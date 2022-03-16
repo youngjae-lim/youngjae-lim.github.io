@@ -1,0 +1,66 @@
+---
+title: How To Set Up Tailwind CSS(jit) with the SvelteKit 
+slug: how-to-setup-tailwind-sveltekit 
+image: ./images/main_tailwind_svelte.png
+date: 2021-06-24
+author: youngjae lim
+category: Svelte
+readTime: 10
+embeddedImages:
+  - ./images/postcss_config.png
+  - ./images/tailwind_config.png
+  - ./images/layout_svelte.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+
+## Overview
+
+Svelte kit and the new Tailwindcss just-in-time compiler just got released. Here's a super quick rundown on how to set them up.
+
+## Steps
+1. Set up the project
+
+  ```shell
+  $ npm init svelte@next sveltekit-demo
+  $ cd sveltekit-demo
+  $ npm install -D tailwindcss autoprefixer
+  ```
+
+2. Configure postcss
+
+- Create a `postcss.config.cjs` file under the project root directory:
+
+  <GatsbyImage
+    image={getImage(props.embeddedImages[0])}
+    alt='random stuff'
+    className='first-inline-img'
+  />
+
+3. Configure tailwind
+  - Create a `tailwind.confg.cjs` file to enable the just-in-time compiler and add the correct paths to be [purged](https://tailwindcss.com/docs/optimizing-for-production). You can also run `npx tailwind init`
+
+  ```shell
+  $ npx tailwind init
+  ```
+
+  <GatsbyImage
+    image={getImage(props.embeddedImages[1])}
+    alt='random stuff'
+    className='first-inline-img'
+  />
+
+4. Create and import the css file
+  - Add these tags in the `__layout.svelte` so that postcss knows where to insert the tailwind styles.
+
+    <GatsbyImage
+    image={getImage(props.embeddedImages[2])}
+    alt='random stuff'
+    className='first-inline-img'
+  />
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

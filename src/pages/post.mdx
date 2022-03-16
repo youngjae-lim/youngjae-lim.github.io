@@ -1,0 +1,249 @@
+import { Link } from 'gatsby'
+import { FiInfo } from 'react-icons/fi'
+import { Counter, LikeButton, RegVideo, Video } from '../components/Complete'
+
+<section class="mdx-page">
+
+## This is a mdx file
+
+**I'm baby quinoa kogi green juice messenger bag, brooklyn sartorial la croix letterpress banjo put a bird on it shaman fingerstache taxidermy gastropub poke.** Intelligentsia church-key seitan, everyday carry scenester bushwick brunch narwhal master cleanse cliche austin. Green juice pop-up church-key man bun kitsch stumptown bitters. _Roof party pabst mustache tumeric next level pinterest intelligentsia narwhal salvia af pork belly four loko._
+
+# my heading h1
+
+## my heading h2
+
+### my heading h3
+
+#### my heading h4
+
+### Table
+
+| Syntax    | Description |
+| --------- | ----------- |
+| Header    | Title       |
+| Paragraph | Text        |
+
+## Blockquote
+
+#### No display props
+
+> Intelligentsia church-key seitan, everyday carry scenester bushwick brunch narwhal master cleanse cliche austin.
+
+#### Info
+
+<blockquote display='info'>
+  Intelligentsia church-key seitan, everyday carry scenester bushwick brunch
+  narwhal master cleanse cliche austin.
+</blockquote>
+
+#### Warning
+
+<blockquote display='warning'>
+  Intelligentsia church-key seitan, everyday carry scenester bushwick brunch
+  narwhal master cleanse cliche austin.
+</blockquote>
+
+#### Default
+
+<blockquote display='default'>
+  Intelligentsia church-key seitan, everyday carry scenester bushwick brunch
+  narwhal master cleanse cliche austin.
+</blockquote>
+
+### List
+
+1. First item
+2. Second item
+3. Third item
+
+- First item
+- Second item
+- Third item
+- First item
+  - Nested item
+
+```
+const firstName = 'youngjae'
+console.log(firstName)
+```
+
+```
+git status
+git add
+git commit
+```
+
+<h2>React Components</h2>
+<Counter />
+
+```jsx
+import React from 'react'
+import styled from 'styled-components'
+import { AiOutlineLike } from 'react-icons/ai'
+const LikeButton = () => {
+  const [value, setValue] = React.useState(0)
+  return (
+    <Wrapper>
+      <div>
+        <button onClick={() => setValue(value + 1)}>
+          <AiOutlineLike />
+        </button>
+        <p>
+          Liked the post?
+          <br />
+          Click thumbs up few times
+        </p>
+      </div>
+      <span>+{value}</span>
+    </Wrapper>
+  )
+}
+```
+
+<LikeButton />
+
+### Video Components
+
+<RegVideo />
+
+<Video />
+
+<h2 title='true'>Random h2 with title props</h2>
+<h2>Another Random h3</h2>
+
+<h4>Inline Code</h4>
+
+`this is a code`
+
+```js
+console.log('hello there')
+```
+
+#### Javascript
+
+```js
+// comments
+const name = 'john'
+const channel = 'coding addict'
+
+function featuredProducts(data) {
+  return data.filter(item => {
+    return item.featured === true
+  })
+}
+featuredProducts()
+```
+
+#### JSX
+
+```jsx
+import React from 'react'
+
+const Counter = () => {
+  const [count, setCount] = React.useState(0)
+  return (
+    <section className='counter'>
+      <h4>show some love to MDX</h4>
+      <h4>likes {count}</h4>
+      <button className='btn btn-danger' onClick={() => setCount(count + 1)}>
+        i like mdx
+      </button>
+    </section>
+  )
+}
+export default Counter
+```
+
+#### HTML
+
+```html
+<h1>hello world</h1>
+<p class="random">random text</p>
+<section class="contact">
+  <div class="title">
+    <h1>contact us</h1>
+  </div>
+</section>
+```
+
+#### CSS
+
+```css
+max-width: 500px;
+border-radius: var(--radius);
+padding: 1rem 1.5rem;
+background: var(--clr-grey-10);
+text-align: center;
+```
+
+# Tables
+
+| First Header                | Second Header                |
+| --------------------------- | ---------------------------- |
+| Content from cell 1         | Content from cell 2          |
+| Content in the first column | Content in the second column |
+
+You can create tables with pipes | and hyphens -. Hyphens are used to create each column's header, while pipes separate each column. You must include a blank line before your table in order for it to correctly render.
+
+| First Header | Second Header |
+| ------------ | ------------- |
+| Content Cell | Content Cell  |
+| Content Cell | Content Cell  |
+
+The pipes on either end of the table are optional.
+
+Cells can vary in width and do not need to be perfectly aligned within columns. There must be at least three hyphens in each column of the header row.
+
+| Command    | Description                                    |
+| ---------- | ---------------------------------------------- |
+| git status | List all new or modified files                 |
+| git diff   | Show file differences that haven't been staged |
+
+You can use formatting such as links, inline code blocks, and text styling within your table:
+
+| Command      | Description                                        |
+| ------------ | -------------------------------------------------- |
+| `git status` | List all _new or modified_ files                   |
+| `git diff`   | Show file differences that **haven't been** staged |
+
+To include a pipe | as content within your cell, use a \ before the pipe:
+
+| Name     | Character |
+| -------- | --------- |
+| Backtick | `         |
+| Pipe     | \|        |
+
+# Math
+
+Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following
+equation.
+
+```
+$$
+L = \frac{1}{2} \rho v^2 S C_L
+$$
+```
+
+---
+
+$$
+L = \frac{1}{2} \rho v^2 S C_L
+$$
+
+---
+
+
+### Strikethrough
+
+~~The world is flat.~~ We now know that the world is round.
+
+### Task Lists
+
+- [x] Write the press release
+- [ ] Update the website
+- [ ] Contact the media
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>
+</section>

@@ -1,0 +1,138 @@
+---
+title: How To Install Pyenv on MacOS 
+slug: how-to-install-pyenv-on-macos
+image: ./images/main_pyenv.png
+date: 2022-03-07
+author: youngjae lim
+category: Python
+readTime: 5
+---
+
+import { Link } from 'gatsby'
+
+## Overview
+
+Pyenv lets you easily switch between multiple versions of Python. It's simple, unobtrusive, and follows the UNIX tradition of single-purpose tools that do one thing well.
+
+## Steps
+
+1. Update brew
+
+  ```
+  $ brew update
+  ```
+
+2. Install zlib sqlite xz installed on your machine
+
+  ```
+  $ brew install zlib sqlite xz
+  ```
+
+3. Brew install Pyenv
+
+  ```
+  $ brew install pyenv
+  ```
+
+
+4. Restart the terminal for changes to take effect or run `exec "$SHELL"`
+
+  ```
+  $ exec "$SHELL"
+  ```
+
+5. Add exports to the current terminal window
+
+  <blockquote display="info">
+    The zlib compression algorithm and the SQLite database are dependencies for pyenv and often cause build problems when not configured correctly. Add these exports to your current terminal window to ensure the installation completes:
+  </blockquote>
+
+  ```
+  $ export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/sqlite/lib"
+  $ export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/sqlite/include"
+  ```
+
+6. Check out some available versions of python > 3.9.*
+
+  ```
+  $ pyenv install --list | grep 3.9.
+  ```
+
+7. Install python 3.9.4
+
+  It will take some time to finish the installation.
+
+  ```
+  $ pyenv install 3.9.4
+  ```
+
+8. Make 3.9.4 as global python version
+
+  ```
+  $ pyenv global 3.9.4
+  ```
+
+9. Check the version
+
+  ```
+  $ pyenv version
+  ```
+  You should see `3.9.4 (set by /Users/youngjaelim/.pyenv/version)`.
+
+10. Configure `.zshrc`
+
+  <blockquote display="info">
+  The power of pyenv comes from its control over our shell's path. In order for it to work correctly, we need to add the following to our configuration file (.zshrc for me, possibly .bash_profile for you)
+  </blockquote>
+  
+  ```
+  $ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init --path)"  eval "$(pyenv init -)"\nfi' >> ~/.zshrc
+  ```
+
+11. Check to make sure .zshrc updated
+
+  ```
+  $ cat ~/.zshrc
+  if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+  fi
+  ```
+
+12. Restart the terminal for changes to take effect or run exec "$SHELL".
+
+  ```
+  $ exec "$SHELL"
+  ```
+
+13. Check python version
+
+  ```
+  $ python -V
+  Python 3.9.4
+
+  $ python
+  Python 3.9.4 (default, May 22 2021, 00:50:28) 
+  [Clang 12.0.5 (clang-1205.0.22.9)] on darwin
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> quit()
+  ```
+
+14. Upgrade the pip and setuptools packages
+
+  ```
+  # To avoid the persistent warning about upgrading the pip package. 
+  # It would be best if you upgrade the pip package.
+  $ pip install -U pip setuptools
+
+  $ pip list
+  Package    Version
+  ---------- -------
+  pip        21.1.1
+  setuptools 56.2.0
+  $ ~ %
+  ```
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

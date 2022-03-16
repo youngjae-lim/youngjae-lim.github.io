@@ -1,0 +1,220 @@
+---
+title: Datasette
+slug: datasette 
+image: ./images/main.png
+date: 2022-02-24
+author: youngjae lim
+category: Data
+readTime: 50
+embeddedImages:
+  - ./images/html-1.png
+  - ./images/html-2.png
+  - ./images/html-3.png
+videoSourceURL: https://youtu.be/1npWH0rPOnI
+videoTitle: "Deploying Sites to GitHub Pages using GitHub Actions"
+---
+
+# What is Datasette?
+
+# Installation
+
+## Using Homebrew for Mac
+
+```
+$ brew install datasette
+
+$ datasette --version
+```
+
+### sqlite-utils
+
+`sqlite-utils` is python CLI utility and library for manipulating SQLite databases that can be a great companion with `Datasette`.
+
+You can brew-install this tool as well:
+
+```
+$ brew install sqlite-utils
+
+$ sqlite-utils --help
+Usage: sqlite-utils [OPTIONS] COMMAND [ARGS]...
+
+  Commands for interacting with a SQLite database
+
+Options:
+  --version   Show the version and exit.
+  -h, --help  Show this message and exit.
+
+Commands:
+  query*                Execute SQL query and return the results as JSON
+  add-column            Add a column to the specified table
+  add-foreign-key       Add a new foreign key constraint to an existing...
+  add-foreign-keys      Add multiple new foreign key constraints to a...
+  add-geometry-column   Add a SpatiaLite geometry column to an existing...
+  analyze               Run ANALYZE against the whole database, or...
+  analyze-tables        Analyze the columns in one or more tables
+  bulk                  Execute parameterized SQL against the provided...
+  convert               Convert columns using Python code you supply.
+  create-database       Create a new empty database file
+  create-index          Add an index to the specified table for the...
+  create-spatial-index  Create a spatial index on a SpatiaLite geometry...
+  create-table          Add a table with the specified columns.
+  create-view           Create a view for the provided SELECT query
+  disable-fts           Disable full-text search for specific table
+  disable-wal           Disable WAL for database files
+  drop-table            Drop the specified table
+  drop-view             Drop the specified view
+  dump                  Output a SQL dump of the schema and full contents...
+  enable-counts         Configure triggers to update a _counts table with...
+  enable-fts            Enable full-text search for specific table and...
+  enable-wal            Enable WAL for database files
+  extract               Extract one or more columns into a separate table
+  index-foreign-keys    Ensure every foreign key column has an index on it
+  indexes               Show indexes for the whole database or specific...
+  insert                Insert records from FILE into a table, creating...
+  insert-files          Insert one or more files using BLOB columns in...
+  memory                Execute SQL query against an in-memory database,...
+  optimize              Optimize all full-text search tables and then run...
+  populate-fts          Re-populate full-text search for specific table...
+  rebuild-fts           Rebuild all or specific full-text search tables
+  reset-counts          Reset calculated counts in the _counts table
+  rows                  Output all rows in the specified table
+  schema                Show full schema for this database or for...
+  search                Execute a full-text search against this table
+  tables                List the tables in the database
+  transform             Transform a table beyond the capabilities of...
+  triggers              Show triggers configured in this database
+  upsert                Upsert records based on their primary key.
+  vacuum                Run VACUUM against the database
+  views                 List the views in the database
+```
+
+### Example: NYC Street Tree Census Data
+
+#### Data - NYC Street Tree Census Data
+
+Let's download NYC Street Tree Census data from [NYC OpenData](https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh).
+
+#### CSV Data to Sqlite Database
+
+Then put the downloaded csv data into sqlite database using `sqlite-utils`.
+
+Go into the directory that contains the csv data and run the following command:
+
+```
+# Insert the csv data into a table called nyctrees in sqlite database.
+$ sqlite-utils insert nyctrees.db nyctrees 2015_Street_Tree_Census_-_Tree_Data.csv --csv
+```
+
+Once the inserting is done, you should see `nyctrees.db` created in the current working direcotry.
+
+Let's open up the database with `Datasette`: this will spin up the http web server to run datasette web application.
+
+```
+$ datasette nyctrees.db
+INFO:     Started server process [60614]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+```
+
+Click the url from the output message to open up `Datasette` in the web browser. You should see the webpage loaded like this:
+
+![datasette-home]()
+
+#### datasette-cluster-map plugin
+
+Because the data has some geographical information in it, we would like to install datasette plugin called `datasette-cluster-map` to show interactive map for tree locations. Stop the server and install the plugin.
+
+```
+# Install the plugin
+$ datasette isntall datasette-cluster-map
+
+# Restart the server
+$ datasette nyctrees.db
+```
+
+![datasette-map]()
+
+#### Extract a column into a separate table
+
+Extracting is for extracting one or more columns into a separate table.
+
+Because I am interested in the types of tree species, let's take a close look at it by extracting into a separate table:
+
+```
+$ sqlite-utils extract nyctrees.db nyctrees spc_common
+```
+
+![datasette-extract-1]()
+![datasette-extract-2]()
+![datasette-extract-3]()
+
+#### Enable full-text search
+
+You can also enable full-text search for the table. Here let's enable for address column so that we can search by address.
+
+```
+$ sqlite-utils enable-fts nyctrees.db nyctrees address
+```
+
+![datasette-search]()
+
+#### Faceting by a column
+
+#### Publish data
+
+```
+$ datasette publish --help
+PTIONS] COMMAND [ARGS]...
+
+  Publish specified SQLite database files to the internet along with a
+  Datasette-powered interface and API
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  cloudrun  Publish databases to Datasette running on Cloud Run
+  heroku    Publish databases to Datasette running on Heroku
+
+
+$ datasette publish heroku --help
+Usage: datasette publish heroku [OPTIONS] [FILES]...
+
+  Publish databases to Datasette running on Heroku
+
+Options:
+  -m, --metadata FILENAME         Path to JSON/YAML file containing metadata
+                                  to publish
+  --extra-options TEXT            Extra options to pass to datasette serve
+  --branch TEXT                   Install datasette from a GitHub branch e.g.
+                                  main
+  --template-dir DIRECTORY        Path to directory containing custom
+                                  templates
+  --plugins-dir DIRECTORY         Path to directory containing custom plugins
+  --static MOUNT:DIRECTORY        Serve static files from this directory at
+                                  /MOUNT/...
+  --install TEXT                  Additional packages (e.g. plugins) to
+                                  install
+  --plugin-secret <TEXT TEXT TEXT>...
+                                  Secrets to pass to plugins, e.g. --plugin-
+                                  secret datasette-auth-github client_id xxx
+  --version-note TEXT             Additional note to show on /-/versions
+  --secret TEXT                   Secret used for signing secure values, such
+                                  as signed cookies
+  --title TEXT                    Title for metadata
+  --license TEXT                  License label for metadata
+  --license_url TEXT              License URL for metadata
+  --source TEXT                   Source label for metadata
+  --source_url TEXT               Source URL for metadata
+  --about TEXT                    About label for metadata
+  --about_url TEXT                About URL for metadata
+  -n, --name TEXT                 Application name to use when deploying
+  --tar TEXT                      --tar option to pass to Heroku, e.g.
+                                  --tar=/usr/local/bin/gtar
+  --help                          Show this message and exit.
+```
+
+```
+$ datasette publish heroku nyctrees.db --title "NYC Trees" --install datasette-cluster-map
+```
