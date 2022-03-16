@@ -1,6 +1,6 @@
 # My Portfolio Website
 
-## Initially Recorded with V2
+## Built with Gatsby V3
 
 #### Changes
 
