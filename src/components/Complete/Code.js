@@ -16,4 +16,5 @@ const Pre = styled.code`
   overflow-x: auto;
   white-space: break-spaces;
   overflow-wrap: break-word;
+  text-transform: none;
 `

@@ -130,7 +130,7 @@ body {
 ul,
 ol {
   color: var(--clr-white);
-  margin: 0.5rem 0 1rem 2rem;
+  margin: 0.5rem 1rem 1rem 1rem;
 }
 
 .nav-links li,
@@ -216,7 +216,7 @@ h4 {
   line-height: 1.25;
   margin-bottom: 0.75rem;
   font-family: var(--ff-primary);
-  margin-top: var(--spacing-12);
+  margin-top: var(--spacing-10);
 }
 h1 {
   font-size: var(--fontSize-5);
@@ -294,7 +294,7 @@ p {
   display: block;
   width: 12rem;
   text-align: center;
-  margin: 3rem auto;
+  margin: 2rem auto;
 }
 /* section */
 .page-center {
