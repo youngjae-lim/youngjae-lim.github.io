@@ -33,34 +33,52 @@ Svelte kit and the new Tailwindcss just-in-time compiler just got released. Here
 
 - Create a `postcss.config.cjs` file under the project root directory:
 
-  <GatsbyImage
-    image={getImage(props.embeddedImages[0])}
-    alt='random stuff'
-    className='first-inline-img'
-  />
-
+  ```js
+  // postcss.config.cjs
+  module.exports = {
+    plugins: {
+      autoprefixer: {},
+      tailwindcss: {}
+    }
+  }
+  ```
+  
 3. Configure tailwind
-  - Create a `tailwind.confg.cjs` file to enable the just-in-time compiler and add the correct paths to be [purged](https://tailwindcss.com/docs/optimizing-for-production). You can also run `npx tailwind init`
+  - Create a `tailwind.config.cjs` file to enable the just-in-time compiler and add the correct paths to be [purged](https://tailwindcss.com/docs/optimizing-for-production). You can also run `npx tailwind init`
 
   ```shell
   $ npx tailwind init
   ```
 
-  <GatsbyImage
-    image={getImage(props.embeddedImages[1])}
-    alt='random stuff'
-    className='first-inline-img'
-  />
+  ```js
+  // tailwind.config.cjs
+  module.exports = {
+    mode: 'jit',
+    purge: ['./src/**/*.svelte']
+  }
+  ```
 
 4. Create and import the css file
   - Add these tags in the `__layout.svelte` so that postcss knows where to insert the tailwind styles.
 
-    <GatsbyImage
-    image={getImage(props.embeddedImages[2])}
-    alt='random stuff'
-    className='first-inline-img'
-  />
+  ```svelte
+  // src/routes/__layout.svelte 
+  <script>
+	  import Nav from '../components/nav.svelte';
+  </script>
 
+  <div class="p-8 max-w-6xl mx-auto">
+    <Nav />
+    <slot />
+  </div>
+
+  <style>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  </style>
+  ```
+   
 <Link to='/posts' className='btn center-btn'>
   all posts
 </Link>
