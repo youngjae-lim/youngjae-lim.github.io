@@ -1,9 +1,9 @@
 import React from 'react'
 import Post from './Post'
 import Banner from '../Banner'
+
 const Posts = ({ posts, title, count }) => {
   // return list of posts
-  console.log(count)
   return (
     <section className='posts'>
       <h3 className='posts-title'>

@@ -3,6 +3,15 @@ const remarkSlug = require(`remark-slug`)
 
 module.exports = {
   /* Your site config here */
+  siteMetadata: {
+    title: "Youngjae Jay Lim's Dev Blog/Portfolio Website",
+    description:
+      "This is Youngjae Jay Lim's Web Development/Data Science Portfolio Website",
+    author: 'Youngjae Jay Lim',
+    twitterUsername: '@JayYoungjae',
+    image: '/twitter-img.png',
+    siteUrl: 'https://youngjae-lim.github.io/',
+  },
   plugins: [
     `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,

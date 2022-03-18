@@ -8,7 +8,6 @@ const PostsPage = ({ data }) => {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
 
-  console.log(posts, count)
   return (
     <Layout>
       <Posts posts={posts} title='all posts' count={count} />

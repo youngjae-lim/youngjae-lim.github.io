@@ -14,7 +14,7 @@ const About = () => {
         width={130}
         height={130}
         className='img'
-        alt='author'
+        alt='profile'
       />
       <p>
         I am an senior data analyst as well as a full stack developer from NYC

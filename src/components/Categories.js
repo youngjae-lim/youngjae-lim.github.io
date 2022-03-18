@@ -18,9 +18,6 @@ const Categories = () => {
     allMdx: { group: categories },
   } = data
 
-  console.log('data: ', data)
-  console.log(categories)
-
   return (
     <ul className='categories'>
       {categories.map((category, index) => {

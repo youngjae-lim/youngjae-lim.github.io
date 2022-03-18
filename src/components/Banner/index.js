@@ -5,7 +5,6 @@ import Recent from './Recent'
 import BannerCategories from './BannerCategories'
 
 const Banner = ({ post }) => {
-  console.log('post? ', post)
   return (
     <Wrapper post={post}>
       <About />

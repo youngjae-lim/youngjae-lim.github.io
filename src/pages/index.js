@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../components/Layout'
 import Posts from '../components/Posts'
+import Seo from '../components/Seo'
 import { graphql } from 'gatsby'
 
 const IndexPage = ({ data }) => {
@@ -10,6 +11,7 @@ const IndexPage = ({ data }) => {
 
   return (
     <Layout>
+      <Seo title='Home' />
       <Posts posts={posts} title='recently published' />
     </Layout>
   )

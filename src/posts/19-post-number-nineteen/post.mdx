@@ -1,0 +1,23 @@
+---
+title: How To Remove Old and Merged Git Branches Easily
+slug: how-to-remove-oldandmerged-git-branches-easily 
+image: ./images/main_git_branch.png
+date: 2022-03-18
+author: youngjae lim
+category: Git 
+readTime: 5
+---
+
+import { Link } from 'gatsby'
+
+## Overview
+
+Oftentimes, you might have old and merged Git branches in your local repositories that are needed to clean up. Here is a one-line to remove all of them at once:
+
+```shell
+$ git branch --merged | grep -v '\*\|main\|develop' | xargs -n 1 git branch -d
+```
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>
