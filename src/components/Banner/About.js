@@ -17,11 +17,11 @@ const About = () => {
         alt='profile'
       />
       <p>
-        I am an senior data analyst as well as a full stack developer from NYC
-        who is seeking remote/freelancing/full-time opportunities. I am
-        passionate about collecting, processing, exploring, and publishing data
-        and building anything involving modern web technology. When I am not at
-        my computer, I am a photographer as well.
+        I am a full stack software engineer/data analyst from NYC who is seeking
+        remote/freelancing/full-time opportunities. I am passionate about
+        collecting, processing, exploring, and publishing data and building
+        anything involving modern web technology. When I am not at my computer,
+        I am a photographer as well.
       </p>
       <SocialLinks styleClass='banner-icons' />
     </Wrapper>

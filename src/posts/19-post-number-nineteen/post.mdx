@@ -12,10 +12,22 @@ import { Link } from 'gatsby'
 
 ## Overview
 
-Oftentimes, you might have old and merged Git branches in your local repositories that are needed to clean up. Here is a one-line to remove all of them at once:
+Let's say that you do your all of your development on a feature branch in your local repository and push it to the remote repository creating a pull request. Then in your remote repository(say, `GitHub`), you merge the feature branch into main branch after review, then get rid of the feature branch. 
+
+However, you still have the feature branch in your local repository. If you keep doing this, you will have growing number of feature branches that are no longer needed locally. You need to clean them up and the below is how you do it.
 
 ```shell
-$ git branch --merged | grep -v '\*\|main\|develop' | xargs -n 1 git branch -d
+# Fetch the latest from the git
+$ git fetch
+
+# Check the list of local git branches
+$ git branch
+
+# Delete all local branches that have been merged to main branch and then deleted in the remote repository
+$ git branch --verbose | grep ': gone]' | grep -v '\*' | awk '{ print $1; }' | xargs -r git branch -d
+
+# Check the list of local git branches that remain
+$ git branch
 ```
 
 <Link to='/posts' className='btn center-btn'>

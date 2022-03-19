@@ -222,7 +222,7 @@ h4 {
 }
 h1 {
   font-size: var(--fontSize-5);
-  font-weight: 700;
+  font-weight: 900;
 }
 h2 {
   font-size: var(--fontSize-4);
@@ -240,6 +240,7 @@ p {
 @media screen and (min-width: 800px) {
   h1 {
     font-size: var(--fontSize-6);
+    font-weight: 900;
   }
   h2 {
     font-size: var(--fontSize-5);
@@ -670,6 +671,10 @@ Single Pages
   padding-top: 1.25rem;
   color: var(--clr-white);
 }
+.contact-form p {
+  text-align: left;
+  padding: 0 2rem;
+}
 .form-group {
   padding: 1rem 1.5rem;
 }
@@ -825,6 +830,7 @@ Testing Post and Components
   width: 90vw;
   max-width: var(--fixed-width);
   margin: 1rem auto 1rem;
+  padding-top: 0.3rem;
 }
 .mdx-img p {
   width: 20rem;

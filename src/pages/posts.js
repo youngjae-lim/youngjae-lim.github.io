@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../components/Layout'
 import { graphql } from 'gatsby'
 import Posts from '../components/Posts'
+import Seo from '../components/Seo'
 
 const PostsPage = ({ data }) => {
   const {
@@ -10,6 +11,7 @@ const PostsPage = ({ data }) => {
 
   return (
     <Layout>
+      <Seo title='Posts' />
       <Posts posts={posts} title='all posts' count={count} />
     </Layout>
   )

@@ -1,15 +1,18 @@
 import React from 'react'
 import Layout from '../components/Layout'
 import TableOfContents from '../components/TableOfContents'
+import Seo from '../components/Seo'
 import styled from 'styled-components'
 import Banner from '../components/Banner'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 const PostTemplate = ({ data }) => {
   const {
     title,
     category,
+    image,
     date,
     embeddedImages,
     videoSourceURL,
@@ -23,6 +26,7 @@ const PostTemplate = ({ data }) => {
 
   return (
     <Layout>
+      <Seo title={title} />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
         {isThereTableOfContent && (
@@ -30,11 +34,11 @@ const PostTemplate = ({ data }) => {
         )}
         {/* Post Info */}
         <article className='mdx-page'>
-          {/* <GatsbyImage */}
-          {/*   image={getImage(image)} */}
-          {/*   alt={title} */}
-          {/*   className='main-img' */}
-          {/* /> */}
+          <GatsbyImage
+            image={getImage(image)}
+            alt={title}
+            className='main-img'
+          />
           <div className='post-info'>
             <span>{category}</span>
             <h1>{title}</h1>
@@ -131,7 +135,7 @@ const Wrapper = styled.section`
       width: 92vw;
     }
     .main-img {
-      width: 75%;
+      width: 100%;
       display: block;
       margin: 0 auto;
     }
