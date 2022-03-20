@@ -19,14 +19,14 @@ const PostTemplate = ({ data }) => {
     videoTitle,
   } = data.mdx.frontmatter
 
-  const { body, tableOfContents } = data.mdx
+  const { body, tableOfContents, excerpt } = data.mdx
 
   const isThereTableOfContent = Object.keys(tableOfContents).length !== 0
   const post = false
 
   return (
     <Layout>
-      <Seo title={title} />
+      <Seo title={title} description={excerpt} image={image} />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
         {isThereTableOfContent && (
@@ -89,6 +89,7 @@ export const query = graphql`
         videoSourceURL
         videoTitle
       }
+      excerpt(pruneLength: 160)
     }
   }
 `

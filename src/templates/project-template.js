@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../components/Layout'
 import TableOfContents from '../components/TableOfContents'
+import Seo from '../components/Seo'
 import styled from 'styled-components'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Banner from '../components/Banner'
@@ -18,13 +19,14 @@ const ProjectTemplate = ({ data }) => {
     videoTitle,
   } = data.mdx.frontmatter
 
-  const { body, tableOfContents } = data.mdx
+  const { body, tableOfContents, excerpt } = data.mdx
 
   const isThereTableOfContent = Object.keys(tableOfContents).length !== 0
   const post = false
 
   return (
     <Layout>
+      <Seo title={title} description={excerpt} image={image} />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
         {isThereTableOfContent && (
@@ -87,6 +89,7 @@ export const query = graphql`
         videoSourceURL
         videoTitle
       }
+      excerpt(pruneLength: 160)
     }
   }
 `

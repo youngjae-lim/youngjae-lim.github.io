@@ -6,6 +6,7 @@ import * as Math from './Math'
 import Code from './Code'
 import Blockquote from './Blockquote'
 import PrismSetup from './PrismSetup'
+import ExternalLink from './ExternalLink'
 export {
   Counter,
   LikeButton,
@@ -16,4 +17,5 @@ export {
   Code,
   Blockquote,
   PrismSetup,
+  ExternalLink,
 }
