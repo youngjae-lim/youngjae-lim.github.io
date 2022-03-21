@@ -1,0 +1,640 @@
+---
+title: SvelteKit With Headless WordPress as CMS
+slug: sveltekit-with-headless-wordpress-cms
+image: ./images/main_wordpress.png
+date: 2022-03-20
+author: youngjae lim
+category: SvelteKit 
+readTime: 10
+embeddedImages:
+  - ./images/install_local_1.png
+  - ./images/install_local_2.png
+  - ./images/install_local_3.png
+  - ./images/install_local_4.png
+  - ./images/install_local_5.png
+  - ./images/wp_admin_1.png
+  - ./images/wp_admin_2.png
+  - ./images/wp_admin_3.png
+  - ./images/wp_admin_4.png
+  - ./images/wp_admin_5.png
+  - ./images/wp_admin_6.png
+  - ./images/wp_admin_7.png
+  - ./images/wp_admin_8.png
+  - ./images/front_end_1.png
+  - ./images/wp_graphql_1.png
+  - ./images/blog_page_1.png
+  - ./images/blog_page_2.png
+  - ./images/wp_graphql_2.png
+  - ./images/post_page_1.png
+  - ./images/podcast_player.png
+  - ./images/wp_admin_9.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+This article will show you how to get started with development of SvelteKit front-end web application using headless WordPress as a CMS(Content Management System). We will also use `GraphQL` as our query language tool to retrieve data from wordpress.
+
+## Install `Local By FlyWheel`
+
+Local By FlyWheel is a local web server that allows you to develop your website on your local machine instead of a staging or live server.
+
+[Instruction](https://localwp.com/help-docs/getting-started/installing-local/)
+
+## Configure Local
+
+### Open up the app and click the + icon in the lower-left corner
+<GatsbyImage image={getImage(props.embeddedImages[0])} alt="local by flywheel configuration" />
+
+### Type your name of site you want to build
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt="local by flywheel configuration" />
+
+### Check preffered option and click continue
+<GatsbyImage image={getImage(props.embeddedImages[2])} alt="local by flywheel configuration" />
+
+### Type your wordpress username, password, email and click Add Site
+<GatsbyImage image={getImage(props.embeddedImages[3])} alt="local by flywheel configuration" />
+
+If everything goes well, you will be able to see the following information regarding the configured local server.
+<GatsbyImage image={getImage(props.embeddedImages[4])} alt="local by flywheel configuration" />
+
+Please click `Admin` button in the top right corner to open up `wp-admin` login page in the web browser.
+
+## Access `wp-admin` dashboard from web browser
+
+Use your username and password that you've set above to log in to wordpress admin panel.
+
+<GatsbyImage image={getImage(props.embeddedImages[5])} alt="local by flywheel configuration" />
+<GatsbyImage image={getImage(props.embeddedImages[6])} alt="local by flywheel configuration" />
+
+### Create a couple of dummy posts in the `wp-admin` dashboard
+
+Click `Posts` and `Add New`. Creating a post is very intuitive and make sure you also set featuredImage so that we can render an image for each post in the front-end application.
+
+<GatsbyImage image={getImage(props.embeddedImages[7])} alt="local by flywheel configuration" />
+<GatsbyImage image={getImage(props.embeddedImages[20])} alt="local by flywheel configuration" />
+<GatsbyImage image={getImage(props.embeddedImages[8])} alt="local by flywheel configuration" />
+
+## Install `WPGraphQL` plugin 
+
+<GatsbyImage image={getImage(props.embeddedImages[9])} alt="local by flywheel configuration" />
+<GatsbyImage image={getImage(props.embeddedImages[10])} alt="local by flywheel configuration" />
+
+Click `Install` button and then `Activate` button as well.
+
+## Turn WordPress backend as GraphQL Server using `WPGraphQL` plugin
+
+Now you will be able to see `GraphQL` menu from the left panel. Hover your mouse over the `GraphQL` menu and click `Settings`:
+
+<GatsbyImage image={getImage(props.embeddedImages[11])} alt="local by flywheel configuration" />
+
+You will be able to find your graphql endpoint:
+
+In my case, it is `http://sveltekitwordpressdemo.local/graphql`. This endpoint will be used later in SvelteKit to make our HTTP POST request to send our graphql query and retreive data we want.
+
+<GatsbyImage image={getImage(props.embeddedImages[12])} alt="local by flywheel configuration" />
+
+Now that we've set up everything we need in the local wordpress server, let's get started with creating a new SvelteKit project.
+
+## Set up a new SvelteKit project
+
+```
+$ npm init svelte@next sveltekit-wordpress-demo
+$ cd sveltekit-wordpress-demo
+$ npm install
+$ npm run dev -- --open
+```
+
+## Configure CSS and layout
+
+### Create `./src/layout.css`.
+
+```css
+:root {
+	--border-radius: 8px;
+
+	/* Colors */
+	--color-white: #fff;
+	--color-gray-1: #102a43;
+	--color-gray-2: #243b53;
+	--color-gray-3: #334e68;
+	--color-gray-4: #486581;
+	--color-gray-5: #627d98;
+	--color-gray-6: #829ab1;
+	--color-gray-7: #9fb3c8;
+	--color-gray-8: #bcccdc;
+	--color-gray-9: #d9e2ec;
+	--color-gray-10: #f0f4f8;
+	--color-yellow-1: #8d2b0b;
+	--color-yellow-2: #b44d12;
+	--color-yellow-3: #cb6e17;
+	--color-yellow-4: #de911d;
+	--color-yellow-5: #f0b429;
+	--color-yellow-6: #f7c948;
+	--color-yellow-7: #fadb5f;
+	--color-yellow-8: #fce588;
+	--color-yellow-9: #fff3c4;
+	--color-yellow-10: #fffbea;
+
+	/* Box Shadows */
+	--box-shadow-1: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+	--box-shadow-2: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+	--box-shadow-3: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+	--box-shadow-4: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+	--box-shadow-5: rgba(0, 0, 0, 0.2) 0px 3px 5px -1px, rgba(0, 0, 0, 0.14) 0px 5px 8px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 14px 0px;
+	--box-shadow-6: rgba(0, 0, 0, 0.2) 0px 3px 5px -1px, rgba(0, 0, 0, 0.14) 0px 6px 10px 0px,
+		rgba(0, 0, 0, 0.12) 0px 1px 18px 0px;
+	--box-shadow-7: rgba(0, 0, 0, 0.2) 0px 4px 5px -2px, rgba(0, 0, 0, 0.14) 0px 7px 10px 1px,
+		rgba(0, 0, 0, 0.12) 0px 2px 16px 1px;
+	--box-shadow-8: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+		rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+	--box-shadow-9: rgba(0, 0, 0, 0.2) 0px 5px 6px -3px, rgba(0, 0, 0, 0.14) 0px 9px 12px 1px,
+		rgba(0, 0, 0, 0.12) 0px 3px 16px 2px;
+	--box-shadow-10: rgba(0, 0, 0, 0.2) 0px 6px 6px -3px, rgba(0, 0, 0, 0.14) 0px 10px 14px 1px,
+		rgba(0, 0, 0, 0.12) 0px 4px 18px 3px;
+	--box-shadow-11: rgba(0, 0, 0, 0.2) 0px 6px 7px -4px, rgba(0, 0, 0, 0.14) 0px 11px 15px 1px,
+		rgba(0, 0, 0, 0.12) 0px 4px 20px 3px;
+	--box-shadow-12: rgba(0, 0, 0, 0.2) 0px 7px 8px -4px, rgba(0, 0, 0, 0.14) 0px 12px 17px 2px,
+		rgba(0, 0, 0, 0.12) 0px 5px 22px 4px;
+	--box-shadow-13: rgba(0, 0, 0, 0.2) 0px 7px 8px -4px, rgba(0, 0, 0, 0.14) 0px 13px 19px 2px,
+		rgba(0, 0, 0, 0.12) 0px 5px 24px 4px;
+	--box-shadow-14: rgba(0, 0, 0, 0.2) 0px 7px 9px -4px, rgba(0, 0, 0, 0.14) 0px 14px 21px 2px,
+		rgba(0, 0, 0, 0.12) 0px 5px 26px 4px;
+	--box-shadow-15: rgba(0, 0, 0, 0.2) 0px 8px 9px -5px, rgba(0, 0, 0, 0.14) 0px 15px 22px 2px,
+		rgba(0, 0, 0, 0.12) 0px 6px 28px 5px;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+		Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	background-color: #f0f4f8;
+	color: var(--color-gray-2);
+}
+
+a {
+	color: inherit;
+}
+```
+
+### Create a `./src/routes/__layout.svelte`:
+
+```js
+<script context="module">
+  import '../layout.css';
+</script>
+
+<main>
+  <slot />
+</main>
+
+<style>
+  main {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto 12rem;
+  }
+</style>
+```
+
+## Connect the front-end to wordpress GraphQL server
+
+### Create an environment variable for graphql endpoint
+
+Create `.env.local` file in your project root directory and type `VITE_PUBLIC_WORDPRESS_API_URL=`. Then copy and paste the graphql endpoint that we've seen in the `WPGraphQL` Settings in the `wp-admin` panel.
+
+<GatsbyImage image={getImage(props.embeddedImages[13])} alt="local by flywheel configuration" />
+
+## Blog Page
+
+### Run a graphql query from `GraphiQL IDE` in the wordpress admin panel
+
+When you work with graphql, a typical way to develop is:
+  1. Make a query in the `GraphiQL IDE` tool and make sure it returns a resulting data. 
+  2. Then you will copy the query and use it as a query variable in the one of those `Svelte` files that will render a page in your web application. 
+
+Go back to `wp-admin` panel and open up `GraphiQL IDE` and click `Query Composer`. You can drill down `posts` item and select the items as they appear in the following screen capture. Once you selected items you want, you can click the `play` button to see the resulting data that we would like to want from our SvelteKit front-end application.
+
+<GatsbyImage image={getImage(props.embeddedImages[14])} alt="local by flywheel configuration" />
+
+### Create a svelte file to render a Blog page
+
+Now let's create a svelte file to render our Blog page.
+Create `./src/routes/blog/index.svelte` file that will make a HTTP POST request to send a graphql query and receive a resulting blog posts data and then render a list of the blog post titles.
+
+```js
+<script context="module">
+  const query = `
+    query getPosts {
+      posts {
+        nodes {
+          databaseId
+          uri
+          title
+          excerpt
+          date
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              mediaDetails {
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+	export async function load({ url, fetch }) {
+    const response = await fetch(import.meta.env.VITE_PUBLIC_WORDPRESS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+		if (response.ok) {
+      const responseObj = await response.json();
+      const posts = responseObj.data.posts.nodes;
+			return {
+				props: {
+					posts
+				}
+			};
+		}
+		return {
+			status: response.status,
+			error: new Error(`Could not load ${url}`)
+		};
+	}
+</script>
+
+<script>
+	export let posts;
+</script>
+
+<h1>Blog</h1>
+{#if posts}
+  <ul>
+    {#each posts as post}
+      <li>
+        <p>{post.title}</p>
+      </li>
+    {/each}
+  </ul>
+{:else}
+  <p>No posts found.</p>
+{/if}
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li + li {
+    margin-top: 2rem;
+  }
+</style>
+```
+
+### Test a Blog page
+
+Let's run our application in the dev environment:
+
+```
+$ npm run dev -- --open
+```
+
+You will be able to see the `blog` page loaded when you access `localhost:3000/blog`
+
+<GatsbyImage image={getImage(props.embeddedImages[15])} alt="local by flywheel configuration" />
+
+## Make card component
+
+Now that we know that we can retreive data from worpress graphql server, let's make our blog page a bit prettier making `PostCard` component.
+
+Create `./src/components/PostCard.svelte` file:
+
+```js
+// ./src/components/PostCard.svelte
+
+<script>
+  export let post;
+</script>
+
+<article>
+  {#if post.featuredImage}
+    <a href={`/blog${post.uri}`}>
+        <img src={post.featuredImage.node.sourceUrl} alt={post.featuredImage.node.altText} />
+    </a>
+  {/if}
+  <a href={`/blog${post.uri}`}>
+    <h2>{post.title}</h2>
+  </a>
+  <div>{@html post.excerpt}</div>
+</article>
+
+<style>
+  article {
+    padding: 2.5rem;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-2);
+  }
+  article > a {
+    text-decoration: none;
+  }
+  article h2 {
+    margin-top: 0;
+  }
+  article img {
+    max-width: 100%;
+  }
+  article h2 {
+    margin-top: 2rem;
+  }
+</style>
+```
+
+Because we want to use this component in the Blog page, we have to make a change in the `./src/routes/blog/index.svelte` file:
+- Import PostCard component (line 50)
+- Replace `<p>` tag with `<PostCard {post} />` (line 59)
+
+```js
+<script context="module">
+  const query = `
+    query getPosts {
+      posts {
+        nodes {
+          databaseId
+          uri
+          title
+          excerpt
+          date
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              mediaDetails {
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+	export async function load({ url, fetch }) {
+    const response = await fetch(import.meta.env.VITE_PUBLIC_WORDPRESS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+		if (response.ok) {
+      const responseObj = await response.json();
+      const posts = responseObj.data.posts.nodes;
+			return {
+				props: {
+					posts
+				}
+			};
+		}
+		return {
+			status: response.status,
+			error: new Error(`Could not load ${url}`)
+		};
+	}
+</script>
+
+<script>
+  import PostCard from '../../components/PostCard.svelte';
+	export let posts;
+</script>
+
+<h1>Blog</h1>
+{#if posts}
+  <ul>
+    {#each posts as post}
+      <li>
+        <PostCard {post} />
+      </li>
+    {/each}
+  </ul>
+{:else}
+  <p>No posts found.</p>
+{/if}
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li + li {
+    margin-top: 2rem;
+  }
+</style>
+```
+
+Now when you check the Blog page again, you should see the blog posts rendered in a card format.
+
+<GatsbyImage image={getImage(props.embeddedImages[16])} alt="local by flywheel configuration" />
+
+## Individual Post Page
+
+However, we can't click an individual blog card to see the detail post yet. To be able to do that, we need to make a dynamic route that is going to be rendered depending on each slug of the blog post.
+
+### Develop a graphql query
+
+You can run the following graphql query from the `GraphiQL IDE` in the `wp-admin` panel:
+
+<GatsbyImage image={getImage(props.embeddedImages[17])} alt="local by flywheel configuration" />
+
+### Make a svelte file to render each post.
+
+Create `./src/routes/blog/[slug].svelte`:
+
+```js
+<script context="module">
+  export const prerender = true;
+  const query = `
+    query getPostBySlug($slug: ID!) {
+      post(id: $slug, idType: SLUG) {
+        date
+        title
+        content
+        author {
+          node {
+            name
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            mediaDetails {
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+  `;
+  export async function load({ url, params, fetch }) {
+    const response = await fetch(import.meta.env.VITE_PUBLIC_WORDPRESS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          slug: params.slug,
+        }
+      }),
+    });
+		if (response.ok) {
+      const responseObj = await response.json();
+      const { post } = responseObj.data;
+			return {
+				props: {
+					post
+				}
+			};
+		}
+		return {
+			status: response.status,
+			error: new Error(`Could not load ${url}`)
+		};
+	}
+</script>
+
+<script>
+  export let post;
+  const formatDate = (date) => new Date(date).toLocaleDateString();
+  const categories = post.categories?.nodes?.map(category => category.name) ?? [];
+</script>
+<a href="/blog" class="blog-link">&#8592; Blog</a>
+<article>
+  {#if post.featuredImage}
+    <img src={post.featuredImage.node.sourceUrl} alt={post.featuredImage.node.altText} />
+  {/if}
+  <h1>{post.title}</h1>
+  <p class="post-meta">
+    ✍️ {post.author.node.name} on {formatDate(post.date)}
+  </p>
+  <div>{@html post.content}</div>
+  {#if categories.length}
+    <div class="category-list">
+      <h4>Categorized As</h4>
+      <p>{categories.join(', ')}</p>
+    </div>
+  {/if}
+</article>
+
+<style>
+  .blog-link {
+    text-decoration: none;
+  }
+  article {
+    margin-top: 2rem;
+  }
+  article img {
+    max-width: 100%;
+  }
+  .category-list {
+    border-top: 2px solid var(--color-gray-9);
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+  }
+  .category-list h4 {
+    margin: 0;
+  }
+</style>
+```
+
+### Test a Post page
+
+Now that the dynamic routes are all set, we can click the individual post to see the detail contents:
+
+<GatsbyImage image={getImage(props.embeddedImages[18])} alt="local by flywheel configuration" />
+
+## Adding a Podcast Player
+
+So far, we retrieved blog post data from wordpress graphql server and rendered in our SvelteKit front-end application. Because the SvelteKit is a SPA(Single Page Application), we can create a persistent component that can be rendered throught all the pages. For example, we can create a footer like component that plays a podcast, but you can still navigate to other pages without interrupting the playing podcast.
+
+Create a `./src/components/PodcastPlayer.svelte` file:
+
+```js
+<div>
+  <iframe
+    src="https://www.buzzsprout.com/1724287/9511712-gutenberg-with-jason-bahl?client_source=small_player&amp;iframe=true&amp;referrer=https%3A%2F%2Fwww.buzzsprout.com%2F1724287%2F9511712-gutenberg-with-jason-bahl.js%3Fcontainer_id%3Dbuzzsprout-player-9511712%26player%3Dsmall"
+    loading="lazy"
+    width="100%"
+    height="200"
+    frameborder="0"
+    scrolling="no"
+    title={`DE{CODE}, Gutenberg with Jason Bahl`}
+  ></iframe>
+</div>
+
+<style>
+  div {
+    position: fixed;
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow-2);
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+</style>
+```
+
+Render this component in our `./src/__layout.svelte` component.
+
+```js
+<script context="module">
+  import "../layout.css";
+  import PodcastPlayer from "../components/PodcastPlayer.svelte";
+</script>
+
+<main>
+  <slot />
+</main>
+<PodcastPlayer />
+
+<style>
+  main {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto 12rem;
+  }
+</style>
+```
+
+As you see, the podcast player appears in the bottom of every page that you navigate to.
+
+<GatsbyImage image={getImage(props.embeddedImages[19])} alt="local by flywheel configuration" />
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>
