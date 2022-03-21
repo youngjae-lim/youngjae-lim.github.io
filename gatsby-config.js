@@ -9,7 +9,11 @@ module.exports = {
       "This is Youngjae Jay Lim's Web Development/Data Science Portfolio Website",
     author: 'Youngjae Jay Lim',
     twitterUsername: '@JayYoungjae',
-    image: '/twitter-img.png',
+    image: {
+      src: '/twitter-img.png',
+      width: 1884,
+      height: 933,
+    },
     siteUrl: 'https://youngjae-lim.github.io/',
   },
   plugins: [

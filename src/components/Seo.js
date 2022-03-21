@@ -13,25 +13,22 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
             description
             author
             siteUrl
-            # defaultImage: image
+            image {
+              src
+              width
+              height
+            }
           }
         }
       }
     `
   )
 
-  // console.log(metaImage.childImageSharp.gatsbyImageData)
-  // console.log(metaImage.childImageSharp.gatsbyImageData.width)
-  // console.log(metaImage.childImageSharp.gatsbyImageData.height)
-  // console.log(metaImage.childImageSharp.gatsbyImageData.images.fallback.src)
-
   const metaDescription = description || site.siteMetadata.description
   const image =
     metaImage && metaImage.childImageSharp.gatsbyImageData.images.fallback.src
       ? `${site.siteMetadata.siteUrl}${metaImage.childImageSharp.gatsbyImageData.images.fallback.src}`
-      : null
-
-  // console.log(image)
+      : `${site.siteMetadata.siteUrl}${site.siteMetadata.image.src}`
 
   const canonical = pathname ? `${site.siteMetadata.siteUrl}${pathname}` : null
 
@@ -108,8 +105,20 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
               ]
             : [
                 {
+                  property: 'og:image',
+                  content: image,
+                },
+                {
+                  property: 'og:image:width',
+                  content: site.siteMetadata.image.witdh,
+                },
+                {
+                  property: 'og:image:height',
+                  content: site.siteMetadata.image.height,
+                },
+                {
                   name: 'twitter:card',
-                  content: 'summary',
+                  content: 'summary_large_image',
                 },
               ]
         )
