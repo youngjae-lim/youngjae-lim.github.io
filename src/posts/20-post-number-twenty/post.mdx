@@ -111,7 +111,7 @@ $ npm run dev -- --open
 
 ### Create `./src/layout.css`.
 
-```css
+```css:./src/layout.css
 :root {
 	--border-radius: 8px;
 
@@ -371,7 +371,7 @@ Because we want to use this component in the Blog page, we have to make a change
 - Import PostCard component (line 50)
 - Replace `<p>` tag with `<PostCard {post} />` (line 59)
 
-```js
+```js:./src/routes/blog/index.svelte highlights=50,59
 <script context="module">
   const query = `
     query getPosts {
