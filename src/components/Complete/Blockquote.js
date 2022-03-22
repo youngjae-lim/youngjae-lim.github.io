@@ -46,7 +46,7 @@ const Wrapper = styled.blockquote`
     background: var(--clr-grey-10);
     border-radius: var(--radius);
     color: var(--clr-grey-1);
-    border-left: 4px solid var(--clr-grey-5);
+    border-left: 5px solid hsl(215, 80%, 56%);
     position: relative;
     margin: 2rem 0;
   }

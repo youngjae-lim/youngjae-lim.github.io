@@ -264,6 +264,10 @@ p {
   margin-bottom: 0.5rem;
   color: var(--clr-white);
 }
+
+strong {
+  color: white;
+}
 @media screen and (min-width: 800px) {
   h1 {
     font-size: var(--fontSize-6);

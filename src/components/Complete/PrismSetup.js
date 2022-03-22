@@ -15,6 +15,7 @@ const PrismWrapper = props => {
       theme={theme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => {
+        console.log(style)
         return (
           <Container>
             <Pre className={className} style={style}>
@@ -22,7 +23,9 @@ const PrismWrapper = props => {
               {tokens.map((line, i) => (
                 <div
                   {...getLineProps({ line, key: i })}
-                  style={{ display: 'table-row' }}
+                  style={{
+                    display: 'table-row',
+                  }}
                 >
                   <span className='line-no'>{i + 1}</span>
                   {line.map((token, key) => (
