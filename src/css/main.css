@@ -65,9 +65,13 @@ Variables
   --ff-primary: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont,
     'Roboto', sans-serif;
   --ff-secondary: 'Merriweather', 'Georgia', Cambria, 'Times New Roman', Times,
-    serif;
-  --font-body: var(--ff-secondary);
-  --font-heading: var(--ff-primary);
+    sans-serif;
+  --overpass-gowun-dodum-font: 'Overpass', 'Gowun Dodum', sans-serif;
+  --fira-mono-font: 'Fira Mono', monospace !important;
+  --font-body: var(--overpass-gowun-dodum-font);
+  --font-heading: var(--overpass-gowun-dodum-font);
+  /* --font-body: var(--ff-secondary); */
+  /* --font-heading: var(--ff-primary); */
   --transition: all 0.3s linear;
   /* --spacing: 0.1rem; */
   --spacing: 0.025em;
@@ -103,6 +107,8 @@ Variables
   --clr-code-bg: hsl(212, 46%, 7%);
   --clr-code-font: hsl(179, 63%, 85%);
   --clr-headings: hsl(0, 0%, 100%);
+  --clr-external-link: hsl(59, 70%, 45%);
+  --clr-toc-hover-link: hsl(15, 100%, 50%);
 }
 /*
 ===============
@@ -151,12 +157,32 @@ ul.contains-task-list {
 }
 
 li {
-  margin: 0.25rem 0;
+  margin: 0.25rem 0 0.25rem 0.5rem;
 }
 
 a {
   text-decoration: none;
   color: var(--clr-white);
+}
+a.text-link[href*="//"]:before
+{
+  content: '';
+  display: inline-block;
+  vertical-align: baseline;
+  position: relative;
+  top: 2px; /* visual balance */
+  width: 1em;
+  height: 1em;
+  background-color: var(--clr-external-link);
+  mask-image: url('/open-in-new.svg');
+  mask-size: 100%;
+  mask-repeat: no-repeat;
+  mask-position: 50% 50%;
+  margin-right: 0.1em;
+}
+a.text-link[href*="//"]:hover
+{
+  text-decoration: underline;
 }
 
 /* Table styles  */
@@ -217,7 +243,7 @@ h4 {
   text-transform: capitalize;
   line-height: 1.25;
   margin-bottom: 0.75rem;
-  font-family: var(--ff-primary);
+  font-family: var(--overpass-gowun-dodum-font);
   margin-top: var(--spacing-10);
   scroll-margin-top: 6rem;
 }
@@ -416,7 +442,7 @@ Navbar
     letter-spacing: var(--spacing);
     font-size: 1rem;
     transition: var(--transition);
-    font-family: var(--ff-secondary);
+    font-family: var(--overpass-gowun-dodum-font);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius);
@@ -691,7 +717,7 @@ Single Pages
   letter-spacing: var(--spacing);
 }
 .form-control::placeholder {
-  font-family: var(--ff-primary);
+  font-family: var(--overpass-gowun-dodum-font);
   color: var(--clr-grey-1);
   text-transform: uppercase;
   letter-spacing: var(--spacing);
@@ -788,7 +814,7 @@ Testing Post and Components
   font-family: 'Courier New', Courier, monospace;
 }
 .code .token-line {
-  line-height: 1.5;
+  main.cssline-height: 1.5;
 }
 
 .nice-text {

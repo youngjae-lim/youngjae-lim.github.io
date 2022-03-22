@@ -104,13 +104,12 @@ const DetailsWrapper = styled.article`
 
     * > a {
       padding: 0.3rem;
-      transition: all 500ms ease-in-out;
+      transition: all 200ms ease-in-out;
     }
 
     * > a:hover {
-      color: white;
-      background: var(--clr-grey-3);
-      border-radius: 5px;
+      color: var(--clr-toc-hover-link);
+      text-decoration: underline;
     }
   }
   @media (max-width: 1170px) {
@@ -124,12 +123,12 @@ const ToCListStyles = styled.li`
   & > a {
     color: ${props =>
       props.activeId === props.item.url.slice(1)
-        ? 'var(--clr-toc-link)'
+        ? 'var(--clr-toc-hover-link)'
         : 'var(--clr-grey-3)'};
-    /* border-left: ${props =>
+    border-left: ${props =>
       props.activeId === props.item.url.slice(1)
-        ? '3px solid var(--clr-white)'
-        : ''}; */
+        ? '3px solid var(--clr-toc-hover-link)'
+        : ''};
     padding-left: ${props =>
       props.activeId === props.item.url.slice(1) ? '3px' : ''};
     text-decoration: ${props =>

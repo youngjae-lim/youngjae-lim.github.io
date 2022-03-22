@@ -17,9 +17,9 @@ const ExternalLink = props => {
       href={props.href}
       target='_blank'
       rel='noopener noreferrer'
+      className='text-link'
       style={{
-        color: 'hsl(59, 70%, 45%)',
-        borderBottom: '1px solid white',
+        color: 'var(--clr-external-link)',
       }}
     >
       {props.children}

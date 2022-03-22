@@ -17,4 +17,5 @@ const Pre = styled.code`
   white-space: break-spaces;
   overflow-wrap: break-word;
   text-transform: none;
+  font-family: var(--fira-mono-font);
 `

@@ -49,6 +49,7 @@ const PrismWrapper = props => {
                 backgroundColor: 'var(--clr-code-bg)',
                 paddingLeft: '1rem',
                 margin: '1rem 0',
+                fontFamily: `var(--fira-mono-font)`,
               }}
             >
               {tokens.map((line, i) => (
