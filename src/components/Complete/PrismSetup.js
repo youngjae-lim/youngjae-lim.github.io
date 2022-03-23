@@ -1,8 +1,14 @@
 import React from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
+// themes: dracula, nightOwl, okaidia, palenight, shadesOfPurple, synthwave84, vsDark
 import theme from 'prism-react-renderer/themes/nightOwl'
 import styled from 'styled-components'
-import { FaRegCopy, FaTerminal } from 'react-icons/fa'
+import {
+  FaRegCopy,
+  FaTerminal,
+  FaPlusCircle,
+  FaMinusCircle,
+} from 'react-icons/fa'
 import rangeParser from 'parse-numeric-range'
 
 const areLinesToHighlight = raw => {
@@ -38,9 +44,12 @@ const PrismWrapper = props => {
   const fileName = props.children.props.file || ''
 
   const highlights = areLinesToHighlight(props.children.props.highlights || '')
+  const deletes = areLinesToHighlight(props.children.props.delete || '')
+  const adds = areLinesToHighlight(props.children.props.add || '')
 
-  console.log(className)
-  console.log(props)
+  // console.log(className)
+  // console.log(props)
+  // console.log(props.children.props)
 
   return className ? (
     <Highlight /* Fenced code block with language specification */
@@ -69,12 +78,20 @@ const PrismWrapper = props => {
               {/* <div className='code-tab'>{language}</div> */}
               {tokens.map((line, i) => (
                 <div
+                  key={i}
                   style={{
                     display: 'block',
-                    background: highlights(i)
+                    background: adds(i)
+                      ? 'rgba(70, 149, 74, 0.25)'
+                      : deletes(i)
+                      ? 'rgba(229, 83, 75, 0.25)'
+                      : highlights(i)
                       ? 'rgba(70, 149, 74, 0.25)'
                       : 'transparent',
                   }}
+                  className={
+                    adds(i) ? 'added-line' : deletes(i) ? 'deleted-line' : ''
+                  }
                 >
                   <div
                     {...getLineProps({ line, key: i })}
@@ -88,6 +105,17 @@ const PrismWrapper = props => {
                       <span className='terminal'>
                         <FaTerminal />
                       </span>
+                    )}
+                    {adds(i) ? (
+                      <span className='plus'>
+                        <FaPlusCircle />
+                      </span>
+                    ) : deletes(i) ? (
+                      <span className='minus'>
+                        <FaMinusCircle />
+                      </span>
+                    ) : (
+                      ''
                     )}
                     {line.map((token, key) => (
                       <span {...getTokenProps({ token, key })} />
@@ -208,6 +236,16 @@ const Pre = styled.pre`
     margin-left: 0.4rem;
     margin-right: 0.6rem;
     color: hsl(224, 51%, 49%);
+  }
+  .deleted-line,
+  .added-line {
+    font-style: italic;
+  }
+  .minus {
+    color: red;
+  }
+  .plus {
+    color: green;
   }
 `
 const Container = styled.article`

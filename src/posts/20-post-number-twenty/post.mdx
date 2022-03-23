@@ -369,7 +369,7 @@ Because we want to use this component in the Blog page, we have to make a change
 - Import PostCard component (line 50)
 - Replace `<p>` tag with `<PostCard {post} />` (line 59, 60)
 
-```diff file=./src/routes/blog/index.svelte highlights=50,59,60
+```jsx file=./src/routes/blog/index.svelte delete=59 add=50,60  
 <script context="module">
   const query = `
     query getPosts {
@@ -419,8 +419,8 @@ Because we want to use this component in the Blog page, we have to make a change
 </script>
 
 <script>
-+ import PostCard from '../../components/PostCard.svelte';
-	export let posts;
+  import PostCard from '../../components/PostCard.svelte';
+  export let posts;
 </script>
 
 <h1>Blog</h1>
@@ -428,8 +428,8 @@ Because we want to use this component in the Blog page, we have to make a change
   <ul>
     {#each posts as post}
       <li>
--       <p>{post.title}</p>
-+       <PostCard {post} />
+        <p>{post.title}</p>
+        <PostCard {post} />
       </li>
     {/each}
   </ul>
@@ -610,16 +610,16 @@ Create a PodcastPlayer component:
 
 Render this component in the layout svelte file.
 
-```diff file=./src/__layout.svelte highlights=3,9
+```jsx file=./src/__layout.svelte add=3,9
 <script context="module">
   import "../layout.css";
-+ import PodcastPlayer from "../components/PodcastPlayer.svelte";
+  import PodcastPlayer from "../components/PodcastPlayer.svelte";
 </script>
 
 <main>
   <slot />
 </main>
-+ <PodcastPlayer />
+<PodcastPlayer />
 
 <style>
   main {
