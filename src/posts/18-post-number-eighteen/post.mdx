@@ -25,7 +25,7 @@ This article will help you to publish your gatsby site to github pages using git
 
 ### Gatsby
 
-Gatsby is a react based ,GraphQL powered static site generator . It simply means it combines the power of react ,GraphQL ,web pack and other front end tools to offer a great developer Experience
+Gatsby is a react based GraphQL powered static site generator. It simply means it combines the power of react, GraphQL, webpack and other front end tools to offer a great developer experience.
 
 ### GitHub Pages
 
@@ -36,30 +36,34 @@ GitHub Pages are public webpages hosted and easily published through GitHub.
 
 GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline. You can create workflows that build and test every pull request to your repository, or deploy merged pull requests to production.
 
+### Objective
+
+Our objective here is to use Github Actions to publish our webiste to Github pages whenever we push our codes to the remote repository or make a pull request to the dev branch.
+
 ## Steps
 
 ### 1. Create a GitHub Respository
 
-  I named my repository `youngjae-lim.github.io`
+  I named my repository `youngjae-lim.github.io`.
 
 
 ### 2. Initialize git in your local Gatsby project directory
 
-  ```
-  $ git init
+  ```bash
+  git init
   ```
 
 ### 3. Create a branch called `dev` in your local repository and push it to the GitHub remote repository
 
 
-  ```
-  $ git checkout -b dev
-  $ git status
-  $ git add .
-  $ git commit -m "initial commit to dev branch"
+  ```bash
+  git checkout -b dev
+  git status
+  git add .
+  git commit -m "initial commit to dev branch"
 
-  $ git remote add origin https://github.com/youngjae-lim/youngjae-lim.github.io 
-  $ git push origin dev 
+  git remote add origin https://github.com/youngjae-lim/youngjae-lim.github.io 
+  git push origin dev 
   ```
 
   Now that you pushed the local repository to the remote repository, you should be able to see the same project in your GitHub repository:
@@ -77,11 +81,11 @@ GitHub Actions is a continuous integration and continuous delivery (CI/CD) platf
 
   In other words, we will work in `dev` branch locally to develop our website and once we push to the remote repository, it will trigger GitHub Actions that build our Gatsby Website and deploy to `gh-pages` branch automatically. 
  
-  ```
-  $ git checkout --orphan gh-pages
-  $ git rm -rf .
-  $ git commit --allow-empty "initial commit to gh-pages branch"
-  $ git push origin gh-pages
+  ```bash
+  git checkout --orphan gh-pages
+  git rm -rf .
+  git commit --allow-empty "initial commit to gh-pages branch"
+  git push origin gh-pages
   ```
 
   If you check your remote GitHub repository, you should see an empty repository `gh-pages` created.
@@ -96,10 +100,9 @@ GitHub Actions is a continuous integration and continuous delivery (CI/CD) platf
 
 ### 6. Create a `GitHub Actions`
 
-  Create a `.github/workflows` directory right under your local project root and create `deploy.yml` like this:
+  Create a `./github/workflows` directory right under your local project root and create `deploy.yml` like this:
 
-  ```yml
-  # .github/workflows/deploy.yml
+  ```yml file=./github/workflows/deploy.yml highlights=32,36
   # This is a basic workflow to help you get started with Actions
   name: CI
 
@@ -107,6 +110,8 @@ GitHub Actions is a continuous integration and continuous delivery (CI/CD) platf
   on:
     # Triggers the workflow on push or pull request events but only for the dev branch
     push:
+      branches: [dev]
+    pull_request:
       branches: [dev]
 
     # Allows you to run this workflow manually from the Actions tab
@@ -153,11 +158,11 @@ GitHub Actions is a continuous integration and continuous delivery (CI/CD) platf
   
 Now that we created our deploy GitHub Actions in our local repository, let's push the changes to `dev` branch of the remote GitHub repository. Make sure you are currently working in your local `dev` branch:
 
-  ```
-  $ git checkout dev
-  $ git add .
-  $ git commit -m "create a deploy GitHub Actions"
-  $ git push origin dev
+  ```bash
+  git checkout dev
+  git add .
+  git commit -m "create a deploy GitHub Actions"
+  git push origin dev
   ```
 
   This will automatically trigger our Gatsby build script and publish the website to `gh-pages` branch. You can check the real-time build steps from the `Actions` tab in your remote repository:

@@ -16,34 +16,38 @@ Let's say that you do your all of your development on a feature branch in your l
 
 However, you still have the feature branch in your local repository. If you keep doing this, you will have growing number of feature branches that are no longer needed locally. You need to clean them up and the below is how you do it.
 
-```shell
+## Case I
+
+```bash
 # Fetch the latest from the git
-$ git fetch
+git fetch
 
 # Check the list of local git branches
-$ git branch
+git branch
 
 # Delete all local branches that have been merged to main branch and then deleted in the remote repository
-$ git branch --verbose | grep ': gone]' | grep -v '\*' | awk '{ print $1; }' | xargs -r git branch -d
+git branch --verbose | grep ': gone]' | grep -v '\*' | awk '{ print $1; }' | xargs -r git branch -d
 
 # Check the list of local git branches that remain
-$ git branch
+git branch
 ```
+
+## Case II
 
 In case where you merged the feature branch into main branch, but haven't deleted it yet in the remote repository, you can use the following commands to remove the merged branches locally:
 
-```shell
+```bash
 # Fetch the latest from the git
-$ git fetch
+git fetch
 
 # Check the list of local git branches
-$ git branch
+git branch
 
 # Delete all local branches that have been merged to main branch, but haven't yet deleted in the remote repository
-$ git branch --merged main | grep -v '^\* main' | xargs -n 1 -r git branch -d
+git branch --merged main | grep -v '^\* main' | xargs -n 1 -r git branch -d
 
 # Check the list of local git branches that remain
-$ git branch
+git branch
 ```
 
 <Link to='/posts' className='btn center-btn'>

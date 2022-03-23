@@ -100,18 +100,18 @@ Now that we've set up everything we need in the local wordpress server, let's ge
 
 ## Set up a new SvelteKit project
 
-```
-$ npm init svelte@next sveltekit-wordpress-demo
-$ cd sveltekit-wordpress-demo
-$ npm install
-$ npm run dev -- --open
+```bash
+npm init svelte@next sveltekit-wordpress-demo
+cd sveltekit-wordpress-demo
+npm install
+npm run dev -- --open
 ```
 
 ## Configure CSS and layout
 
-### Create `./src/layout.css`.
+### Create a layout css file to globally apply css rules.
 
-```css:./src/layout.css
+```css file=./src/layout.css
 :root {
 	--border-radius: 8px;
 
@@ -186,9 +186,9 @@ a {
 }
 ```
 
-### Create a `./src/routes/__layout.svelte`:
+### Create a layout svelte file
 
-```js
+```jsx file=./src/routes/__layout.svelte
 <script context="module">
   import '../layout.css';
 </script>
@@ -231,7 +231,7 @@ Go back to `wp-admin` panel and open up `GraphiQL IDE` and click `Query Composer
 Now let's create a svelte file to render our Blog page.
 Create `./src/routes/blog/index.svelte` file that will make a HTTP POST request to send a graphql query and receive a resulting blog posts data and then render a list of the blog post titles.
 
-```js
+```jsx file=./src/routes/blog/index.svelte
 <script context="module">
   const query = `
     query getPosts {
@@ -312,8 +312,8 @@ Create `./src/routes/blog/index.svelte` file that will make a HTTP POST request 
 
 Let's run our application in the dev environment:
 
-```
-$ npm run dev -- --open
+```bash
+npm run dev -- --open
 ```
 
 You will be able to see the `blog` page loaded when you access `localhost:3000/blog`
@@ -324,11 +324,9 @@ You will be able to see the `blog` page loaded when you access `localhost:3000/b
 
 Now that we know that we can retreive data from worpress graphql server, let's make our blog page a bit prettier making `PostCard` component.
 
-Create `./src/components/PostCard.svelte` file:
+Create a PostCard component:
 
-```js
-// ./src/components/PostCard.svelte
-
+```jsx file=./src/components/PostCard.svelte
 <script>
   export let post;
 </script>
@@ -369,9 +367,9 @@ Create `./src/components/PostCard.svelte` file:
 
 Because we want to use this component in the Blog page, we have to make a change in the `./src/routes/blog/index.svelte` file:
 - Import PostCard component (line 50)
-- Replace `<p>` tag with `<PostCard {post} />` (line 59)
+- Replace `<p>` tag with `<PostCard {post} />` (line 59, 60)
 
-```js:./src/routes/blog/index.svelte highlights=50,59
+```diff file=./src/routes/blog/index.svelte highlights=50,59,60
 <script context="module">
   const query = `
     query getPosts {
@@ -421,7 +419,7 @@ Because we want to use this component in the Blog page, we have to make a change
 </script>
 
 <script>
-  import PostCard from '../../components/PostCard.svelte';
++ import PostCard from '../../components/PostCard.svelte';
 	export let posts;
 </script>
 
@@ -430,7 +428,8 @@ Because we want to use this component in the Blog page, we have to make a change
   <ul>
     {#each posts as post}
       <li>
-        <PostCard {post} />
+-       <p>{post.title}</p>
++       <PostCard {post} />
       </li>
     {/each}
   </ul>
@@ -467,7 +466,7 @@ You can run the following graphql query from the `GraphiQL IDE` in the `wp-admin
 
 Create `./src/routes/blog/[slug].svelte`:
 
-```js
+```jsx file=./src/routes/blog/[slug].svelte highlights=41
 <script context="module">
   export const prerender = true;
   const query = `
@@ -582,9 +581,9 @@ Now that the dynamic routes are all set, we can click the individual post to see
 
 So far, we retrieved blog post data from wordpress graphql server and rendered in our SvelteKit front-end application. Because the SvelteKit is a SPA(Single Page Application), we can create a persistent component that can be rendered throught all the pages. For example, we can create a footer like component that plays a podcast, but you can still navigate to other pages without interrupting the playing podcast.
 
-Create a `./src/components/PodcastPlayer.svelte` file:
+Create a PodcastPlayer component:
 
-```js
+```jsx file=./src/components/PodcastPlayer.svelte
 <div>
   <iframe
     src="https://www.buzzsprout.com/1724287/9511712-gutenberg-with-jason-bahl?client_source=small_player&amp;iframe=true&amp;referrer=https%3A%2F%2Fwww.buzzsprout.com%2F1724287%2F9511712-gutenberg-with-jason-bahl.js%3Fcontainer_id%3Dbuzzsprout-player-9511712%26player%3Dsmall"
@@ -609,18 +608,18 @@ Create a `./src/components/PodcastPlayer.svelte` file:
 </style>
 ```
 
-Render this component in our `./src/__layout.svelte` component.
+Render this component in the layout svelte file.
 
-```js
+```diff file=./src/__layout.svelte highlights=3,9
 <script context="module">
   import "../layout.css";
-  import PodcastPlayer from "../components/PodcastPlayer.svelte";
++ import PodcastPlayer from "../components/PodcastPlayer.svelte";
 </script>
 
 <main>
   <slot />
 </main>
-<PodcastPlayer />
++ <PodcastPlayer />
 
 <style>
   main {

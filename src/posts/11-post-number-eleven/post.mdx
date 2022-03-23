@@ -22,10 +22,10 @@ import { Link } from 'gatsby'
 
 ## Using Homebrew for Mac
 
-```
-$ brew install datasette
+```bash
+brew install datasette
 
-$ datasette --version
+datasette --version
 ```
 
 ### sqlite-utils
@@ -34,10 +34,14 @@ $ datasette --version
 
 You can brew-install this tool as well:
 
+```bash
+brew install sqlite-utils
+sqlite-utils --help
 ```
-$ brew install sqlite-utils
 
-$ sqlite-utils --help
+All options and commands of `sqlite-utils` command:
+```
+
 Usage: sqlite-utils [OPTIONS] COMMAND [ARGS]...
 
   Commands for interacting with a SQLite database
@@ -102,21 +106,17 @@ Then put the downloaded csv data into sqlite database using `sqlite-utils`.
 
 Go into the directory that contains the csv data and run the following command:
 
-```
+```bash
 # Insert the csv data into a table called nyctrees in sqlite database.
-$ sqlite-utils insert nyctrees.db nyctrees 2015_Street_Tree_Census_-_Tree_Data.csv --csv
+sqlite-utils insert nyctrees.db nyctrees 2015_Street_Tree_Census_-_Tree_Data.csv --csv
 ```
 
 Once the inserting is done, you should see `nyctrees.db` created in the current working direcotry.
 
 Let's open up the database with `Datasette`: this will spin up the http web server to run datasette web application.
 
-```
-$ datasette nyctrees.db
-INFO:     Started server process [60614]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+```bash
+datasette nyctrees.db
 ```
 
 Click the url from the output message to open up `Datasette` in the web browser. You should see the webpage loaded like this:
@@ -127,12 +127,12 @@ Click the url from the output message to open up `Datasette` in the web browser.
 
 Because the data has some geographical information in it, we would like to install datasette plugin called `datasette-cluster-map` to show interactive map for tree locations. Stop the server and install the plugin.
 
-```
+```bash
 # Install the plugin
-$ datasette isntall datasette-cluster-map
+datasette isntall datasette-cluster-map
 
 # Restart the server
-$ datasette nyctrees.db
+datasette nyctrees.db
 ```
 
 ![datasette-map]()
@@ -143,8 +143,8 @@ Extracting is for extracting one or more columns into a separate table.
 
 Because I am interested in the types of tree species, let's take a close look at it by extracting into a separate table:
 
-```
-$ sqlite-utils extract nyctrees.db nyctrees spc_common
+```bash
+sqlite-utils extract nyctrees.db nyctrees spc_common
 ```
 
 ![datasette-extract-1]()
@@ -155,8 +155,8 @@ $ sqlite-utils extract nyctrees.db nyctrees spc_common
 
 You can also enable full-text search for the table. Here let's enable for address column so that we can search by address.
 
-```
-$ sqlite-utils enable-fts nyctrees.db nyctrees address
+```bash
+sqlite-utils enable-fts nyctrees.db nyctrees address
 ```
 
 ![datasette-search]()
@@ -165,9 +165,12 @@ $ sqlite-utils enable-fts nyctrees.db nyctrees address
 
 #### Publish data
 
+```bash
+datasette publish --help
 ```
-$ datasette publish --help
-PTIONS] COMMAND [ARGS]...
+
+```
+[OPTIONS] COMMAND [ARGS]...
 
   Publish specified SQLite database files to the internet along with a
   Datasette-powered interface and API
@@ -178,9 +181,15 @@ Options:
 Commands:
   cloudrun  Publish databases to Datasette running on Cloud Run
   heroku    Publish databases to Datasette running on Heroku
+```
 
+#### Publish data to Heroku
 
-$ datasette publish heroku --help
+```bash
+datasette publish heroku --help
+```
+
+```
 Usage: datasette publish heroku [OPTIONS] [FILES]...
 
   Publish databases to Datasette running on Heroku
@@ -217,8 +226,8 @@ Options:
   --help                          Show this message and exit.
 ```
 
-```
-$ datasette publish heroku nyctrees.db --title "NYC Trees" --install datasette-cluster-map
+```bash
+datasette publish heroku nyctrees.db --title "NYC Trees" --install datasette-cluster-map
 ```
 
 <Link to='/posts' className='btn center-btn'>

@@ -22,7 +22,7 @@ simplify building and launching.
 
 Consider this example:
 
-```
+```bash
 docker network create shop
 docker build -t shop-node .
 docker run -v logs:/app/logs --network shop --name shope-web shop-node
@@ -45,7 +45,7 @@ command to bring up the entire environment: docker-compose up .
 
 A `docker-compose.yaml` file looks like this:
 
-```yaml
+```yaml file=docker-compose.yaml
 version: "3.8" # version of the Docker Compose spec which is being used
 services: # "Services" are in the end the Containers that your app needs
   web:
@@ -65,7 +65,7 @@ services: # "Services" are in the end the Containers that your app needs
 You can conveniently edit this file at any time and you just have a short, simple command which
 you can use to bring up your Containers:
 
-```
+```bash
 docker-compose up
 ```
 

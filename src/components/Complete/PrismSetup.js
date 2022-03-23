@@ -1,8 +1,8 @@
 import React from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
-import theme from 'prism-react-renderer/themes/okaidia'
+import theme from 'prism-react-renderer/themes/nightOwl'
 import styled from 'styled-components'
-import { FaRegCopy } from 'react-icons/fa'
+import { FaRegCopy, FaTerminal } from 'react-icons/fa'
 import rangeParser from 'parse-numeric-range'
 
 const areLinesToHighlight = raw => {
@@ -32,15 +32,15 @@ const copyToClipboard = str => {
 
 const PrismWrapper = props => {
   const [isCopied, setIsCopied] = React.useState(false)
-  const className = props.children.props.className
+  const className = props.children.props.className // example: language-python
   const code = props.children.props.children.trim()
-  console.log(className)
-  const language = className?.split('-')[1].split(':')[0]
-  const fileName = className?.split(':')[1]
-  console.log(fileName)
+  const language = className?.split('-')[1]
+  const fileName = props.children.props.file || ''
 
   const highlights = areLinesToHighlight(props.children.props.highlights || '')
-  console.log(highlights)
+
+  console.log(className)
+  console.log(props)
 
   return className ? (
     <Highlight /* Fenced code block with language specification */
@@ -50,18 +50,17 @@ const PrismWrapper = props => {
       theme={theme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => {
-        console.log(style)
         return (
           <Container>
             <Pre className={className} style={style}>
               <div className='filename-tab'>
-                <span>{fileName}</span>
+                <span>{language !== 'bash' ? fileName : 'Terminal'}</span>
                 <button
                   className='copy-button'
                   onClick={() => {
                     copyToClipboard(code)
                     setIsCopied(true)
-                    setTimeout(() => setIsCopied(false), 1000)
+                    setTimeout(() => setIsCopied(false), 2000)
                   }}
                 >
                   {isCopied ? '🎉 Copied!' : <FaRegCopy />}
@@ -70,18 +69,30 @@ const PrismWrapper = props => {
               {/* <div className='code-tab'>{language}</div> */}
               {tokens.map((line, i) => (
                 <div
-                  {...getLineProps({ line, key: i })}
                   style={{
-                    display: 'table-row',
+                    display: 'block',
                     background: highlights(i)
-                      ? 'hsla(120, 100%, 75%, 0.2)'
+                      ? 'rgba(70, 149, 74, 0.25)'
                       : 'transparent',
                   }}
                 >
-                  <span className='line-no'>{i + 1}</span>
-                  {line.map((token, key) => (
-                    <span {...getTokenProps({ token, key })} />
-                  ))}
+                  <div
+                    {...getLineProps({ line, key: i })}
+                    style={{
+                      display: 'table-row',
+                    }}
+                  >
+                    {language !== 'bash' ? (
+                      <span className='line-no'>{i + 1}</span>
+                    ) : (
+                      <span className='terminal'>
+                        <FaTerminal />
+                      </span>
+                    )}
+                    {line.map((token, key) => (
+                      <span {...getTokenProps({ token, key })} />
+                    ))}
+                  </div>
                 </div>
               ))}
             </Pre>
@@ -90,7 +101,7 @@ const PrismWrapper = props => {
       }}
     </Highlight>
   ) : (
-    <Highlight /* Fenced code block with language specification */
+    <Highlight /* Fenced code block with no language specification */
       {...defaultProps}
       code={code}
     >
@@ -126,13 +137,13 @@ const PrismWrapper = props => {
 // Styling Only
 const Pre = styled.pre`
   background: var(--clr-codeschool-dark-1);
-  padding: 1rem 1.5rem 1rem 0.3rem;
+  padding: 0.5rem 0rem 0.5rem 0rem;
   /* border-radius: var(--radius); */
   /* border-top-left-radius: var(--radius); */
   /* border-top-right-radius: var(--radius); */
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
-  margin: 2.5rem 0;
+  margin: 3rem 0 1rem 0;
   font-size: 0.9rem;
   /* font-family: Operator Mono, Menlo, Monaco, 'Courier New', monospace; */
   overflow-x: auto;
@@ -144,23 +155,24 @@ const Pre = styled.pre`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     top: 0;
     left: 0%;
     right: 0;
     color: yellow;
-    font-size: 1rem;
+    font-size: 0.7rem;
     font-weight: 700;
     transform: translateY(-100%);
     padding: 0.07rem 0.85rem 0;
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
-    background: hsl(236, 0%, 25%);
+    background: hsl(200, 20%, 25%);
   }
   .copy-button {
     margin: 4px 0;
-    padding: 4px 12px;
-    background: hsl(236, 20%, 22%);
-    border: none;
+    padding: 4px 8px;
+    background: hsl(150, 10%, 30%);
+    border: 0.1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--radius);
     cursor: pointer;
     color: #e2e8f0;
@@ -181,16 +193,26 @@ const Pre = styled.pre`
     border-top-right-radius: var(--radius);
     background: rgb(39, 40, 34);
   }
+  /* https://github.com/FormidableLabs/prism-react-renderer/issues/45#issuecomment-522590016 */
   .line-no {
-    display: table-cell;
+    display: inline-block;
+    width: 2em;
     text-align: right;
-    padding-right: 1em;
+    vertical-align: bottom;
+    margin-right: 0.5rem;
+    /* padding-right: 1em; */
     user-select: none;
     opacity: 0.5;
+  }
+  .terminal {
+    margin-left: 0.4rem;
+    margin-right: 0.6rem;
+    color: hsl(224, 51%, 49%);
   }
 `
 const Container = styled.article`
   position: relative;
+  /* margin-bottom: 2rem; */
 `
 
 export default PrismWrapper
