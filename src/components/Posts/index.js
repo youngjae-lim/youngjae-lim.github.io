@@ -1,9 +1,12 @@
 import React from 'react'
-import Post from './Post'
+import PostCard from './PostCard'
+import ProjectCard from '../Projects/ProjectCard'
 import Banner from '../Banner'
+import Tags from '../Tags'
 
 const Posts = ({ posts, title, count }) => {
   // return list of posts
+
   return (
     <section className='posts'>
       <h3 className='posts-title'>
@@ -17,9 +20,15 @@ const Posts = ({ posts, title, count }) => {
       <div className='posts-center'>
         {/* posts column */}
         <article>
-          {posts.map(post => (
-            <Post key={post.id} {...post} />
-          ))}
+          <Tags />
+          <br />
+          {posts.map(post =>
+            post.frontmatter.category !== 'PROJECT' ? (
+              <PostCard key={post.id} {...post} />
+            ) : (
+              <ProjectCard key={post.id} {...post} />
+            )
+          )}
         </article>
         {/* banner column on the right side */}
         <article>

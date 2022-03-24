@@ -16,6 +16,7 @@ const PostTemplate = ({ data, pageContext }) => {
   const {
     title,
     category,
+    tags,
     image,
     date,
     embeddedImages,
@@ -114,6 +115,7 @@ export const query = graphql`
         title
         author
         category
+        tags
         slug
         date(formatString: "MMMM Do, YYYY")
         readTime

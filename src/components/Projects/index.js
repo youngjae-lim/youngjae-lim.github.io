@@ -1,5 +1,5 @@
 import React from 'react'
-import Project from './Project'
+import ProjectCard from './ProjectCard'
 import Banner from '../Banner'
 
 const Projects = ({ projects, title }) => {
@@ -10,7 +10,7 @@ const Projects = ({ projects, title }) => {
         {/* posts column */}
         <article>
           {projects.map(project => (
-            <Project key={project.id} {...project} />
+            <ProjectCard key={project.id} {...project} />
           ))}
         </article>
         {/* banner column on the right side */}

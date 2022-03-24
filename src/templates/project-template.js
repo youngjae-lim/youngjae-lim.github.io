@@ -13,6 +13,7 @@ const ProjectTemplate = ({ data }) => {
     image,
     title,
     category,
+    tags,
     date,
     embeddedImages,
     videoSourceURL,
@@ -73,6 +74,7 @@ export const query = graphql`
         title
         author
         category
+        tags
         slug
         date(formatString: "MMMM Do, YYYY")
         readTime

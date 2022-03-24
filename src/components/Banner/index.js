@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import About from './About'
 import Recent from './Recent'
 import BannerCategories from './BannerCategories'
+import BannerTags from './BannerTags'
 
 const Banner = ({ post }) => {
   return (
@@ -10,6 +11,7 @@ const Banner = ({ post }) => {
       <About />
       <Recent />
       <BannerCategories />
+      <BannerTags />
     </Wrapper>
   )
 }

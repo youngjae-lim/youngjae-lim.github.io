@@ -3,7 +3,7 @@ import Layout from '../components/Layout'
 import Posts from '../components/Posts'
 import { graphql } from 'gatsby'
 
-const CategoryTemplate = ({ data, pageContext }) => {
+const TagTemplate = ({ data, pageContext }) => {
   const {
     allMdx: { nodes: posts },
   } = data
@@ -12,18 +12,18 @@ const CategoryTemplate = ({ data, pageContext }) => {
     <Layout>
       <Posts
         posts={posts}
-        title={`category / ${pageContext.category}`}
+        title={`tag / ${pageContext.tag}`}
         count={pageContext.count}
       />
     </Layout>
   )
 }
 
-export default CategoryTemplate
+export default TagTemplate
 
 export const query = graphql`
-  query GetPostsByCategory($category: String!) {
-    allMdx(filter: { frontmatter: { category: { eq: $category } } }) {
+  query GetPostsByTag($tag: String!) {
+    allMdx(filter: { frontmatter: { tags: { eq: $tag } } }) {
       nodes {
         id
         excerpt
