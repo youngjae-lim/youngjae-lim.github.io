@@ -36,9 +36,14 @@ async function turnPostsIntoPages({ graphql, actions }) {
   // 2. Query all posts
   const result = await graphql(`
     query GetAllSlugs {
-      allMdx {
+      allMdx(
+        filter: { frontmatter: { category: { ne: "PROJECT" } } }
+        sort: { fields: frontmatter___date, order: DESC }
+      ) {
         nodes {
+          id
           frontmatter {
+            title
             slug
           }
         }
@@ -46,16 +51,25 @@ async function turnPostsIntoPages({ graphql, actions }) {
     }
   `)
 
+  const posts = result.data.allMdx.nodes
+
   // 3. Loop over each page and create it
-  result.data.allMdx.nodes.forEach(({ frontmatter: { slug } }) => {
-    actions.createPage({
-      path: `/posts/${slug}`,
-      component: postTemplate,
-      context: {
-        slug,
-      },
+  if (posts.length > 0) {
+    posts.forEach(({ frontmatter: { slug } }, index) => {
+      const previousPost = index === 0 ? null : posts[index - 1]
+      const nextPost = index === posts.length - 1 ? null : posts[index + 1]
+
+      actions.createPage({
+        path: `/posts/${slug}`,
+        component: postTemplate,
+        context: {
+          slug,
+          previousPost,
+          nextPost,
+        },
+      })
     })
-  })
+  }
 }
 
 async function turnCategoriesIntoPages({ graphql, actions }) {
@@ -65,7 +79,7 @@ async function turnCategoriesIntoPages({ graphql, actions }) {
   // 2. Query all distinct category
   const result = await graphql(`
     query GetDistinctCategory {
-      allMdx {
+      allMdx(filter: { frontmatter: { category: { ne: "PROJECT" } } }) {
         group(field: frontmatter___category) {
           fieldValue
           totalCount

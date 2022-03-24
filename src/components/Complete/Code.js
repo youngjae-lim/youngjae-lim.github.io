@@ -8,9 +8,9 @@ const Code = ({ children }) => {
 export default Code
 
 const Pre = styled.code`
-  background: var(--clr-code-bg);
+  background: var(--clr-green-3);
   color: var(--clr-code-font);
-  padding: 0.3rem;
+  padding: 0.1rem 0.2rem;
   border-radius: var(--radius);
   font-size: 90%;
   overflow-x: auto;

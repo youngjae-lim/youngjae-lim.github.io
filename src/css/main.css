@@ -32,6 +32,13 @@ Variables
   --fontSize-6: 2.488rem;
   --fontSize-7: 2.986rem;
 
+  /* shades of green */
+  --clr-green-1: #cad2c5;
+  --clr-green-2: #84a98c;
+  --clr-green-3: #52796f;
+  --clr-green-4: #354f52;
+  --clr-green-5: #2f3e46;
+
   /* dark shades of primary color*/
   --clr-primary-1: hsl(245, 91%, 17%);
   --clr-primary-2: hsl(245, 84%, 25%);
@@ -105,7 +112,7 @@ Variables
   --clr-info-border: hsl(132, 40%, 36%);
   --clr-info-bg: hsl(132, 40%, 77%);
   --clr-code-bg: hsl(212, 46%, 7%);
-  --clr-code-font: hsl(179, 63%, 85%);
+  --clr-code-font: hsl(179, 63%, 100%);
   --clr-headings: hsl(0, 0%, 100%);
   --clr-external-link: hsl(59, 70%, 45%);
   --clr-toc-hover-link: hsl(15, 100%, 50%);

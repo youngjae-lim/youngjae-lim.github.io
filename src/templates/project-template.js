@@ -33,7 +33,7 @@ const ProjectTemplate = ({ data }) => {
           <TableOfContents items={tableOfContents.items} />
         )}
         {/* Post Info */}
-        <article>
+        <article className='mdx-page'>
           <GatsbyImage
             image={getImage(image)}
             alt={title}
@@ -95,26 +95,29 @@ export const query = graphql`
 `
 
 const Wrapper = styled.section`
+  display: grid;
   width: 90vw;
   max-width: ${props => (props.toc ? '1600px' : '1100px')};
-  margin: 0 auto;
-  margin-top: 5rem;
-  margin-bottom: 4rem;
+  margin: 4rem auto 4rem;
+
+  /* article { */
+  /*   margin: 4rem auto; */
+  /* } */
 
   .post-info {
-    margin: 2rem 0 4rem 0;
+    margin: 2rem 0 3rem 0;
     text-align: center;
     span {
-      background: var(--clr-primary-5);
-      color: var(--clr-white);
+      background: var(--clr-green-1);
+      color: black;
       border-radius: var(--radius);
       padding: 0.25rem 0.5rem;
       text-transform: uppercase;
       letter-spacing: var(--spacing);
     }
-    h2 {
+    h1 {
       margin: 1.25rem 0;
-      font-weight: 400;
+      font-weight: 900;
     }
     p {
       color: var(--clr-white);
@@ -127,12 +130,14 @@ const Wrapper = styled.section`
       margin-bottom: 1rem;
     }
   }
+
   @media (min-width: 992px) {
     & {
+      display: grid;
       width: 92vw;
     }
     .main-img {
-      width: 75%;
+      width: 100%;
       display: block;
       margin: 0 auto;
     }
@@ -141,8 +146,59 @@ const Wrapper = styled.section`
     & {
       display: grid;
       grid-template-columns: ${props =>
-        props.toc ? '400px 1fr 200px' : '1fr 200px'};
+        props.toc ? '380px 1fr 200px' : '1fr 300px'};
       column-gap: 4rem;
+      justify-content: space-around;
     }
   }
 `
+// const Wrapper = styled.section`
+//   width: 90vw;
+//   max-width: ${props => (props.toc ? '1600px' : '1100px')};
+//   margin: 4rem auto 4rem;
+//
+//   .post-info {
+//     margin: 2rem 0 4rem 0;
+//     text-align: center;
+//     span {
+//       background: var(--clr-green-1);
+//       color: black;
+//       border-radius: var(--radius);
+//       padding: 0.25rem 0.5rem;
+//       text-transform: uppercase;
+//       letter-spacing: var(--spacing);
+//     }
+//     h2 {
+//       margin: 1.25rem 0;
+//       font-weight: 400;
+//     }
+//     p {
+//       color: var(--clr-white);
+//     }
+//     .underline {
+//       width: 5rem;
+//       height: 1px;
+//       background: var(--clr-grey-9);
+//       margin: 0 auto;
+//       margin-bottom: 1rem;
+//     }
+//   }
+//   @media (min-width: 992px) {
+//     & {
+//       width: 92vw;
+//     }
+//     .main-img {
+//       width: 75%;
+//       display: block;
+//       margin: 0 auto;
+//     }
+//   }
+//   @media (min-width: 1170px) {
+//     & {
+//       display: grid;
+//       grid-template-columns: ${props =>
+//         props.toc ? '400px 1fr 200px' : '1fr 200px'};
+//       column-gap: 4rem;
+//     }
+//   }
+// `

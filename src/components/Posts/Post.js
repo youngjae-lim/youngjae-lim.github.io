@@ -45,13 +45,13 @@ const Wrapper = styled.article`
   .category {
     display: inline-block;
     margin-bottom: 1rem;
-    background: var(--clr-grey-10);
+    background: var(--clr-green-1);
     padding: 0.25rem 0.5rem;
     text-transform: uppercase;
     font-weight: 700;
     border-radius: var(--radius);
     letter-spacing: var(--spacing);
-    color: var(--clr-grey-5);
+    color: black;
   }
   h3 {
     font-weight: 700;

@@ -4,11 +4,15 @@ import TableOfContents from '../components/TableOfContents'
 import Seo from '../components/Seo'
 import styled from 'styled-components'
 import Banner from '../components/Banner'
-import { graphql } from 'gatsby'
+import { Link, graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 
-const PostTemplate = ({ data }) => {
+const PostTemplate = ({ data, pageContext }) => {
+  console.log(data)
+  console.log(pageContext)
+
   const {
     title,
     category,
@@ -18,6 +22,8 @@ const PostTemplate = ({ data }) => {
     videoSourceURL,
     videoTitle,
   } = data.mdx.frontmatter
+
+  const { previousPost, nextPost } = pageContext
 
   const { body, tableOfContents, excerpt } = data.mdx
 
@@ -52,7 +58,42 @@ const PostTemplate = ({ data }) => {
           >
             {body}
           </MDXRenderer>
+          <nav className='post-nav'>
+            <ul
+              style={{
+                display: `flex`,
+                flexWrap: `wrap`,
+                justifyContent: `space-between`,
+                listStyle: `none`,
+                padding: 0,
+                margin: 0,
+                border: `1px solid var(--clr-green-4)`,
+                borderRadius: 'var(--radius)',
+              }}
+            >
+              <li>
+                {previousPost && (
+                  <Link
+                    to={`/posts/${previousPost.frontmatter.slug}`}
+                    rel='prev'
+                  >
+                    <FaAngleLeft />
+                    <span>{previousPost.frontmatter.title}</span>
+                  </Link>
+                )}
+              </li>
+              <li>
+                {nextPost && (
+                  <Link to={`/posts/${nextPost.frontmatter.slug}`} rel='next'>
+                    <span>{nextPost.frontmatter.title} </span>
+                    <FaAngleRight />
+                  </Link>
+                )}
+              </li>
+            </ul>
+          </nav>
         </article>
+
         {/* Banner on the right side */}
         <article>
           <Banner post={post} />
@@ -108,8 +149,8 @@ const Wrapper = styled.section`
     margin: 2rem 0 3rem 0;
     text-align: center;
     span {
-      background: var(--nav-menu-bg-green-light);
-      color: var(--clr-white);
+      background: var(--clr-green-1);
+      color: black;
       border-radius: var(--radius);
       padding: 0.25rem 0.5rem;
       text-transform: uppercase;
@@ -130,6 +171,16 @@ const Wrapper = styled.section`
       margin-bottom: 1rem;
     }
   }
+
+  .post-nav {
+    /* display: flex; */
+    /* justify-content: center; */
+    span {
+      color: white;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+
   @media (min-width: 992px) {
     & {
       display: grid;

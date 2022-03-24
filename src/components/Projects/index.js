@@ -1,6 +1,7 @@
 import React from 'react'
 import Project from './Project'
 import Banner from '../Banner'
+
 const Projects = ({ projects, title }) => {
   return (
     <section className='posts'>
