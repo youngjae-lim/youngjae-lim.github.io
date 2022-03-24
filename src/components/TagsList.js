@@ -1,33 +1,16 @@
 import React from 'react'
-import { graphql, useStaticQuery } from 'gatsby'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 
-const Tags = () => {
-  const data = useStaticQuery(graphql`
-    {
-      allMdx {
-        group(field: frontmatter___tags) {
-          fieldValue
-          totalCount
-        }
-      }
-    }
-  `)
-
-  const {
-    allMdx: { group: tags },
-  } = data
+const TagsList = ({ tags }) => {
+  console.log(tags)
 
   return (
     <Wrapper>
-      <Link to={`/tags`} className='tag'>
-        All
-      </Link>
       {tags.map((tag, index) => {
         return (
-          <Link key={index} to={`/tags/${tag.fieldValue}`} className='tag'>
-            {tag.fieldValue} ({tag.totalCount})
+          <Link key={index} to={`/tags/${tag}`} className='tag'>
+            {tag}
           </Link>
         )
       })}
@@ -35,7 +18,7 @@ const Tags = () => {
   )
 }
 
-export default Tags
+export default TagsList
 
 const Wrapper = styled.div`
   .tag {
@@ -43,7 +26,7 @@ const Wrapper = styled.div`
     color: var(--clr-code-font);
     padding: 0.1rem 0.2rem;
     border-radius: var(--radius);
-    font-size: 80%;
+    font-size: 90%;
     overflow-x: auto;
     /* white-space: break-spaces; */
     /* overflow-wrap: break-word; */

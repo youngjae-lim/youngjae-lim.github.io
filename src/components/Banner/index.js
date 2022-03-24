@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import About from './About'
 import Recent from './Recent'
-import BannerCategories from './BannerCategories'
+// import BannerCategories from './BannerCategories'
 import BannerTags from './BannerTags'
 
 const Banner = ({ post }) => {
@@ -10,7 +10,7 @@ const Banner = ({ post }) => {
     <Wrapper post={post}>
       <About />
       <Recent />
-      <BannerCategories />
+      {/* <BannerCategories /> */}
       <BannerTags />
     </Wrapper>
   )

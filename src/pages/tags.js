@@ -1,30 +1,36 @@
 import React from 'react'
-import Layout from '../components/Layout'
 import { graphql } from 'gatsby'
-import Posts from '../components/Posts'
+import Layout from '../components/Layout'
 import Seo from '../components/Seo'
+import Posts from '../components/Posts'
+import Banner from '../components/Banner'
 
-const PostsPage = ({ data }) => {
+const TagsPage = ({ data }) => {
   const {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
 
   return (
     <Layout>
-      <Seo title='Posts' />
-      <Posts posts={posts} title='blog posts' count={count} />
+      <Seo title='All posts' />
+      <section className='posts'>
+        <article>
+          <Posts posts={posts} title='All posts' count={count} />
+        </article>
+        {/* banner column on the right side */}
+        <article>
+          <Banner post={true} />
+        </article>
+      </section>
     </Layout>
   )
 }
 
-export default PostsPage
+export default TagsPage
 
 export const query = graphql`
   {
-    allMdx(
-      filter: { frontmatter: { category: { ne: "PROJECT" } } }
-      sort: { fields: frontmatter___date, order: DESC }
-    ) {
+    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
       allPosts: nodes {
         id
         frontmatter {

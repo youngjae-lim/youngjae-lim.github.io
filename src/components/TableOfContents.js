@@ -94,7 +94,7 @@ const DetailsWrapper = styled.article`
     ol {
       list-style: none;
       margin: 0 0 0.5rem 1rem;
-      border-left: 2px red dotted;
+      border-left: 1px red dotted;
     }
 
     > ol {

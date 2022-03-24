@@ -4,18 +4,19 @@ import { FaRegClock } from 'react-icons/fa'
 import { IoMdArrowRoundForward } from 'react-icons/io'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
+import TagsList from '../TagsList'
 
 const Project = ({ frontmatter, excerpt }) => {
-  const { title, slug, date, category, image, readTime } = frontmatter
+  const { title, slug, date, tags, image, readTime } = frontmatter
 
   return (
     <Wrapper>
       <GatsbyImage image={getImage(image)} alt={title} className='img' />
       <div className='info'>
-        <span className='category'>{category}</span>
         <h3>{title}</h3>
         <div className='underline' />
         <p>{excerpt}</p>
+        {tags?.length > 0 ? <TagsList tags={tags} /> : ''}
         <Link to={`/projects/${slug}`} className='link'>
           Continue Reading <IoMdArrowRoundForward />
         </Link>

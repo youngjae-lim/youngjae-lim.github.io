@@ -12,18 +12,12 @@ const Links = ({ styleClass, children }) => {
         <Link to='/posts' className='page-link'>
           Posts
         </Link>
-        {children}
       </li>
       <li>
         <Link to='/projects' className='page-link'>
           Projects
         </Link>
       </li>
-      {/* <li> */}
-      {/*   <Link to='/newsletter' className='page-link'> */}
-      {/*     Newsletter */}
-      {/*   </Link> */}
-      {/* </li> */}
       <li>
         <Link to='/contact' className='page-link'>
           Contact
@@ -33,12 +27,8 @@ const Links = ({ styleClass, children }) => {
         <Link to='/about' className='page-link'>
           About
         </Link>
+        {children}
       </li>
-      {/* <li> */}
-      {/*   <Link to='/post' className='page-link'> */}
-      {/*     Post */}
-      {/*   </Link> */}
-      {/* </li> */}
     </ul>
   )
 }
