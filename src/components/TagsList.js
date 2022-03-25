@@ -50,4 +50,8 @@ const Wrapper = styled.div`
     background: var(--clr-green-1);
     color: black;
   }
+
+  @media (min-width: 992px) {
+    justify-content: left;
+  }
 `
