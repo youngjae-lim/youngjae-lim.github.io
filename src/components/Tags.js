@@ -56,7 +56,7 @@ const Wrapper = styled.div`
 
   a[aria-current='page'] {
     background: var(--clr-tags-selected);
-    color: var(--clr-primary-10);
+    color: var(--clr-tags-selected-font);
   }
 
   .tag:hover {

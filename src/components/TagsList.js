@@ -2,9 +2,11 @@ import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 
-const TagsList = ({ tags }) => {
+const TagsList = ({ tags, isPost }) => {
+  console.log(isPost)
+
   return (
-    <Wrapper>
+    <Wrapper isPost={isPost}>
       {tags.map((tag, index) => {
         return (
           <Link key={index} to={`/tags/${tag}`} className='tag'>
@@ -43,7 +45,7 @@ const Wrapper = styled.div`
 
   a[aria-current='page'] {
     background: var(--clr-tags-selected);
-    color: var(--clr-primary-10);
+    color: var(--clr-tags-selected-font);
   }
 
   .tag:hover {
@@ -52,6 +54,6 @@ const Wrapper = styled.div`
   }
 
   @media (min-width: 992px) {
-    justify-content: left;
+    justify-content: ${props => (props.isPost ? 'center' : 'left')};
   }
 `

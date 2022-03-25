@@ -6,7 +6,14 @@ const ExternalLink = props => {
     props.href[0] === '/'
   ) {
     return (
-      <a {...props} href={props.href}>
+      <a
+        {...props}
+        href={props.href}
+        style={{
+          color: 'var(--clr-external-link)',
+          textDecoration: 'underline',
+        }}
+      >
         {props.children}
       </a>
     )

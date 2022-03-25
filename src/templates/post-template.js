@@ -46,7 +46,7 @@ const PostTemplate = ({ data, pageContext }) => {
           />
           <div className='post-info'>
             <h1>{title}</h1>
-            {tags?.length > 0 ? <TagsList tags={tags} /> : ''}
+            {tags?.length > 0 ? <TagsList tags={tags} isPost={true} /> : ''}
             <p>{date}</p>
             <div className='underline'></div>
           </div>

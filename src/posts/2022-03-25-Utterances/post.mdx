@@ -11,7 +11,8 @@ embeddedImages:
   - ./images/utterance_install_1.png
   - ./images/utterance_install_2.png
   - ./images/utterance_success.png
-  - ./images/config_env_on_github.png
+  - ./images/github_secret_key_settings.png
+  - ./images/comment_capture.png
 ---
 
 import { Link } from 'gatsby'
@@ -72,9 +73,99 @@ export default Comments
 
 ## Setup Gatsby Environment Variable
 
-Because I publish my site to Github pages using GitHub Actions, it needs to be able to access the environment variable during the deploying process. To set it, you can go to Github **Settings>Environments** menu and add a key and a variable.
+### For your local development
+
+Let's add the following codes to the top of `gatsby-config.js` to use an environment variable in Gatsby:
+
+```js file=./gatsby-config.js
+require('dotenv').config({
+  path: `.env`,
+})
+```
+
+Then create `.env` file in your project root and add a key and a value pair to indicate our repo for uttterances comment system:
+
+```dot file=./.env
+GATSBY_COMMENTS_REPO=<github_owner_name>/<github_repository_name_connected_to_utterances>
+```
+
+With this configuration, now the `Comments` component that we've created above will have access the env variable using `process.env.GATSBY_COMMENTS_REPO` syntax. The Post template that imports the `Comments` component shoudl be able to render the comment without any issues in your local development environment.
+
+<GatsbyImage image={getImage(props.embeddedImages[4])} alt="utterance comment" />
+
+
+### For your production development
+
+The above setting definitely works in the dev environment, but how about production environment? We have two concerns to address:
+
+1. Because we are not pushing our `.env` file to the remote repository by adding `.env` to the `.gitignore` file, we have to add one manually to our Github repository **Settings**:
+
+  <blockquote display="warning">
+  Note that pushing .env file with sensitive data to a remote repository is always dangerous practive, so it should be avoided.
+  </blockquote>
+
+2. Because I publish my site to Github pages using GitHub Actions, the workflows script needs to be able to access and read the environment variable during the deploying process. To set it:
+
+For those who missed reading my article on how to deploy Gatsby website to github pages using github actions, please refer to [How To Deploy Gatsby Website To GitHub Pages Using GitHub Actions](https://youngjae-lim.github.io/posts/how-to-deploy-gatsby-to-github-pages).
+
+#### Add a Github Secret Key
+
+Go to **GitHub>Settings** of your repository and add a secret key:
 
 <GatsbyImage image={getImage(props.embeddedImages[3])} alt="github env variable" />
+
+
+#### Update Github Actions
+
+Then let's make some changes to the `deploy.yml` that creates the same `.env` file to the original github actions that I've been using so far:
+
+```yml file=./github/workflows/deploy.yml delete=33 add=34-37
+# This is a basic workflow to help you get started with Actions
+name: CI
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the dev branch
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+          node-version: 16
+      - run: npm ci
+
+      - run: npm run build --if-present
+      - run: |
+          touch .env
+          echo GATSBY_COMMENTS_REPO=${{ secrets.GATSBY_COMMENTS_REPO }} >> .env
+          npm run build --if-present
+
+      - run: npm test
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: public # The folder the action should deploy.
+```
 
 <Link to='/posts' className='btn center-btn'>
   all posts

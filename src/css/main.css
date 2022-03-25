@@ -117,7 +117,8 @@ Variables
   --clr-external-link: hsl(59, 70%, 45%);
   --clr-toc-hover-link: hsl(15, 100%, 50%);
   --clr-tags-bg: rgba(10, 200, 80, 0.3);
-  --clr-tags-selected: rgba(230, 90, 20, 0.6);
+  --clr-tags-selected: rgba(222, 157, 172, 1);
+  --clr-tags-selected-font: rgba(0, 0, 0, 1);
 }
 /*
 ===============
