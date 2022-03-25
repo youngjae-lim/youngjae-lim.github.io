@@ -71,6 +71,7 @@ const Wrapper = styled.article`
     line-height: 1.8;
   }
   .link {
+    margin-top: 1rem;
     text-transform: uppercase;
     letter-spacing: var(--spacing);
     font-weight: 700;
