@@ -30,7 +30,10 @@ jobs:
           node-version: 16
       - run: npm ci
 
-      - run: npm run build --if-present
+      - run: |
+          touch .env
+          echo GATSBY_COMMENTS_REPO=${{ secrets.GATSBY_COMMENTS_REPO }} >> .env
+          npm run build --if-present
 
       - run: npm test
 
