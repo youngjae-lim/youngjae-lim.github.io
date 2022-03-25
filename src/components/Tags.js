@@ -39,7 +39,7 @@ export default Tags
 
 const Wrapper = styled.div`
   .tag {
-    background: var(--clr-green-3);
+    background: var(--clr-tags-bg);
     color: var(--clr-code-font);
     padding: 0.1rem 0.2rem;
     border-radius: var(--radius);
@@ -55,7 +55,7 @@ const Wrapper = styled.div`
   }
 
   a[aria-current='page'] {
-    background: hsl(26, 32%, 48%);
+    background: var(--clr-tags-selected);
     color: var(--clr-primary-10);
   }
 

@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: `.env`,
+})
+
 const remarkMath = require(`remark-math`)
 const remarkSlug = require(`remark-slug`)
 

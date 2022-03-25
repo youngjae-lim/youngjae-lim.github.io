@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../components/Layout'
 import Posts from '../components/Posts'
 import { graphql } from 'gatsby'
+import Seo from '../components/Seo'
 
 const TagTemplate = ({ data, pageContext }) => {
   const {
@@ -10,6 +11,7 @@ const TagTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout>
+      <Seo title={`tag / ${pageContext.tag}`} />
       <Posts
         posts={posts}
         title={`tag / ${pageContext.tag}`}

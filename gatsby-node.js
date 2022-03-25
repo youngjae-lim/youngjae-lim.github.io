@@ -50,7 +50,7 @@ async function turnPostsIntoPages({ graphql, actions }) {
     query GetAllSlugs {
       allMdx(
         filter: { frontmatter: { category: { ne: "PROJECT" } } }
-        sort: { fields: frontmatter___date, order: DESC }
+        sort: { fields: frontmatter___date, order: ASC }
       ) {
         nodes {
           id

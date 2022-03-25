@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../components/Layout'
 import TableOfContents from '../components/TableOfContents'
 import Seo from '../components/Seo'
+import TagsList from '../components/TagsList'
 import styled from 'styled-components'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Banner from '../components/Banner'
@@ -12,7 +13,6 @@ const ProjectTemplate = ({ data }) => {
   const {
     image,
     title,
-    category,
     tags,
     date,
     embeddedImages,
@@ -41,8 +41,8 @@ const ProjectTemplate = ({ data }) => {
             className='main-img'
           />
           <div className='post-info'>
-            <span>{category}</span>
             <h2>{title}</h2>
+            {tags?.length > 0 ? <TagsList tags={tags} /> : ''}
             <p>{date}</p>
             <div className='underline'></div>
           </div>

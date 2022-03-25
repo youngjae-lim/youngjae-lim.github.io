@@ -1,21 +1,19 @@
 import React from 'react'
 import Layout from '../components/Layout'
+import TagsList from '../components/TagsList'
 import TableOfContents from '../components/TableOfContents'
 import Seo from '../components/Seo'
-import styled from 'styled-components'
 import Banner from '../components/Banner'
-import { Link, graphql } from 'gatsby'
+import PrevAndNext from '../components/PrevAndNext'
+import Comments from '../components/Comments'
+import styled from 'styled-components'
+import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 
 const PostTemplate = ({ data, pageContext }) => {
-  console.log(data)
-  console.log(pageContext)
-
   const {
     title,
-    category,
     tags,
     image,
     date,
@@ -47,8 +45,8 @@ const PostTemplate = ({ data, pageContext }) => {
             className='main-img'
           />
           <div className='post-info'>
-            <span>{category}</span>
             <h1>{title}</h1>
+            {tags?.length > 0 ? <TagsList tags={tags} /> : ''}
             <p>{date}</p>
             <div className='underline'></div>
           </div>
@@ -59,40 +57,8 @@ const PostTemplate = ({ data, pageContext }) => {
           >
             {body}
           </MDXRenderer>
-          <nav className='post-nav'>
-            <ul
-              style={{
-                display: `flex`,
-                flexWrap: `wrap`,
-                justifyContent: `space-between`,
-                listStyle: `none`,
-                padding: 0,
-                margin: 0,
-                border: `1px solid var(--clr-green-4)`,
-                borderRadius: 'var(--radius)',
-              }}
-            >
-              <li>
-                {previousPost && (
-                  <Link
-                    to={`/posts/${previousPost.frontmatter.slug}`}
-                    rel='prev'
-                  >
-                    <FaAngleLeft />
-                    <span>{previousPost.frontmatter.title}</span>
-                  </Link>
-                )}
-              </li>
-              <li>
-                {nextPost && (
-                  <Link to={`/posts/${nextPost.frontmatter.slug}`} rel='next'>
-                    <span>{nextPost.frontmatter.title} </span>
-                    <FaAngleRight />
-                  </Link>
-                )}
-              </li>
-            </ul>
-          </nav>
+          <PrevAndNext prev={previousPost} next={nextPost} />
+          <Comments />
         </article>
 
         {/* Banner on the right side */}

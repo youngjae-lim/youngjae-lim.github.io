@@ -67,7 +67,7 @@ Variables
   --clr-green-light: hsl(134, 41%, 88%);
   --clr-red-dark: hsl(360, 67%, 44%);
   --clr-red-light: hsl(360, 71%, 66%);
-  --clr-white: rgba(255, 255, 255, 0.8);
+  --clr-white: rgba(216, 222, 233, 0.9);
   --clr-black: #0a0c10;
   --ff-primary: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont,
     'Roboto', sans-serif;
@@ -116,6 +116,8 @@ Variables
   --clr-headings: hsl(0, 0%, 100%);
   --clr-external-link: hsl(59, 70%, 45%);
   --clr-toc-hover-link: hsl(15, 100%, 50%);
+  --clr-tags-bg: rgba(10, 200, 80, 0.3);
+  --clr-tags-selected: rgba(230, 90, 20, 0.6);
 }
 /*
 ===============
@@ -138,8 +140,8 @@ body {
   font-family: var(--font-body);
   background: var(--clr-codeschool-dark-1);
   color: var(--clr-white);
-  line-height: 1.8;
-  font-size: 1rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
 }
 
 ul,
@@ -933,4 +935,9 @@ Footer
 #copyright-symbol {
   font-size: 1rem;
   font-family: Georgia, Consolas, Verdana; /* this fixes the copyright symbol mis-alingment issue */
+}
+
+.utterances {
+  margin: -16px 0;
+  padding: 0 -4px;
 }
