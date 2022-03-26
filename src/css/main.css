@@ -119,6 +119,8 @@ Variables
   --clr-tags-bg: rgba(10, 200, 80, 0.3);
   --clr-tags-selected: rgba(222, 157, 172, 1);
   --clr-tags-selected-font: rgba(0, 0, 0, 1);
+  --clr-scroll-to-top-bg: rgba(125, 125, 125, 0.3);
+  --clr-scroll-to-top-border: rgba(200, 200, 200, 0.8);
 }
 /*
 ===============
