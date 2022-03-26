@@ -313,7 +313,7 @@ svg {
 .btn-danger {
   text-transform: uppercase;
   background: var(--newsletter-sub-btn);
-  color: var(--clr-white);
+  color: white;
   padding: 0.375rem 0.75rem;
   letter-spacing: var(--spacing);
   display: inline-block;

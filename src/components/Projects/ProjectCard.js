@@ -1,7 +1,6 @@
 import React from 'react'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import { FaRegClock } from 'react-icons/fa'
-import { IoMdArrowRoundForward } from 'react-icons/io'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 import TagsList from '../TagsList'
@@ -18,12 +17,11 @@ const Project = ({ frontmatter, excerpt }) => {
         <p>{excerpt}</p>
         {tags?.length > 0 ? <TagsList tags={tags} isPost={false} /> : ''}
         <Link to={`/projects/${slug}`} className='link'>
-          Continue Reading <IoMdArrowRoundForward />
+          Continue Reading...
         </Link>
         <footer>
           <span className='date'>
-            <FaRegClock className='icon' />
-            {date}
+            <span className='date'>📆 &nbsp; {date}</span>
           </span>
           <span>{readTime} min</span>
         </footer>
@@ -71,13 +69,13 @@ const Wrapper = styled.article`
     line-height: 1.8;
   }
   .link {
+    display: flex;
     margin-top: 1rem;
     text-transform: uppercase;
     letter-spacing: var(--spacing);
     font-weight: 700;
     color: var(--continue-reading);
-    padding-bottom: 0.1rem;
-    display: flex;
+    /* padding-bottom: 0.1rem; */
     align-items: center;
     svg {
       margin-left: 0.25rem;
