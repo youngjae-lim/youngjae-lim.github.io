@@ -3,6 +3,7 @@ import PostCard from './PostCard'
 import ProjectCard from '../Projects/ProjectCard'
 import Banner from '../Banner'
 import Tags from '../Tags'
+import Accordion from '../Accordion'
 
 const Posts = ({ posts, title, count }) => {
   // return list of posts
@@ -20,7 +21,9 @@ const Posts = ({ posts, title, count }) => {
       <div className='posts-center'>
         {/* posts column */}
         <article>
-          <Tags />
+          <Accordion title={'Tags'}>
+            <Tags />
+          </Accordion>
           <br />
           {posts.map(post =>
             post.frontmatter.category !== 'PROJECT' ? (

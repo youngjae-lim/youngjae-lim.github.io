@@ -3,8 +3,6 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 const TagsList = ({ tags, isPost }) => {
-  console.log(isPost)
-
   return (
     <Wrapper isPost={isPost}>
       {tags.map((tag, index) => {

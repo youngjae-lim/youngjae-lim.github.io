@@ -1,6 +1,5 @@
 import React from 'react'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
-import { FaRegClock } from 'react-icons/fa'
 import { Link } from 'gatsby'
 import TagsList from '../TagsList'
 import styled from 'styled-components'
