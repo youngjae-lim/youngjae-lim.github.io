@@ -6,6 +6,7 @@ import {
   Blockquote,
   PrismSetup,
   ExternalLink,
+  Marker,
 } from './src/components/Complete'
 
 const components = {
@@ -15,6 +16,7 @@ const components = {
   div: Math.MathBlock,
   span: Math.MathInline,
   a: ExternalLink,
+  mark: Marker,
 }
 
 export const wrapMDX = ({ element }) => (
