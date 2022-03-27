@@ -12,6 +12,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 const ProjectTemplate = ({ data }) => {
   const url = typeof window !== 'undefined' ? window.location.href : ''
+  const pathName = typeof window !== 'undefined' ? window.location.pathname : ''
 
   const {
     image,
@@ -35,6 +36,7 @@ const ProjectTemplate = ({ data }) => {
         title={title}
         description={excerpt}
         image={image.childImageSharp.resize}
+        pathname={pathName}
       />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}

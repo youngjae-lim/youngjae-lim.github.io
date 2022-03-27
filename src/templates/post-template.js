@@ -14,6 +14,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 const PostTemplate = ({ data, pageContext }) => {
   const url = typeof window !== 'undefined' ? window.location.href : ''
+  const pathName = typeof window !== 'undefined' ? window.location.pathname : ''
 
   const {
     title,
@@ -39,6 +40,7 @@ const PostTemplate = ({ data, pageContext }) => {
         title={title}
         description={excerpt}
         image={image.childImageSharp.resize}
+        pathname={pathName}
       />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
