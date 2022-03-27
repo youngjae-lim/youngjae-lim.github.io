@@ -14,7 +14,7 @@ module.exports = {
     author: 'Youngjae Jay Lim',
     twitterUsername: '@JayYoungjae',
     image: {
-      src: '/twitter-img.png',
+      src: '/default-card-img.png',
       width: 1884,
       height: 933,
     },
@@ -26,6 +26,7 @@ module.exports = {
     `gatsby-remark-images`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-styled-components`,
+    `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -54,5 +55,36 @@ module.exports = {
         remarkPlugins: [remarkMath, remarkSlug],
       },
     },
+    // {
+    //   resolve: `gatsby-plugin-react-social-cards`,
+    //   options: {
+    //     query: `
+    //             {
+    //               allMdx {
+    //                 nodes {
+    //                   excerpt(pruneLength: 160)
+    //                   frontmatter {
+    //                     slug
+    //                     title
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //             `,
+    //     queryToPages: result =>
+    //       result.data.allMdx.nodes.map(node => {
+    //         const slugWithoutSlashes = node.fontmatter.slug.replace(/\//g, '')
+    //         return {
+    //           slug: `/${slugWithoutSlashes}`,
+    //           pageContext: {
+    //             title: node.frontmatter.title,
+    //             description: node.excerpt,
+    //           },
+    //         }
+    //       }),
+    //     component: require.resolve('./src/components/SocialCard.js'),
+    //     cardLimit: 0, // Useful for debugging.
+    //   },
+    // },
   ],
 }
