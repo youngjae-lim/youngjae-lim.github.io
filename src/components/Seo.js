@@ -25,9 +25,9 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
   )
 
   const metaDescription = description || site.siteMetadata.description
-  const image =
-    metaImage && metaImage.childImageSharp.gatsbyImageData.images.fallback.src
-      ? `${site.siteMetadata.siteUrl}${metaImage.childImageSharp.gatsbyImageData.images.fallback.src}`
+  const imageSrc =
+    metaImage && metaImage.src
+      ? `${site.siteMetadata.siteUrl}${metaImage.src}`
       : `${site.siteMetadata.siteUrl}${site.siteMetadata.image.src}`
 
   const canonical = pathname ? `${site.siteMetadata.siteUrl}${pathname}` : null
@@ -59,6 +59,10 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
         //   content: site.siteMetadata.keywords.join(','),
         // },
         {
+          property: `og:url`,
+          content: canonical,
+        },
+        {
           property: `og:title`,
           content: title,
         },
@@ -88,15 +92,15 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
             ? [
                 {
                   property: 'og:image',
-                  content: image,
+                  content: imageSrc,
                 },
                 {
                   property: 'og:image:width',
-                  content: metaImage.childImageSharp.gatsbyImageData.width,
+                  content: metaImage.width,
                 },
                 {
                   property: 'og:image:height',
-                  content: metaImage.childImageSharp.gatsbyImageData.height,
+                  content: metaImage.height,
                 },
                 {
                   name: 'twitter:card',
@@ -106,7 +110,7 @@ function Seo({ description, lang, meta, image: metaImage, title, pathname }) {
             : [
                 {
                   property: 'og:image',
-                  content: image,
+                  content: imageSrc,
                 },
                 {
                   property: 'og:image:width',

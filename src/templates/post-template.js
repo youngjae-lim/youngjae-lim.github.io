@@ -35,7 +35,11 @@ const PostTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout>
-      <Seo title={title} description={excerpt} image={image} />
+      <Seo
+        title={title}
+        description={excerpt}
+        image={image.childImageSharp.resize}
+      />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
         {isThereTableOfContent && (
@@ -70,7 +74,6 @@ const PostTemplate = ({ data, pageContext }) => {
           </div>
           <PrevAndNext prev={previousPost} next={nextPost} />
           <Comments />
-          <hr />
         </article>
 
         {/* Banner on the right side */}
@@ -100,6 +103,11 @@ export const query = graphql`
         image {
           childImageSharp {
             gatsbyImageData
+            resize(width: 1200) {
+              src
+              width
+              height
+            }
           }
         }
         embeddedImages {

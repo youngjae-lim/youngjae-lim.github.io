@@ -31,7 +31,11 @@ const ProjectTemplate = ({ data }) => {
 
   return (
     <Layout>
-      <Seo title={title} description={excerpt} image={image} />
+      <Seo
+        title={title}
+        description={excerpt}
+        image={image.childImageSharp.resize}
+      />
       <Wrapper toc={isThereTableOfContent}>
         {/* Table of Contents */}
         {isThereTableOfContent && (
@@ -92,6 +96,11 @@ export const query = graphql`
         image {
           childImageSharp {
             gatsbyImageData
+            resize(width: 1200) {
+              src
+              width
+              height
+            }
           }
         }
         embeddedImages {
