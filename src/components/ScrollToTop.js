@@ -57,12 +57,12 @@ const Button = styled.div`
   display: ${props => (props.isVisible ? 'flex' : 'none')};
 
   @media (min-width: 500px) {
-    left: 80vw;
+    left: 85vw;
   }
   @media (min-width: 768px) {
-    left: 90w;
+    left: 87vw;
   }
   @media (min-width: 992px) {
-    left: 95w;
+    left: 90vw;
   }
 `

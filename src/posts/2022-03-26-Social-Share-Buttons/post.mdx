@@ -1,0 +1,93 @@
+---
+title: How To Add Social Share Buttons To Gatsby Blog 
+slug: how-to-add-social-share-buttons-to-gatsby-blog
+image: ./images/main_social_share_buttons.png
+date: 2022-03-26
+author: youngjae lim
+category: Gatsby 
+tags: ["gatsby", "ui"]
+readTime: 10
+embeddedImages:
+  - ./images/utterance_install_1.png
+  - ./images/utterance_install_2.png
+  - ./images/utterance_success.png
+  - ./images/github_secret_key_settings.png
+  - ./images/comment_capture.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+This article shows you how to add social share buttons to your Gatsby blog post. 
+
+## Why you need social share buttons
+
+## What you need
+
+1. `react-share` package
+  ```bash
+  npm install react-share
+  ```
+2. `react-icons` package 
+
+## SocialShareButtons component
+
+```jsx file=./src/components/SocialShareButtons.js
+import React from 'react'
+import styled from 'styled-components'
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  EmailIcon,
+} from 'react-share'
+
+const size = 32
+const round = true
+
+const SocialShareButtons = ({ url, title, description }) => (
+  <Wrapper>
+    <FacebookShareButton url={url} quote={description}>
+      <FacebookIcon size={size} round={round} />
+    </FacebookShareButton>
+
+    <LinkedinShareButton url={url} title={title} summary={description}>
+      <LinkedinIcon size={size} round={round} />
+    </LinkedinShareButton>
+
+    <TwitterShareButton url={url} title={description}>
+      <TwitterIcon size={size} round={round} />
+    </TwitterShareButton>
+
+    <EmailShareButton url={url} title={description}>
+      <EmailIcon size={size} round={round} />
+    </EmailShareButton>
+  </Wrapper>
+)
+
+export default SocialShareButtons
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  transition: all 0.2s ease-out;
+  gap: 0.5rem;
+`
+```
+
+## Update the existing Blog Post template
+
+```jsx file=./src/templates/post-template.js add=1
+
+```
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

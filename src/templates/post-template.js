@@ -6,12 +6,15 @@ import Seo from '../components/Seo'
 import Banner from '../components/Banner'
 import PrevAndNext from '../components/PrevAndNext'
 import Comments from '../components/Comments'
+import SocialShareButtons from '../components/SocialShareButtons'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 const PostTemplate = ({ data, pageContext }) => {
+  const url = typeof window !== 'undefined' ? window.location.href : ''
+
   const {
     title,
     tags,
@@ -26,8 +29,9 @@ const PostTemplate = ({ data, pageContext }) => {
 
   const { body, tableOfContents, excerpt } = data.mdx
 
+  const description = title ? title : excerpt
+
   const isThereTableOfContent = Object.keys(tableOfContents).length !== 0
-  const post = false
 
   return (
     <Layout>
@@ -48,7 +52,10 @@ const PostTemplate = ({ data, pageContext }) => {
             <h1>{title}</h1>
             {tags?.length > 0 ? <TagsList tags={tags} isPost={true} /> : ''}
             <p>{date}</p>
-            <div className='underline'></div>
+            <div className='underline' />
+            <div className='social-buttons-top'>
+              <SocialShareButtons url={url} description={description} />
+            </div>
           </div>
           <MDXRenderer
             embeddedImages={embeddedImages}
@@ -57,13 +64,18 @@ const PostTemplate = ({ data, pageContext }) => {
           >
             {body}
           </MDXRenderer>
+          <div className='social-buttons'>
+            <span>If you found this article informative, please share: </span>
+            <SocialShareButtons url={url} description={description} />
+          </div>
           <PrevAndNext prev={previousPost} next={nextPost} />
           <Comments />
+          <hr />
         </article>
 
         {/* Banner on the right side */}
         <article>
-          <Banner post={post} />
+          <Banner isPost={true} />
         </article>
       </Wrapper>
     </Layout>
@@ -109,10 +121,6 @@ const Wrapper = styled.section`
   max-width: ${props => (props.toc ? '1600px' : '1100px')};
   margin: 4rem auto 4rem;
 
-  /* article { */
-  /*   margin: 4rem auto; */
-  /* } */
-
   .post-info {
     margin: 2rem 0 3rem 0;
     text-align: center;
@@ -141,12 +149,25 @@ const Wrapper = styled.section`
   }
 
   .post-nav {
-    /* display: flex; */
-    /* justify-content: center; */
     span {
       color: white;
       border-bottom: 1px solid #ddd;
     }
+  }
+  .social-buttons-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .social-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.6rem;
   }
 
   @media (min-width: 992px) {
@@ -164,7 +185,7 @@ const Wrapper = styled.section`
     & {
       display: grid;
       grid-template-columns: ${props =>
-        props.toc ? '380px 1fr 200px' : '1fr 300px'};
+        props.toc ? '350px 1fr 200px' : '1fr 300px'};
       column-gap: 4rem;
       justify-content: space-around;
     }

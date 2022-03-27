@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import TableOfContents from '../components/TableOfContents'
 import Seo from '../components/Seo'
 import TagsList from '../components/TagsList'
+import SocialShareButtons from '../components/SocialShareButtons'
 import styled from 'styled-components'
 import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 import Banner from '../components/Banner'
@@ -10,6 +11,8 @@ import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 const ProjectTemplate = ({ data }) => {
+  const url = typeof window !== 'undefined' ? window.location.href : ''
+
   const {
     image,
     title,
@@ -22,8 +25,9 @@ const ProjectTemplate = ({ data }) => {
 
   const { body, tableOfContents, excerpt } = data.mdx
 
+  const description = title ? title : excerpt
+
   const isThereTableOfContent = Object.keys(tableOfContents).length !== 0
-  const post = false
 
   return (
     <Layout>
@@ -45,6 +49,9 @@ const ProjectTemplate = ({ data }) => {
             {tags?.length > 0 ? <TagsList tags={tags} isPost={true} /> : ''}
             <p>{date}</p>
             <div className='underline'></div>
+            <div className='social-buttons-top'>
+              <SocialShareButtons url={url} description={description} />
+            </div>
           </div>
           <MDXRenderer
             embeddedImages={embeddedImages}
@@ -53,10 +60,14 @@ const ProjectTemplate = ({ data }) => {
           >
             {body}
           </MDXRenderer>
+          <div className='social-buttons'>
+            <span>If you found this article informative, please share: </span>
+            <SocialShareButtons url={url} description={description} />
+          </div>
         </article>
         {/* Banner on the right side */}
         <article>
-          <Banner post={post} />
+          <Banner isPost={true} />
         </article>
       </Wrapper>
     </Layout>
@@ -133,6 +144,22 @@ const Wrapper = styled.section`
     }
   }
 
+  .social-buttons-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .social-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.6rem;
+  }
+
   @media (min-width: 992px) {
     & {
       display: grid;
@@ -154,53 +181,3 @@ const Wrapper = styled.section`
     }
   }
 `
-// const Wrapper = styled.section`
-//   width: 90vw;
-//   max-width: ${props => (props.toc ? '1600px' : '1100px')};
-//   margin: 4rem auto 4rem;
-//
-//   .post-info {
-//     margin: 2rem 0 4rem 0;
-//     text-align: center;
-//     span {
-//       background: var(--clr-green-1);
-//       color: black;
-//       border-radius: var(--radius);
-//       padding: 0.25rem 0.5rem;
-//       text-transform: uppercase;
-//       letter-spacing: var(--spacing);
-//     }
-//     h2 {
-//       margin: 1.25rem 0;
-//       font-weight: 400;
-//     }
-//     p {
-//       color: var(--clr-white);
-//     }
-//     .underline {
-//       width: 5rem;
-//       height: 1px;
-//       background: var(--clr-grey-9);
-//       margin: 0 auto;
-//       margin-bottom: 1rem;
-//     }
-//   }
-//   @media (min-width: 992px) {
-//     & {
-//       width: 92vw;
-//     }
-//     .main-img {
-//       width: 75%;
-//       display: block;
-//       margin: 0 auto;
-//     }
-//   }
-//   @media (min-width: 1170px) {
-//     & {
-//       display: grid;
-//       grid-template-columns: ${props =>
-//         props.toc ? '400px 1fr 200px' : '1fr 200px'};
-//       column-gap: 4rem;
-//     }
-//   }
-// `

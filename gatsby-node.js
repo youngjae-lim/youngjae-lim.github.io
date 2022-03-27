@@ -58,6 +58,7 @@ async function turnPostsIntoPages({ graphql, actions }) {
             title
             slug
           }
+          excerpt
         }
       }
     }

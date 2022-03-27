@@ -5,9 +5,9 @@ import Recent from './Recent'
 // import BannerCategories from './BannerCategories'
 import BannerTags from './BannerTags'
 
-const Banner = ({ post }) => {
+const Banner = ({ isPost }) => {
   return (
-    <Wrapper post={post}>
+    <Wrapper isPost={isPost}>
       <About />
       <Recent />
       {/* <BannerCategories /> */}
@@ -21,9 +21,9 @@ export default Banner
 const Wrapper = styled.aside`
   display: grid;
   margin-top: ${props =>
-    props.post
-      ? '0rem'
-      : '2.5rem'}; /* TODO: make margin-top dynamic. 2.5rem is needed for post-template  */
+    props.isPost
+      ? '2.5rem'
+      : '0rem'}; /* TODO: make margin-top dynamic. 2.5rem is needed for post-template  */
   grid-template-columns: 300px;
   justify-content: center;
   row-gap: 1rem;
