@@ -197,6 +197,10 @@ a.text-link[href*="//"]:hover
   text-decoration: underline;
 }
 
+a .autolink {
+  color: white;
+}
+
 /* Table styles  */
 table {
   margin-left: 0;
@@ -254,9 +258,9 @@ h4 {
   letter-spacing: var(--spacing);
   text-transform: capitalize;
   line-height: 1.25;
+  margin-top: var(--spacing-10);
   margin-bottom: 0.75rem;
   font-family: var(--overpass-gowun-dodum-font);
-  margin-top: var(--spacing-10);
   scroll-margin-top: 6rem;
 }
 h1 {
@@ -272,6 +276,28 @@ h3 {
 h4 {
   font-size: var(--fontSize-2);
 }
+
+h1:hover > .autolink > svg {
+  visibility: visible;
+  fill: white;
+  margin-left: 4px;
+}
+h2:hover > .autolink > svg {
+  visibility: visible;
+  fill: white;
+  margin-left: 4px;
+}
+h3:hover > .autolink > svg {
+  visibility: visible;
+  fill: white;
+  margin-left: 4px;
+}
+h4:hover > .autolink > svg {
+  visibility: visible;
+  fill: white;
+  margin-left: 4px;
+}
+
 p {
   margin-bottom: 0.5rem;
   color: var(--clr-white);

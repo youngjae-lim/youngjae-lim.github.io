@@ -51,40 +51,20 @@ module.exports = {
     {
       resolve: `gatsby-plugin-mdx`,
       options: {
-        gatsbyRemarkPlugins: [{ resolve: `gatsby-remark-images` }],
+        extentions: [`.mdx`, '.md'],
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              isIconAfterHeader: true,
+              className: `autolink`,
+              elements: [`h1`, `h2`, `h3`, `h4`],
+            },
+          },
+          { resolve: `gatsby-remark-images` },
+        ],
         remarkPlugins: [remarkMath, remarkSlug],
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-react-social-cards`,
-    //   options: {
-    //     query: `
-    //             {
-    //               allMdx {
-    //                 nodes {
-    //                   excerpt(pruneLength: 160)
-    //                   frontmatter {
-    //                     slug
-    //                     title
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //             `,
-    //     queryToPages: result =>
-    //       result.data.allMdx.nodes.map(node => {
-    //         const slugWithoutSlashes = node.fontmatter.slug.replace(/\//g, '')
-    //         return {
-    //           slug: `/${slugWithoutSlashes}`,
-    //           pageContext: {
-    //             title: node.frontmatter.title,
-    //             description: node.excerpt,
-    //           },
-    //         }
-    //       }),
-    //     component: require.resolve('./src/components/SocialCard.js'),
-    //     cardLimit: 0, // Useful for debugging.
-    //   },
-    // },
   ],
 }
