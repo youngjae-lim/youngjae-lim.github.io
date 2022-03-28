@@ -197,10 +197,6 @@ a.text-link[href*="//"]:hover
   text-decoration: underline;
 }
 
-a .autolink {
-  color: white;
-}
-
 /* Table styles  */
 table {
   margin-left: 0;
@@ -275,6 +271,10 @@ h3 {
 }
 h4 {
   font-size: var(--fontSize-2);
+}
+
+h2 a {
+  font-size: 2rem;
 }
 
 h1:hover > .autolink > svg {
@@ -498,6 +498,8 @@ Navbar
     background: var(--nav-menu-hover-green-light);
     color: var(--clr-primary-10);
   }
+}
+@media screen and (min-width: 1020px) {
   .nav-icons {
     display: flex;
     justify-content: space-between;
@@ -520,16 +522,17 @@ Sidebar
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  right: 0;
+  width: 50%;
   height: 100%;
-  background: var(--clr-sidebar-bg);
+  background: var(--clr-green-3);
+  opacity: 0.9;
   transition: var(--transition);
   display: grid;
-  align-items: center;
+  align-items: end;
   padding-left: 2rem;
   z-index: 999;
-  transform: translateX(-100%);
+  transform: translateX(100%);
   visibility: hidden;
 }
 .showSidebar {
@@ -543,7 +546,7 @@ Sidebar
 .sidebar-links .page-link {
   font-size: 1.5rem;
   display: block;
-  color: var(--clr-grey-1);
+  color: yellow;
   font-weight: 700;
 }
 .sidebar .categories {
@@ -571,7 +574,7 @@ Sidebar
 
 @media screen and (min-width: 800px) {
   .sidebar {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
 }
 
@@ -959,11 +962,6 @@ Footer
 }
 .footer a:hover {
   text-decoration: underline;
-}
-
-#copyright-symbol {
-  font-size: 1rem;
-  font-family: Georgia, Consolas, Verdana; /* this fixes the copyright symbol mis-alingment issue */
 }
 
 .utterances {

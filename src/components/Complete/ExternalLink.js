@@ -21,14 +21,7 @@ const ExternalLink = props => {
     )
   } else if (props.href[0] === '#') {
     return (
-      <Wrapper
-        {...props}
-        href={props.href}
-        // style={{
-        //   fill: 'white',
-        //   textDecoration: 'underline',
-        // }}
-      >
+      <Wrapper {...props} href={props.href}>
         {props.children}
       </Wrapper>
     )
