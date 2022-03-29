@@ -169,8 +169,8 @@ const Pre = styled.pre`
   /* border-radius: var(--radius); */
   /* border-top-left-radius: var(--radius); */
   /* border-top-right-radius: var(--radius); */
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+  border-bottom-left-radius: var(--radius-2);
+  border-bottom-right-radius: var(--radius-2);
   margin: 3rem 0 1rem 0;
   font-size: 0.9rem;
   /* font-family: Operator Mono, Menlo, Monaco, 'Courier New', monospace; */
@@ -192,8 +192,8 @@ const Pre = styled.pre`
     font-weight: 700;
     transform: translateY(-100%);
     padding: 0.07rem 0.85rem 0;
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
+    border-top-left-radius: var(--radius-2);
+    border-top-right-radius: var(--radius-2);
     background: hsl(200, 20%, 25%);
   }
   .copy-button {

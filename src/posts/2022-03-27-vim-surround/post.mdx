@@ -23,26 +23,26 @@ I am a big fan of `vim-surround` plugin which allows me to easily add surroundin
 
 #### Change surroundings with `cs`
 
-| Before         | Command                                            | After                       |
-| -------------- | -------------------------------------------------- | --------------------------- |
-| "Vim Surround" | `cs"'`(change surrounding from " to ')             | 'Vim Surround'              |
-| 'Vim Surround' | `cs'<span>`(change surrounding from ' to span tag) | `<span>Vim Surround</span>` |
+| Before         | Command                                             | After                       |
+| -------------- | --------------------------------------------------- | --------------------------- |
+| "Vim Surround" | `cs"'` (change surrounding from " to ')             | 'Vim Surround'              |
+| 'Vim Surround' | `cs'<span>` (change surrounding from ' to span tag) | `<span>Vim Surround</span>` |
 
 What if you want to change any tag surroundings with any character?
 
 For example, you have `<p>Vim Surround</p>`. You want to replace p tag with a single qoute:
 
-| Before                | Command                                                                  | After          |
-| --------------------- | ------------------------------------------------------------------------ | -------------- |
-| `<p>Vim Surround</p>` | `cst'`(change the surrounding tag to a single quote), t is short for tag | 'Vim Surround' |
+| Before                | Command                                                                   | After          |
+| --------------------- | ------------------------------------------------------------------------- | -------------- |
+| `<p>Vim Surround</p>` | `cst'` (change the surrounding tag to a single quote), t is short for tag | 'Vim Surround' |
 
 #### Delete surroundings with `ds`
 
-| Before                | Command                                                                 | After        |
-| --------------------- | ----------------------------------------------------------------------- | ------------ |
-| "Vim Surround"        | `ds"`(delete the surrounding ")                                         | Vim Surround |
-| `<a>Vim Surround</a>` | `dst`(delete the surrounding a tag)                                     | Vim Surround |
-| (123)456789           | `ds)`(delete the surrounding parentheses) while the cursor on the (123) | 1234567890   |
+| Before                | Command                                                                  | After        |
+| --------------------- | ------------------------------------------------------------------------ | ------------ |
+| "Vim Surround"        | `ds"` (delete the surrounding ")                                         | Vim Surround |
+| `<a>Vim Surround</a>` | `dst` (delete the surrounding a tag)                                     | Vim Surround |
+| (123)456789           | `ds)` (delete the surrounding parentheses) while the cursor on the (123) | 1234567890   |
 
 #### Make surroundings with `ys`
 
