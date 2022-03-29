@@ -1,11 +1,11 @@
 ---
-title: Bank of Useful Vim Commands
-slug: bank-of-useful-vim-commands
+title: Vim Commands Part I - Moving Around
+slug: vim-commands-part-1-moving-around
 image: ./images/main_vim.png
 date: 2022-03-24
 author: youngjae lim
-category: Vim 
-tags: ["vim", "tool"]
+category: Vim
+tags: ['vim', 'tool']
 readTime: 10
 embeddedImages:
 ---
@@ -15,30 +15,104 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-This article shows you some useful vim commands that I enjoy using particularly when I code. I will add more commands once in a while, so this article will be constantly updated. I will keep you posted on that.
+Ever since I switched to Vim from VS Code, I always wanted to write down and organize useful Vim commnds that I've learned throughout the years. Because there are so many commands that I want to share, I am going to break them down in several parts. The first part is for moving around in Vim and these commands are essential to take your journey into Vim world.
 
-## Navigation
+## Moving Around in Vim
 
+### Movement by screens
 
-## Editing
+#### Scrolling the screen
 
-### vim-surround plugin
+| Movement                      | Command |
+| ----------------------------- | ------- |
+| Scroll forward one screen     | `^F`    |
+| Scroll backward one screen    | `^B`    |
+| Scroll forward a half screen  | `^D`    |
+| Scroll backward a half screen | `^U`    |
+| Scroll forward one line       | `^E`    |
+| Scroll backward one line      | `^Y`    |
 
-I am a big fan of `vim-surround` plugin which allows me to easily add surroundings such as parentheses, brackets, quotes, HTML tags, etc. 
+#### Repositioning the screen with `z`
 
-  ```html
-  <span>Hello!!</span>
-  ```
+| Movement                                                                                              | Command |
+| ----------------------------------------------------------------------------------------------------- | ------- |
+| Move current line to <mark>top</mark> of screen and scroll and leave the cursor in the same column    | `zt`    |
+| Move current line to <mark>center</mark> of screen and scroll and leave the cursor in the same column | `zz`    |
+| Move current line to <mark>bottom</mark> of screen and scroll and leave the cursor in the same column | `zb`    |
 
-I would like to surround the `span` element with `div` element. Here is just one line of span element. But what if you have many lines of elements that you want to surround? Then what I usually do is to auto complete the `div` tag and move the `span` tag bewteen the opening div and the closing div.
+#### Move within a screen
 
-But with the help of `vim-surround`, you just visually select(i.e., linewise `visual mode`) the line(s) of codes that you woudl like to surround and then hit `S<div>`. This will make:
+| Movement                            | Command |
+| ----------------------------------- | ------- |
+| Move to home—the top line of screen | `H`     |
+| Move to middle line of screen       | `M`     |
+| Move to bottom line of screen       | `L`     |
 
-  ```html add=1,3
-  <div>
-    <span>Hello!</span>
-  </div>
-  ```
+### Movement by line
+
+#### Move by line
+
+| Movement                                                  | Command              |
+| --------------------------------------------------------- | -------------------- |
+| Move to the first nonblank character of the next line     | `+`(Same as `Enter`) |
+| Move to the first nonblank character of the previous line | `-`                  |
+
+#### Movement on the current line
+
+| Movement                                                 | Command |
+| -------------------------------------------------------- | ------- |
+| Move the cursor to the beginning of the line             | `0`     |
+| Move to the first nonblank character of the current line | `^`     |
+| Move the cursor to the end of the line                   | `$`     |
+
+### Movement by text blocks
+
+| Movement                                 | Command |
+| ---------------------------------------- | ------- |
+| Move to end of word                      | `e`     |
+| Move to end of word (ignore punctuation) | `E`     |
+| Move to beginning of current sentence    | `(`     |
+| Move to beginning of next sentence       | `)`     |
+| Move to beginning of current paragraph   | `{`     |
+| Move to beginning of next paragraph      | `}`     |
+| Move to beginning of current section     | `[[`    |
+| Move to beginning of next section        | `]]`    |
+
+### Movement by searches
+
+#### Pattern searches
+
+| Movement                                 | Command          |
+| ---------------------------------------- | ---------------- |
+| Search forward for pattern               | `/pattern ENTER` |
+| Search backward for pattern              | `?pattern ENTER` |
+| Repeat last search                       | `n`              |
+| Repeat last search in opposite direction | `N`              |
+| Repeat last search forward               | `/`              |
+| Repeat last search backward              | `?`              |
+
+#### Current Line Searches
+
+`f` is short for `find`, and `t` stands for `to`, meaning `up to`.
+
+| Movement                                                                                    | Command |
+| ------------------------------------------------------------------------------------------- | ------- |
+| Find(move cursor to) the next occurrence of x in the line, where x stands for any character | `fx`    |
+| Find(move cursor to) the previous occurrence of x in the line                               | `Fx`    |
+| Find(move cursor to) the character before the next occurrence of x in the line              | `tx`    |
+| Find(move cursor to) the character after the previou occurrence of x in the line            | `Tx`    |
+| Repeat the previous find command in the same direction                                      | `;`     |
+| Repeat the previous find command in the opposite direction                                  | `,`     |
+
+### Movement by line number
+
+| Movement                                             | Command               |
+| ---------------------------------------------------- | --------------------- |
+| Go to given line n                                   | `nG`                  |
+| Go to end of file                                    | `G`                   |
+| Return to previous mark or context                   | \` \` (two backticks) |
+| Return to beginning of line containing previous mark | `''`                  |
+| Show current line (not a movement command)           | `^G`                  |
 
 <Link to='/posts' className='btn center-btn'>
   all posts

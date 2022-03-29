@@ -83,6 +83,7 @@ Variables
   /* --spacing: 0.1rem; */
   --spacing: 0.025em;
   --radius: 0.25rem;
+  --radius-2: 0.5rem;
   --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   --navbar-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
@@ -150,7 +151,7 @@ body {
 ul,
 ol {
   color: var(--clr-white);
-  margin: 0.5rem 1rem 1rem 1rem;
+  margin: 0.5rem 1rem 1rem 2rem;
 }
 
 .nav-links li,
@@ -214,11 +215,16 @@ table {
 }
 th {
   font-weight: bold;
+  color: white;
+  background-color: var(--clr-green-4);
+  opacity: 1;
+  /* border-top-left-radius: var(--radius-2); */
+  /* border-top-right-radius: var(--radius-2); */
 }
 td,
 th {
   text-align: left;
-  border-bottom: 1px solid var(--clr-white);
+  /* border-bottom: 0.5px solid var(--clr-white); */
   font-feature-settings: 'tnum';
   -moz-font-feature-settings: 'tnum';
   -ms-font-feature-settings: 'tnum';
@@ -228,13 +234,16 @@ th {
   padding-top: 0.725rem;
   padding-bottom: calc(0.725rem - 1px);
 }
-th:first-child,
-td:first-child {
-  padding-left: 0;
+th:first-child {
+  padding-left: 0.96667rem;
+  border-top-left-radius: var(--radius-2);
 }
-th:last-child,
-td:last-child {
-  padding-right: 0;
+th:last-child {
+  padding-right: 0.96667rem;
+  border-top-right-radius: var(--radius-2);
+}
+td {
+  background-color: var(--clr-green-5);
 }
 
 /* blockquote p {

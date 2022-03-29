@@ -100,6 +100,7 @@ const DetailsWrapper = styled.article`
     > ol {
       > li {
         margin-top: 1rem;
+        text-transform: capitalize;
       }
     }
 

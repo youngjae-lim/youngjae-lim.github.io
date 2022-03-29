@@ -8,6 +8,8 @@ category: Gatsby
 tags: ['gatsby', 'ui']
 readTime: 10
 embeddedImages:
+  - ./images/social_share_button_capture_1.png
+  - ./images/social_share_button_capture_2.png
 ---
 
 import { Link } from 'gatsby'
@@ -15,7 +17,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-This article shows you how to add social share buttons to your Gatsby blog post.
+This article shows you how to add social share buttons to your Gatsby blog post by using `react-share` package.
 
 ## Why you need social share buttons
 
@@ -37,15 +39,19 @@ Social share buttons help create a presence on social media platforms as well as
 
 - Let's say now you've written this rich content blog post. But does it reach to right target audience. If you've written a tech blog, people sharing it might share it to tech commnunity, forum, etc. In turn, it reaches to more relavant target audience.
 
-## What you need
+## Initial setup
 
-- `react-share` package
+- Install `react-share` package
 
   ```bash
   npm install react-share
   ```
 
-## SocialShareButtons component
+## Implementation
+
+We will <mark>1) create a new component</mark> for social share buttons and then <mark>2) render it inside a blog post template</mark> that is going to be used to create each blog post.
+
+### SocialShareButtons component
 
 ```jsx file=./src/components/SocialShareButtons.js
 import React from 'react'
@@ -95,13 +101,13 @@ const Wrapper = styled.div`
 `
 ```
 
-## Update the existing Blog Post template
+### Render SocialShareButtons inside Blog Post Template
 
 This is a `post-template.js` that I currently use to build each page of post in this site. Note that I show only core part of the codes here. The entire source code is linked [here](https://github.com/youngjae-lim/youngjae-lim.github.io/blob/dev/src/templates/post-template.js).
 
 As you see in the codes, I added the `SocialShareButtons` component to the post template so that Gastby can create pages with it in build time.
 
-```jsx file=./src/templates/post-template.js add=9,73-76
+```jsx file=./src/templates/post-template.js add=9,62-64,73-76
 import React from 'react'
 import Layout from '../components/Layout'
 import TagsList from '../components/TagsList'
@@ -193,6 +199,17 @@ const PostTemplate = ({ data, pageContext }) => {
 
 export default PostTemplate
 ```
+
+Just like you see the social share buttons appeared on the top and the bottom of this blog post page, here is two screen shots for references:
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[0])}
+  alt='github env variable'
+/>
+<GatsbyImage
+  image={getImage(props.embeddedImages[1])}
+  alt='github env variable'
+/>
 
 <Link to='/posts' className='btn center-btn'>
   all posts

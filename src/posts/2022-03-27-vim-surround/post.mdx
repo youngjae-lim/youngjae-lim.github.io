@@ -1,0 +1,104 @@
+---
+title: Vim PlugIn Series - surround.vim
+slug: vim-plugin-series-1-surround-vim
+image: ./images/main_vim_surround.png
+date: 2022-03-27
+author: youngjae lim
+category: Vim
+tags: ['vim', 'tool']
+readTime: 10
+embeddedImages:
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+If you're using `Vim` as your text/code editor, you may have heard about [Tim Pope](https://github.com/tpope). He is one of the best in creating vim plugins out there and there are so many useful plugins that he created, but my first pick is his `sourround.vim` plugin.
+
+### vim-surround plugin
+
+I am a big fan of `vim-surround` plugin which allows me to easily add surroundings such as parentheses, brackets, quotes, HTML tags, etc. Ever since I switched to Vim from VS Code, this plugin greately improved my productivity on coding in Vim.
+
+#### Change surroundings with `cs`
+
+| Before         | Command                                            | After                       |
+| -------------- | -------------------------------------------------- | --------------------------- |
+| "Vim Surround" | `cs"'`(change surrounding from " to ')             | 'Vim Surround'              |
+| 'Vim Surround' | `cs'<span>`(change surrounding from ' to span tag) | `<span>Vim Surround</span>` |
+
+What if you want to change any tag surroundings with any character?
+
+For example, you have `<p>Vim Surround</p>`. You want to replace p tag with a single qoute:
+
+| Before                | Command                                                                  | After          |
+| --------------------- | ------------------------------------------------------------------------ | -------------- |
+| `<p>Vim Surround</p>` | `cst'`(change the surrounding tag to a single quote), t is short for tag | 'Vim Surround' |
+
+#### Delete surroundings with `ds`
+
+| Before                | Command                                                                 | After        |
+| --------------------- | ----------------------------------------------------------------------- | ------------ |
+| "Vim Surround"        | `ds"`(delete the surrounding ")                                         | Vim Surround |
+| `<a>Vim Surround</a>` | `dst`(delete the surrounding a tag)                                     | Vim Surround |
+| (123)456789           | `ds)`(delete the surrounding parentheses) while the cursor on the (123) | 1234567890   |
+
+#### Make surroundings with `ys`
+
+Note that `ys` stands for `you surround`.
+
+| Before       | Command                        | After            |
+| ------------ | ------------------------------ | ---------------- |
+| Vim Surround | `ysiw` with the cursor on Vim  | [ Vim ] Surround |
+| Vim Surround | `ysiw` with the cursor on Vim  | [Vim] Surround   |
+| Vim Surround | `ysiw{` with the cursor on Vim | { Vim } Surround |
+| Vim Surround | `ysiw}` with the cursor on Vim | {Vim} Surround   |
+| Vim Surround | `ysiw}` with the cursor on Vim | {Vim} Surround   |
+
+You can also wrap the <mark>entire line</mark> in parentheses or brackets with `yss` command:
+
+| Before          | Command | After               |
+| --------------- | ------- | ------------------- |
+| This is a line. | `yss[`  | [ This is a line. ] |
+| This is a line. | `yss]`  | [This is a line.]   |
+| This is a line. | `yss{`  | { This is a line. } |
+| This is a line. | `yss}`  | {This is a line.}   |
+
+Of course, you can use any characters like "", or '' to wrap the entire line, too:
+
+| Before          | Command                       | After             |
+| --------------- | ----------------------------- | ----------------- |
+| This is a line. | `yss"` with the cursor on Vim | "This is a line." |
+| This is a line. | `yss'` with the cursor on Vim | 'This is a line.' |
+
+#### Wrap around tags or text with a new tag in <mark>Visual Mode</mark>
+
+So far all the commands that we ran work under the <mark>Normal Mode</mark>. What if you want to wrap around the multiple lines of html elements? Here is an example:
+
+```html
+<li>1</li>
+<li>2</li>
+<li>3</li>
+<li>4</li>
+```
+
+I would like to surround the four `li` elements with `ul` element. With the help of `vim-surround`:
+
+1. Visually select(i.e., linewise `visual mode`) the lines of code by pressing a capital `V` the line(s) of codes and
+2. then hit `S<ul>`. This will make:
+
+```html add=1,6
+<ul>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+</ul>
+```
+
+We've been through lots of commands, but they are very intuitive to use when you code. I hope you enjoyed it and please comment below if you have any questions.
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

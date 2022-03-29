@@ -39,7 +39,7 @@ const PostTemplate = ({ data, pageContext }) => {
       <Seo
         title={title}
         description={excerpt}
-        image={image.childImageSharp.resize}
+        image={image?.childImageSharp.resize}
         pathname={pathName}
       />
       <Wrapper toc={isThereTableOfContent}>
