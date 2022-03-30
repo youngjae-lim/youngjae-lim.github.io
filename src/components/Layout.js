@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
     <myContext.Consumer>
       {context => (
         <>
-          <Navbar toggle={toggle} context={context} />
+          <Navbar toggle={toggle} />
           <Sidebar isOpen={isOpen} toggle={toggle} />
           <main>{children}</main>
           <ScrollToTop />

@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import Posts from '../components/Posts'
 import Banner from '../components/Banner'
+import { myContext } from '../../provider'
 
 const TagsPage = ({ data }) => {
   const {
@@ -11,18 +12,27 @@ const TagsPage = ({ data }) => {
   } = data
 
   return (
-    <Layout>
-      <Seo title='All posts' />
-      <section className='posts'>
-        <article>
-          <Posts posts={posts} title='All posts' count={count} />
-        </article>
-        {/* banner column on the right side */}
-        <article>
-          <Banner post={true} />
-        </article>
-      </section>
-    </Layout>
+    <myContext.Consumer>
+      {context => (
+        <Layout>
+          <Seo title='All posts' />
+          <section className='posts'>
+            <article>
+              <Posts
+                posts={posts}
+                title='All posts'
+                count={count}
+                context={context}
+              />
+            </article>
+            {/* banner column on the right side */}
+            <article>
+              <Banner post={true} />
+            </article>
+          </section>
+        </Layout>
+      )}
+    </myContext.Consumer>
   )
 }
 

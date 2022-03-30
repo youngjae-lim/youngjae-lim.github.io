@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import Posts from '../components/Posts'
 import { graphql } from 'gatsby'
 import Seo from '../components/Seo'
+import { myContext } from '../../provider'
 
 const TagTemplate = ({ data, pageContext }) => {
   const {
@@ -10,14 +11,19 @@ const TagTemplate = ({ data, pageContext }) => {
   } = data
 
   return (
-    <Layout>
-      <Seo title={`tag / ${pageContext.tag}`} />
-      <Posts
-        posts={posts}
-        title={`tag / ${pageContext.tag}`}
-        count={pageContext.count}
-      />
-    </Layout>
+    <myContext.Consumer>
+      {context => (
+        <Layout>
+          <Seo title={`tag / ${pageContext.tag}`} />
+          <Posts
+            posts={posts}
+            title={`tag / ${pageContext.tag}`}
+            count={pageContext.count}
+            context={context}
+          />
+        </Layout>
+      )}
+    </myContext.Consumer>
   )
 }
 

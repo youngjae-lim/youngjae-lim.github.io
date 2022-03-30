@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '../components/Layout'
 import Posts from '../components/Posts'
 import { graphql } from 'gatsby'
+import { myContext } from '../../provider'
 
 const CategoryTemplate = ({ data, pageContext }) => {
   const {
@@ -9,13 +10,18 @@ const CategoryTemplate = ({ data, pageContext }) => {
   } = data
 
   return (
-    <Layout>
-      <Posts
-        posts={posts}
-        title={`category / ${pageContext.category}`}
-        count={pageContext.count}
-      />
-    </Layout>
+    <myContext.Consumer>
+      {context => (
+        <Layout>
+          <Posts
+            posts={posts}
+            title={`category / ${pageContext.category}`}
+            count={pageContext.count}
+            context={context}
+          />
+        </Layout>
+      )}
+    </myContext.Consumer>
   )
 }
 
