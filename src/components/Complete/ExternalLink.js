@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 const ExternalLink = props => {
-  console.log(props.href)
   if (
     props.href.includes('https://youngjae-lim.github.io/') ||
     props.href[0] === '/'

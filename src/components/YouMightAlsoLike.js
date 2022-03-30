@@ -3,9 +3,6 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 const YouMightAlsoLike = ({ posts, tag }) => {
-  console.log(posts)
-  console.log(posts.length)
-
   return (
     <Wrapper>
       <p>

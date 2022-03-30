@@ -94,7 +94,6 @@ async function turnPostsIntoPages({ graphql, actions }) {
     posts.forEach(post => {
       if (post.frontmatter.tags.length > 0) {
         post.frontmatter.tags.forEach(tag => {
-          console.log(post.frontmatter.slug, tag)
           if (!tags.includes(tag)) {
             tags.push(tag)
           }
@@ -109,9 +108,6 @@ async function turnPostsIntoPages({ graphql, actions }) {
         })
       }
     })
-
-    console.log(tags)
-    console.log(postsByTag)
 
     posts.forEach(({ frontmatter: { slug } }, index) => {
       // Get previous post, if any

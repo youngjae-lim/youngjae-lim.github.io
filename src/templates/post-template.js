@@ -28,7 +28,6 @@ const PostTemplate = ({ data, pageContext }) => {
   } = data.mdx.frontmatter
 
   const { previousPost, nextPost, relatedPosts } = pageContext
-  console.log('relatedPosts: ', relatedPosts)
 
   const { body, tableOfContents, excerpt } = data.mdx
 

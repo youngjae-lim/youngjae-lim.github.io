@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs'
 
 const ToggleViewButton = ({ context }) => {
-  console.log(context)
-
   return (
     <Wrapper onClick={() => context.changeView()} className='toggle-view'>
       <span>View as List</span>

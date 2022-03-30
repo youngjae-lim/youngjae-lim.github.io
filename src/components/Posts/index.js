@@ -7,8 +7,6 @@ import ToggleViewButton from '../ToggleViewButton'
 
 const Posts = ({ posts, title, count, context }) => {
   // return list of posts
-  console.log('context: ', context)
-
   return (
     <section className='posts'>
       <h3 className='posts-title'>

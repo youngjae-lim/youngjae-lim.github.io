@@ -6,7 +6,6 @@ import Seo from '../components/Seo'
 import { myContext } from '../../provider'
 
 const PostsPage = ({ data }) => {
-  console.log('this is PostsPage')
   const {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
