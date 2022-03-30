@@ -42,4 +42,11 @@ const Wrapper = styled.div`
   margin-right: 10px;
   transition: all 0.2s ease-out;
   gap: 0.5rem;
+
+  button {
+    transition: var(--transition);
+  }
+  button:hover {
+    transform: translateY(-5px);
+  }
 `

@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import TagsList from '../TagsList'
 import styled from 'styled-components'
 
-const Post = ({ frontmatter, excerpt }) => {
+const PostCard = ({ frontmatter, excerpt }) => {
   const { title, slug, date, tags, image, readTime } = frontmatter
 
   return (
@@ -14,7 +14,7 @@ const Post = ({ frontmatter, excerpt }) => {
         <h3>{title}</h3>
         <div className='underline' />
         <p>{excerpt}</p>
-        {tags?.length > 0 ? <TagsList tags={tags} isPost={false} /> : ''}
+        {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
         <Link to={`/posts/${slug}`} className='link'>
           Continue Reading...
         </Link>
@@ -131,4 +131,4 @@ const Wrapper = styled.article`
   }
 `
 
-export default Post
+export default PostCard

@@ -9,7 +9,7 @@ export default Marker
 
 const Mark = styled.mark`
   margin: 0 -0.4em;
-  padding: 0.1em 0.4em;
+  padding: 0.1em 0.4em 0em;
   border-radius: 0.8em 0.3em;
   background: transparent;
   background-image: linear-gradient(

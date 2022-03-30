@@ -1,5 +1,5 @@
 import './src/css/main.css'
 import 'katex/dist/katex.min.css'
-import { wrapMDX } from './root-mdx'
+import Provider from './provider'
 
-export const wrapRootElement = wrapMDX
+export const wrapRootElement = Provider

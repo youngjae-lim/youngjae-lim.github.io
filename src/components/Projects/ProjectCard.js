@@ -14,7 +14,7 @@ const Project = ({ frontmatter, excerpt }) => {
         <h3>{title}</h3>
         <div className='underline' />
         <p>{excerpt}</p>
-        {tags?.length > 0 ? <TagsList tags={tags} isPost={false} /> : ''}
+        {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
         <Link to={`/projects/${slug}`} className='link'>
           Continue Reading...
         </Link>

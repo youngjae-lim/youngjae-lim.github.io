@@ -1,12 +1,13 @@
 import React from 'react'
-import PostCard from './PostCard'
-import ProjectCard from '../Projects/ProjectCard'
+import PostCardList from './PostCardList'
 import Banner from '../Banner'
 import Tags from '../Tags'
 import Accordion from '../Accordion'
+import ToggleViewButton from '../ToggleViewButton'
 
-const Posts = ({ posts, title, count }) => {
+const Posts = ({ posts, title, count, context }) => {
   // return list of posts
+  console.log('context: ', context)
 
   return (
     <section className='posts'>
@@ -25,13 +26,8 @@ const Posts = ({ posts, title, count }) => {
             <Tags />
           </Accordion>
           <br />
-          {posts.map(post =>
-            post.frontmatter.category !== 'PROJECT' ? (
-              <PostCard key={post.id} {...post} />
-            ) : (
-              <ProjectCard key={post.id} {...post} />
-            )
-          )}
+          <ToggleViewButton context={context} />
+          <PostCardList posts={posts} isSlim={context.isSlim} />
         </article>
         {/* banner column on the right side */}
         <article>

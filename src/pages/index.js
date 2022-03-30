@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import Posts from '../components/Posts'
 import Seo from '../components/Seo'
 import { graphql } from 'gatsby'
+import { myContext } from '../../provider'
 
 const IndexPage = ({ data }) => {
   const {
@@ -10,10 +11,14 @@ const IndexPage = ({ data }) => {
   } = data
 
   return (
-    <Layout>
-      <Seo title='Home' />
-      <Posts posts={posts} title='recently published' />
-    </Layout>
+    <myContext.Consumer>
+      {context => (
+        <Layout>
+          <Seo title='Home' />
+          <Posts posts={posts} title='recently published' context={context} />
+        </Layout>
+      )}
+    </myContext.Consumer>
   )
 }
 

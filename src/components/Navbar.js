@@ -5,7 +5,9 @@ import logo from '../assets/logo_ylim.svg'
 import Links from '../constants/links'
 import SocialLinks from '../constants/socialLinks'
 
-const Navbar = ({ toggle }) => {
+const Navbar = ({ toggle, context }) => {
+  console.log('context from navbar: ', context)
+
   return (
     <nav className='navbar'>
       <div className='nav-container'>

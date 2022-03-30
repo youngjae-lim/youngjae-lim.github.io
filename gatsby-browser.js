@@ -6,7 +6,7 @@ import '@fontsource/gowun-dodum'
 import './src/css/normalize.css'
 import './src/css/main.css'
 import 'katex/dist/katex.min.css'
-import { wrapMDX } from './root-mdx'
+import Provider from './provider'
 
 // Add more languages to prism-react-renderer/prism
 // https://github.com/FormidableLabs/prism-react-renderer/issues/53#issuecomment-546653848
@@ -25,4 +25,4 @@ require('prismjs/components/prism-mongodb')
 require('prismjs/components/prism-makefile')
 require('prismjs/components/prism-toml')
 
-export const wrapRootElement = wrapMDX
+export const wrapRootElement = Provider

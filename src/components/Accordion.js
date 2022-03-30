@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa'
 
 const Accordion = ({ title, children }) => {
-  console.log(title)
   const [isActive, setIsActive] = useState(false)
 
   return (

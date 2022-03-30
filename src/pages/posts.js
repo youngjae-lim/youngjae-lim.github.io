@@ -3,17 +3,28 @@ import Layout from '../components/Layout'
 import { graphql } from 'gatsby'
 import Posts from '../components/Posts'
 import Seo from '../components/Seo'
+import { myContext } from '../../provider'
 
 const PostsPage = ({ data }) => {
+  console.log('this is PostsPage')
   const {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
 
   return (
-    <Layout>
-      <Seo title='Posts' />
-      <Posts posts={posts} title='blog posts' count={count} />
-    </Layout>
+    <myContext.Consumer>
+      {context => (
+        <Layout>
+          <Seo title='Posts' />
+          <Posts
+            posts={posts}
+            title='blog posts'
+            count={count}
+            context={context}
+          />
+        </Layout>
+      )}
+    </myContext.Consumer>
   )
 }
 

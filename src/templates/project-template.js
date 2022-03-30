@@ -52,7 +52,7 @@ const ProjectTemplate = ({ data }) => {
           />
           <div className='post-info'>
             <h2>{title}</h2>
-            {tags?.length > 0 ? <TagsList tags={tags} isPost={true} /> : ''}
+            {tags?.length > 0 && <TagsList tags={tags} isPost={true} />}
             <p>{date}</p>
             <div className='underline'></div>
             <div className='social-buttons-top'>

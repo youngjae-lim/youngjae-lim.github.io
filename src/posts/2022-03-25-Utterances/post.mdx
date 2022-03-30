@@ -4,8 +4,9 @@ slug: how-to-add-utterances-to-gatsby-blog
 image: ./images/main_utterances.png
 date: 2022-03-25
 author: youngjae lim
-category: Gatsby 
-tags: ["gatsby", "tool", "utterances", "widget", "github", "github issues"]
+category: Gatsby
+tags:
+  ['gatsby', 'react', 'tool', 'utterances', 'widget', 'github', 'github issues']
 readTime: 10
 embeddedImages:
   - ./images/utterance_install_1.png
@@ -91,8 +92,10 @@ GATSBY_COMMENTS_REPO=<github_owner_name>/<github_repository_name_connected_to_ut
 
 With this configuration, now the `Comments` component that we've created above will have access the env variable using `process.env.GATSBY_COMMENTS_REPO` syntax. The Post template that imports the `Comments` component shoudl be able to render the comment without any issues in your local development environment.
 
-<GatsbyImage image={getImage(props.embeddedImages[4])} alt="utterance comment" />
-
+<GatsbyImage
+  image={getImage(props.embeddedImages[4])}
+  alt='utterance comment'
+/>
 
 ### For your production development
 
@@ -100,9 +103,11 @@ The above setting definitely works in the dev environment, but how about product
 
 1. Because we are not pushing our `.env` file to the remote repository by adding `.env` to the `.gitignore` file, we have to add one manually to our Github repository **Settings**:
 
-  <blockquote display="warning">
-  Note that pushing .env file with sensitive data to a remote repository is always dangerous practive, so it should be avoided.
-  </blockquote>
+{' '}
+<blockquote display='warning'>
+  Note that pushing .env file with sensitive data to a remote repository is
+  always dangerous practive, so it should be avoided.
+</blockquote>
 
 2. Because I publish my site to Github pages using GitHub Actions, the workflows script needs to be able to access and read the environment variable during the deploying process. To set it:
 
@@ -112,8 +117,10 @@ For those who missed reading my article on how to deploy Gatsby website to githu
 
 Go to **GitHub>Settings** of your repository and add a secret key:
 
-<GatsbyImage image={getImage(props.embeddedImages[3])} alt="github env variable" />
-
+<GatsbyImage
+  image={getImage(props.embeddedImages[3])}
+  alt='github env variable'
+/>
 
 #### Update Github Actions
 

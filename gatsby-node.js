@@ -41,6 +41,17 @@ async function turnProjectsIntoPages({ graphql, actions }) {
   }
 }
 
+const getRelatedPosts = (postsByTag, post) => {
+  const tag = post.frontmatter.tags[0]
+
+  if (postsByTag[tag]?.length > 1) {
+    const postsForTag = postsByTag[tag]
+    return postsForTag.filter(p => p.frontmatter.slug !== post.frontmatter.slug)
+  }
+
+  return []
+}
+
 async function turnPostsIntoPages({ graphql, actions }) {
   // 1. Get a template for this page
   const postTemplate = path.resolve(`./src/templates/post-template.js`)
@@ -57,6 +68,7 @@ async function turnPostsIntoPages({ graphql, actions }) {
           frontmatter {
             title
             slug
+            tags
           }
           excerpt
         }
@@ -76,6 +88,31 @@ async function turnPostsIntoPages({ graphql, actions }) {
 
   // 3. Loop over each page and create it
   if (posts.length > 0) {
+    let tags = []
+    const postsByTag = {}
+
+    posts.forEach(post => {
+      if (post.frontmatter.tags.length > 0) {
+        post.frontmatter.tags.forEach(tag => {
+          console.log(post.frontmatter.slug, tag)
+          if (!tags.includes(tag)) {
+            tags.push(tag)
+          }
+
+          if (!postsByTag[tag]) {
+            postsByTag[tag] = []
+          }
+
+          // if (postsByTag[tag].length < 4) {
+          postsByTag[tag].push(post)
+          // }
+        })
+      }
+    })
+
+    console.log(tags)
+    console.log(postsByTag)
+
     posts.forEach(({ frontmatter: { slug } }, index) => {
       // Get previous post, if any
       const previousPost = index === 0 ? null : posts[index - 1]
@@ -89,6 +126,7 @@ async function turnPostsIntoPages({ graphql, actions }) {
           slug,
           previousPost,
           nextPost,
+          relatedPosts: getRelatedPosts(postsByTag, posts[index]),
         },
       })
     })

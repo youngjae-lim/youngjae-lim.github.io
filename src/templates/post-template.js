@@ -7,6 +7,7 @@ import Banner from '../components/Banner'
 import PrevAndNext from '../components/PrevAndNext'
 import Comments from '../components/Comments'
 import SocialShareButtons from '../components/SocialShareButtons'
+import YouMightAlsoLike from '../components/YouMightAlsoLike'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
@@ -26,7 +27,8 @@ const PostTemplate = ({ data, pageContext }) => {
     videoTitle,
   } = data.mdx.frontmatter
 
-  const { previousPost, nextPost } = pageContext
+  const { previousPost, nextPost, relatedPosts } = pageContext
+  console.log('relatedPosts: ', relatedPosts)
 
   const { body, tableOfContents, excerpt } = data.mdx
 
@@ -56,7 +58,7 @@ const PostTemplate = ({ data, pageContext }) => {
           />
           <div className='post-info'>
             <h1>{title}</h1>
-            {tags?.length > 0 ? <TagsList tags={tags} isPost={true} /> : ''}
+            {tags?.length > 0 && <TagsList tags={tags} isPost={true} />}
             <p>{date}</p>
             <div className='underline' />
             <div className='social-buttons-top'>
@@ -75,6 +77,9 @@ const PostTemplate = ({ data, pageContext }) => {
             <SocialShareButtons url={url} description={description} />
           </div>
           <PrevAndNext prev={previousPost} next={nextPost} />
+          {relatedPosts?.length > 0 && (
+            <YouMightAlsoLike posts={relatedPosts} tag={tags[0]} />
+          )}
           <Comments />
         </article>
 
