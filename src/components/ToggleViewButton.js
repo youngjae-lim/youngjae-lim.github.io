@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   border: 0.3px solid var(--clr-green-4);
   border-radius: var(--radius-2);
   padding: 5px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   span {
     color: white;
     margin-left: 0.2rem;
