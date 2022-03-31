@@ -3,7 +3,6 @@ import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Seo from '../components/Seo'
 import Posts from '../components/Posts'
-import Banner from '../components/Banner'
 import { myContext } from '../../provider'
 
 const TagsPage = ({ data }) => {
@@ -16,20 +15,7 @@ const TagsPage = ({ data }) => {
   return (
     <Layout>
       <Seo title='All posts' />
-      <section className='posts'>
-        <article>
-          <Posts
-            posts={posts}
-            title='All posts'
-            count={count}
-            context={value}
-          />
-        </article>
-        {/* banner column on the right side */}
-        <article>
-          <Banner post={true} />
-        </article>
-      </section>
+      <Posts posts={posts} title='All posts' count={count} context={value} />
     </Layout>
   )
 }
