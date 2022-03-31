@@ -5,7 +5,7 @@ import TagsList from '../TagsList'
 import styled from 'styled-components'
 
 const Card = ({ frontmatter, excerpt }) => {
-  const { title, slug, date, tags, image, readTime } = frontmatter
+  const { title, slug, date, tags, image, readTime, category } = frontmatter
 
   return (
     <Wrapper>
@@ -15,7 +15,10 @@ const Card = ({ frontmatter, excerpt }) => {
         <div className='underline' />
         <p>{excerpt}</p>
         {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
-        <Link to={`/posts/${slug}`} className='link'>
+        <Link
+          to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
+          className='link'
+        >
           Continue Reading...
         </Link>
         <footer>

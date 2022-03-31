@@ -3,13 +3,16 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 const SlimCard = ({ frontmatter }) => {
-  const { title, slug, date } = frontmatter
+  const { title, slug, date, category } = frontmatter
 
   return (
     <Wrapper>
-      <Link to={`/posts/${slug}`} className='info'>
+      <Link
+        to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
+        className='info'
+      >
         <div>
-          <h5>{title}</h5>
+          <h4>{title}</h4>
           <footer>
             <span className='date'>{date}</span>
           </footer>
@@ -41,7 +44,7 @@ const Wrapper = styled.div`
     transform: scale(1.01);
   }
 
-  h5 {
+  h4 {
     color: white;
     margin-top: 0.5rem;
     text-transform: capitalize;
