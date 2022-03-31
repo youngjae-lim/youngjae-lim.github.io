@@ -39,7 +39,6 @@ export default SocialShareButtons
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 10px;
   transition: all 0.2s ease-out;
   gap: 0.5rem;
 
