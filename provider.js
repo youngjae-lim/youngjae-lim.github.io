@@ -22,12 +22,15 @@ const components = {
 
 const Provider = props => {
   const [isSlim, setIsSlim] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <myContext.Provider
       value={{
         isSlim,
         changeView: () => setIsSlim(!isSlim),
+        isOpen,
+        toggleTags: () => setIsOpen(!isOpen),
       }}
     >
       <MDXProvider components={components}>{props.children}</MDXProvider>

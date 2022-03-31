@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa'
+import { myContext } from '../../provider'
 
 const Accordion = ({ title, children }) => {
-  const [isActive, setIsActive] = useState(false)
+  const { isOpen, toggleTags } = React.useContext(myContext)
 
   return (
     <Wrapper>
-      <div className='accordion-title' onClick={() => setIsActive(!isActive)}>
+      <div className='accordion-title' onClick={() => toggleTags()}>
         <div>{title}</div>
-        <div>{isActive ? <FaMinusCircle /> : <FaPlusCircle />}</div>
+        <div>{isOpen ? <FaMinusCircle /> : <FaPlusCircle />}</div>
       </div>
-      {isActive && <div className='accordion-content'>{children}</div>}
+      {isOpen && <div className='accordion-content'>{children}</div>}
     </Wrapper>
   )
 }

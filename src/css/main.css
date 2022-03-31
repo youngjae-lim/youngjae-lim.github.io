@@ -573,6 +573,7 @@ Sidebar
   display: block;
   color: yellow;
   font-weight: 700;
+  line-height: 2;
 }
 /* .sidebar .categories { */
 /*   flex-direction: column; */

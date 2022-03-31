@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
+// import { FiHome, FiFileText, FiBox, FiMail, FiUser } from 'react-icons/fi'
+
 const Links = ({ styleClass, children }) => {
   return (
     <ul className={styleClass}>
