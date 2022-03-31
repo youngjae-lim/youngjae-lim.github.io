@@ -3,16 +3,19 @@ import Layout from '../components/Layout'
 import { graphql } from 'gatsby'
 import Projects from '../components/Projects'
 import Seo from '../components/Seo'
+import { myContext } from '../../provider'
 
 const ProjectsPage = ({ data }) => {
   const {
     allMdx: { allProjects: projects },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
     <Layout>
       <Seo title='Projects' />
-      <Projects projects={projects} title='all projects' />
+      <Projects projects={projects} title='all projects' context={value} />
     </Layout>
   )
 }

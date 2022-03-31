@@ -60,6 +60,7 @@ const Wrapper = styled.div`
 `
 
 const InnerWrapper = styled.div`
+  background-color: var(--clr-green-5);
   border-radius: 8px;
   padding: 8px 16px;
   font-size: 14px;

@@ -25,6 +25,7 @@ const YouMightAlsoLike = ({ posts, tag }) => {
 export default YouMightAlsoLike
 
 const Wrapper = styled.div`
+  background-color: var(--clr-green-5);
   margin-top: 1rem;
   padding: 1rem 1rem 0 1rem;
   border: 0.3px solid var(--clr-green-4);

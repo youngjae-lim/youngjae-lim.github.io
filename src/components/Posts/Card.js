@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import TagsList from '../TagsList'
 import styled from 'styled-components'
 
-const PostCard = ({ frontmatter, excerpt }) => {
+const Card = ({ frontmatter, excerpt }) => {
   const { title, slug, date, tags, image, readTime } = frontmatter
 
   return (
@@ -131,4 +131,4 @@ const Wrapper = styled.article`
   }
 `
 
-export default PostCard
+export default Card

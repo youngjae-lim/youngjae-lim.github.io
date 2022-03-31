@@ -9,19 +9,17 @@ const CategoryTemplate = ({ data, pageContext }) => {
     allMdx: { nodes: posts },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
-    <myContext.Consumer>
-      {context => (
-        <Layout>
-          <Posts
-            posts={posts}
-            title={`category / ${pageContext.category}`}
-            count={pageContext.count}
-            context={context}
-          />
-        </Layout>
-      )}
-    </myContext.Consumer>
+    <Layout>
+      <Posts
+        posts={posts}
+        title={`category / ${pageContext.category}`}
+        count={pageContext.count}
+        context={value}
+      />
+    </Layout>
   )
 }
 

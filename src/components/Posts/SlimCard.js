@@ -2,16 +2,16 @@ import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 
-const SlimPostCard = ({ frontmatter }) => {
+const SlimCard = ({ frontmatter }) => {
   const { title, slug, date } = frontmatter
 
   return (
     <Wrapper>
       <Link to={`/posts/${slug}`} className='info'>
         <div>
-          <h4>{title}</h4>
+          <h5>{title}</h5>
           <footer>
-            <span className='date'>📆 &nbsp; {date}</span>
+            <span className='date'>{date}</span>
           </footer>
         </div>
       </Link>
@@ -29,7 +29,7 @@ const Wrapper = styled.div`
     border-radius: var(--radius-2);
     transition: var(--transition);
     display: flex;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     border: 1px solid var(--clr-green-4);
     svg {
       margin-left: 0.25rem;
@@ -41,27 +41,25 @@ const Wrapper = styled.div`
     transform: scale(1.01);
   }
 
-  h4 {
+  h5 {
+    color: white;
     margin-top: 0.5rem;
+    text-transform: capitalize;
   }
 
   footer {
     margin-top: 0rem;
     padding-top: 0rem;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: space-between;
     color: var(--clr-grey-5);
 
     & .date {
-      display: flex;
+      /* display: flex; */
       align-items: center;
-      & .icon {
-        color: var(--clr-grey-5);
-        margin-right: 0.5rem;
-      }
     }
   }
 `
 
-export default SlimPostCard
+export default SlimCard

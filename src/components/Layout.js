@@ -3,7 +3,6 @@ import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
 import ScrollToTop from './ScrollToTop'
-import { myContext } from '../../provider'
 
 const Layout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -13,17 +12,13 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <myContext.Consumer>
-      {context => (
-        <>
-          <Navbar toggle={toggle} />
-          <Sidebar isOpen={isOpen} toggle={toggle} />
-          <main>{children}</main>
-          <ScrollToTop />
-          <Footer />
-        </>
-      )}
-    </myContext.Consumer>
+    <>
+      <Navbar toggle={toggle} />
+      <Sidebar isOpen={isOpen} toggle={toggle} />
+      <main>{children}</main>
+      <ScrollToTop />
+      <Footer />
+    </>
   )
 }
 

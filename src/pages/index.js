@@ -10,15 +10,13 @@ const IndexPage = ({ data }) => {
     allMdx: { lastestThreePosts: posts },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
-    <myContext.Consumer>
-      {context => (
-        <Layout>
-          <Seo title='Home' />
-          <Posts posts={posts} title='recently published' context={context} />
-        </Layout>
-      )}
-    </myContext.Consumer>
+    <Layout>
+      <Seo title='Home' />
+      <Posts posts={posts} title='recently published' context={value} />
+    </Layout>
   )
 }
 
@@ -28,7 +26,7 @@ export const query = graphql`
   {
     allMdx(
       filter: { frontmatter: { category: { ne: "PROJECT" } } }
-      limit: 3
+      limit: 5
       sort: { fields: frontmatter___date, order: DESC }
     ) {
       lastestThreePosts: nodes {

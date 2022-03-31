@@ -1,5 +1,5 @@
 import React from 'react'
-import PostCardList from './PostCardList'
+import CardList from './CardList'
 import Banner from '../Banner'
 import Tags from '../Tags'
 import Accordion from '../Accordion'
@@ -7,7 +7,6 @@ import ToggleViewButton from '../ToggleViewButton'
 
 const Posts = ({ posts, title, count, context }) => {
   // return list of posts
-  console.log(context)
   return (
     <section className='posts'>
       <h3 className='posts-title'>
@@ -25,8 +24,8 @@ const Posts = ({ posts, title, count, context }) => {
             <Tags />
           </Accordion>
           <br />
-          <ToggleViewButton context={context} />
-          <PostCardList posts={posts} isSlim={context.isSlim} />
+          <ToggleViewButton />
+          <CardList posts={posts} isSlim={context.isSlim} />
         </article>
         {/* banner column on the right side */}
         <article>

@@ -1,12 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BsToggleOff, BsToggleOn } from 'react-icons/bs'
+import { BsToggleOff, BsToggleOn, BsCardList } from 'react-icons/bs'
+import { myContext } from '../../provider'
 
-const ToggleViewButton = ({ context }) => {
+const ToggleViewButton = () => {
+  const value = React.useContext(myContext)
+
   return (
-    <Wrapper onClick={() => context.changeView()} className='toggle-view'>
+    <Wrapper>
+      <span>
+        <BsCardList />
+      </span>
       <span>View as List</span>
-      {context.isSlim ? <BsToggleOn /> : <BsToggleOff />}
+      <span onClick={() => value.changeView()}>
+        {value.isSlim ? <BsToggleOn /> : <BsToggleOff />}
+      </span>
     </Wrapper>
   )
 }
@@ -23,7 +31,7 @@ const Wrapper = styled.div`
   span {
     color: white;
     margin-left: 0.2rem;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     line-height: 2;
   }
 

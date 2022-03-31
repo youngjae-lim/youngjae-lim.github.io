@@ -10,20 +10,13 @@ const PostsPage = ({ data }) => {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
-    <myContext.Consumer>
-      {context => (
-        <Layout>
-          <Seo title='Posts' />
-          <Posts
-            posts={posts}
-            title='blog posts'
-            count={count}
-            context={context}
-          />
-        </Layout>
-      )}
-    </myContext.Consumer>
+    <Layout>
+      <Seo title='Posts' />
+      <Posts posts={posts} title='blog posts' count={count} context={value} />
+    </Layout>
   )
 }
 

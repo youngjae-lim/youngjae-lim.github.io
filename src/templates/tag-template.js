@@ -10,20 +10,18 @@ const TagTemplate = ({ data, pageContext }) => {
     allMdx: { nodes: posts },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
-    <myContext.Consumer>
-      {context => (
-        <Layout>
-          <Seo title={`tag / ${pageContext.tag}`} />
-          <Posts
-            posts={posts}
-            title={`tag / ${pageContext.tag}`}
-            count={pageContext.count}
-            context={context}
-          />
-        </Layout>
-      )}
-    </myContext.Consumer>
+    <Layout>
+      <Seo title={`tag / ${pageContext.tag}`} />
+      <Posts
+        posts={posts}
+        title={`tag / ${pageContext.tag}`}
+        count={pageContext.count}
+        context={value}
+      />
+    </Layout>
   )
 }
 

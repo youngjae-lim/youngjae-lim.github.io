@@ -11,28 +11,26 @@ const TagsPage = ({ data }) => {
     allMdx: { allPosts: posts, totalCount: count },
   } = data
 
+  const value = React.useContext(myContext)
+
   return (
-    <myContext.Consumer>
-      {context => (
-        <Layout>
-          <Seo title='All posts' />
-          <section className='posts'>
-            <article>
-              <Posts
-                posts={posts}
-                title='All posts'
-                count={count}
-                context={context}
-              />
-            </article>
-            {/* banner column on the right side */}
-            <article>
-              <Banner post={true} />
-            </article>
-          </section>
-        </Layout>
-      )}
-    </myContext.Consumer>
+    <Layout>
+      <Seo title='All posts' />
+      <section className='posts'>
+        <article>
+          <Posts
+            posts={posts}
+            title='All posts'
+            count={count}
+            context={value}
+          />
+        </article>
+        {/* banner column on the right side */}
+        <article>
+          <Banner post={true} />
+        </article>
+      </section>
+    </Layout>
   )
 }
 

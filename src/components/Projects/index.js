@@ -1,17 +1,17 @@
 import React from 'react'
-import ProjectCard from './ProjectCard'
 import Banner from '../Banner'
+import ToggleViewButton from '../ToggleViewButton'
+import CardList from '../Posts/CardList'
 
-const Projects = ({ projects, title }) => {
+const Projects = ({ projects, title, context }) => {
   return (
     <section className='posts'>
       <h3 className='posts-title'>{title}</h3>
       <div className='posts-center'>
         {/* posts column */}
         <article>
-          {projects.map(project => (
-            <ProjectCard key={project.id} {...project} />
-          ))}
+          <ToggleViewButton />
+          <CardList posts={projects} isSlim={context.isSlim} />
         </article>
         {/* banner column on the right side */}
         <article>

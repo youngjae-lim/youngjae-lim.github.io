@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import styled from 'styled-components'
 
 const COMMENTS_ID = 'comments-container'
 
@@ -26,11 +27,27 @@ const Comments = () => {
   }, [])
 
   return (
-    <div>
+    <Wrapper>
       <h4>Comments</h4>
       <div id={COMMENTS_ID} />
-    </div>
+    </Wrapper>
   )
 }
 
 export default Comments
+
+const Wrapper = styled.div`
+  h4 {
+    margin-bottom: 1rem;
+  }
+  div {
+    background-color: var(--clr-green-5);
+    border-radius: var(--radius-2);
+    border: 0.3px solid var(--clr-green-4);
+  }
+
+  /* .utterances { */
+  /*   margin: -16px 0; */
+  /*   padding: 0 -4px; */
+  /* } */
+`
