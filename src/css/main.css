@@ -451,6 +451,7 @@ Navbar
 .nav-logo img {
   height: 100%;
   padding-bottom: 0.5rem;
+  padding-top: 0.2rem;
 }
 .nav-links {
   display: none;
@@ -488,6 +489,9 @@ Navbar
     grid-template-columns: auto 1fr auto;
     column-gap: 2rem;
     align-items: center;
+  }
+  .nav-center ul {
+    margin: 1rem;
   }
   .nav-links {
     display: flex;
@@ -893,6 +897,9 @@ Footer
   color: var(--clr-white);
   text-transform: uppercase;
   letter-spacing: var(--spacing);
+}
+.footer ul {
+  margin: 0.5rem 1rem 1rem 1rem;
 }
 .footer a:hover {
   text-decoration: underline;
