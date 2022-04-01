@@ -20,28 +20,28 @@ This article will show you how to setup `Tailwind CSS` in a `SvelteKit` project.
 
 1. Set up the project and install `taliwindcss` and its peer dependencies vis npm.
 
-```bash
-npm init svelte@next sveltekit-demo
-cd sveltekit-demo
-npm install -D tailwindcss postcss autoprefixer
-```
+  ```bash
+  npm init svelte@next sveltekit-demo
+  cd sveltekit-demo
+  npm install -D tailwindcss postcss autoprefixer
+  ```
 
 2. Generate `tailwind.config.cjs` and `postcss.config.cjs` configuration files
 
-```bash
-npx tailwind init tailwind.config.cjs -p
-mv postcss.config.js postcss.config.cjs
-```
+  ```bash
+  npx tailwind init tailwind.config.cjs -p
+  mv postcss.config.js postcss.config.cjs
+  ```
 
 3. Configure your template paths in `tailwind.config.cjs`
 
-```js file=./tailwind.config.cjs
-module.exports = {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-theme: {
-  extend: {}
-}
-```
+  ```js file=./tailwind.config.cjs
+  module.exports = {
+    content: ['./src/**/*.{html,js,svelte,ts}'],
+  theme: {
+    extend: {}
+  }
+  ```
 
 4. Add the Tailwind directives to your CSS
 
@@ -67,9 +67,9 @@ theme: {
 
 6. Run npm development
 
-```bash
-npm run dev
-```
+  ```bash
+  npm run dev
+  ```
 
 7. Try using Tailwind
 
