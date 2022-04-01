@@ -23,6 +23,7 @@ const components = {
 const Provider = props => {
   const [isSlim, setIsSlim] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [isDark, setIsDark] = useState(false)
 
   return (
     <myContext.Provider
@@ -31,6 +32,8 @@ const Provider = props => {
         changeView: () => setIsSlim(!isSlim),
         isOpen,
         toggleTags: () => setIsOpen(!isOpen),
+        isDark,
+        toggleTheme: () => setIsDark(!isDark),
       }}
     >
       <MDXProvider components={components}>{props.children}</MDXProvider>
