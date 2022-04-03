@@ -1,0 +1,155 @@
+---
+title: Data From Endpoint To Layout and Pages In SvelteKit
+slug: data-from-endpoint-to-layouts-to-pages-in-sveltekit
+image: ./images/main_sveltekit.png
+date: 2022-04-01
+author: youngjae lim
+category: SvelteKit
+tags: ['sveltekit', 'front-end']
+readTime: 10
+embeddedImages:
+  - ./images/config_result.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+In the previous article, we went over three ways to pass data from a parent page(layout page) to a child page and a grandchild component. The example was quite limited because we hard-coded data in the layout page and then pass that into the child page and the grand child component. More realistic case would be fetching the data from a backend api and pass that into other pages. In a new example in this article, we will fetch data from an endpoint and load it into a layout page so that we can access the same data from any pages that are wrapped around by the layout page.
+
+## Standalone Endpoints
+
+According to the official SvelteKit doc, Endpoints are:
+
+<blockquote display='info'>
+  Endpoints are modules written in .js or .ts files that export request handler
+  functions corresponding to HTTP methods. Their job is to make it possible to
+  read and write data that is only available on the server (for example in a
+  database, or on the filesystem).
+</blockquote>
+
+There are two types of endpoints in SvelteKit:
+
+| Type of Endpoint    | Explanation                                                                |
+| ------------------- | -------------------------------------------------------------------------- |
+| Page Endpoint       | an endpoint that has the same filename as a page(except for the extension) |
+| Standalone Endpoint | an endpoint that is separate from pages                                    |
+
+Let's say there is a configuration json file in your OS home directory and you want to display that information in a main page of your SvelteKit web application. For example, I created the following file in the home directory on my Mac mini.
+
+```json
+{
+  "name": "Youngjae Jay Lim",
+  "description": "Human"
+}
+```
+
+To read the configuration json file and return as data, you need to create `config.js` file in the `./src/routes/` directory like this:
+
+```jsx file=./src/routes/config.js
+import os from 'os'
+import fs from 'fs'
+import path from 'path'
+
+const config = JSON.parse(
+  fs.readFileSync(path.join(os.homedir(), 'config.json'), 'utf-8')
+)
+
+export async function get() {
+  if (config) {
+    return {
+      body: config,
+    }
+  }
+
+  return {
+    status: 404,
+  }
+}
+```
+
+Please open up your web browser and access `http://localhost:3000/config`. You should see a result as following:
+
+<GatsbyImage image={getImage(props.embeddedImages[0])} alt='sveltekit' />
+
+This is a standalone endpoint because it is not tied to a page with the same filename(say, `./src/routes/config.svelte`). We will fetch data from this enpoint in a layout page in the next section.
+
+## Layout Data Loading
+
+### What is Layout Page
+
+Now that we've created the endpoint, we can fetch data in a layout page. The layout is an element that should be visible on every page you navigate, which could have a navigation bar or a footer. Without layout components, you have to repeat the nav bar or footer for every page. Due to this nature of layout page, you can also fetch data from any endpoint that will be accessible to any nested pages and components.
+
+### How to fetch data in a page
+
+To fetch data in a page, we will utilize a SvelteKit built-in function called `load()` that runs <mark>before</mark> the component is created. This way, we can fetch and manipulate data before the page is rendered. The SvelteKit official documentation puts an emphasis on:
+
+- The `load()` function runs <mark>both during server-side rendering and in the client.</mark>
+- `load` applies to only `page` and `layout` components(not components thay import). In other words, you <mark>can't use `load()` in a regular component</mark>(for instance, a component in `./src/lib/` directory).
+
+To create a default layout in SvelteKit, you create `__layout.svelte` in `./src/routes/` directory.
+
+```jsx file=./src/routes/__layout.svelte highlights=1,2,4,10
+<script context="module">
+  export async function load({ fetch }) {
+    const url = "/config";
+    const res = await fetch(url);
+
+    if (res.ok) {
+      const config = await res.json();
+      return {
+        props: {},
+        stuff: { config },
+      };
+    }
+
+    return {
+      status: res.status,
+      error: new Error(`Could not load ${url}`),
+    };
+  }
+</script>
+
+<slot />
+```
+
+### What this does
+
+First, we have a script tag `<script context="module">` that allows `load()` to run before the page is rendered.
+
+Secondly, as you see, `load` receives an implementation of SvelteKit-provided `fetch` wrapper. This `fetch` made a request to our app's own endpoint `/config` that we've created earlier without issuing an HTTP. As a result of fetch, we get a copy of the response that is sent embedded in the initial page load.
+
+Please also pay attention to `props` and `stuff` variables in the return object. I intentionally put config variable to `stuff`, not `props` because `props` will be an empty object for:
+
+- layout components
+- pages without endpoints
+
+The `stuff` is passed from the layout page to any nested pages, you can literally put any stuffs to `stuff` that will be available to subsequesnt `load` functions. We will see how we can access `stuff` from the nested page in the next section.
+
+## Page
+
+Now that we have `config` data available through `stuff` in our layout page, we can use it in a main page of our app. In similar to what we did in the layout page to fetch data from an endpoint, we will use the same `load()` to retrieve `stuff` object that is already available to the nested main page via the layout page.
+
+```jsx file=./src/routes/index.svelte
+<script context="module">
+  export async function load({ stuff }) {
+    const { config } = stuff;
+    return {
+      props: { config },
+    };
+  }
+</script>
+
+<script>
+  export let config;
+</script>
+
+<main>
+  <h1>Who am I?</h1>
+  <p>Name: {config.name}</p>
+  <p>Description: {config.description}</p>
+</main>
+```
+
+That's all for this article. Now you can create a simple endpoint and fetch data from it and pass it onto other pages all happenning withing a single SvelteKit web application. If you have any questions, please feel free to leave a commnet below.

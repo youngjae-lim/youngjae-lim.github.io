@@ -1,0 +1,260 @@
+---
+title: How To Pass Data From Layout Page To descendant pages and components In SvelteKit
+slug: how-to-pass-data-from-parents-to-children-in-sveltekit
+image: ./images/main_sveltekit.png
+date: 2022-04-02
+author: youngjae lim
+category: SvelteKit
+tags: ['sveltekit', 'front-end']
+readTime: 10
+embeddedImages:
+  - ./images/welcome_to_sveltekit.png
+  - ./images/stuff.png
+  - ./images/direct_import.png
+  - ./images/context.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+In the previous article, we went over how to create a standalone endpoint and fetch data from it in a layout and its descendant page. We specifically used a loading input `stuff` to access the fetched data.
+
+But there are other ways to pass data around in SvelteKit and we will go over them in this article. In order for this article to be comprehensive, I will breifly go over `stuff` again:
+
+- Context
+- Stuff
+- Direct import
+
+## Getting Started
+
+```bash
+npm init svelte@next sveltekit-tutorial
+cd sveltekit-tutorial
+vim .
+npm install
+npm run dev
+```
+
+<GatsbyImage image={getImage(props.embeddedImages[0])} alt='sveltekit' />
+
+## 1. Context
+
+In Svelte and SvelteKit, any components can communicate with each other using Context API. By using it, you don't need to pass data and functions as props, or creating a lot of events to make pages and components to talk to each other.
+
+Let's create `__layout.svelte` to work on our first example:
+
+In the following layout page, we set context with a parent object.
+
+```jsx file=./src/__layout.svelte highlights=2,6
+<script>
+  import { setContext } from "svelte";
+
+  const parent = { name: "John", email: "john@example.com" };
+
+  setContext("parent", parent);
+</script>
+
+<h1>Parent</h1>
+
+<slot />
+```
+
+Here we simpley import our grandchild component.
+
+```jsx file=./src/index.svelte
+<script>
+  import Grandchild from "$lib/Grandchild.svelte";
+</script>
+
+<h2>Child</h2>
+
+<Grandchild />
+```
+
+In this grandchild component, we use `getContext()` to access `parent`.
+
+```jsx file=./src/lib/Grandchild.svelte highlights=2,4
+<script>
+  import { getContext } from "svelte";
+
+  const parent = getContext("parent");
+</script>
+
+<h3>Grand Child</h3>
+
+<pre>{JSON.stringify(parent)}</pre>
+```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
+<GatsbyImage image={getImage(props.embeddedImages[3])} alt='sveltekit' />
+
+## 2. Stuff
+
+In `SvelteKit`, the `load` function receives a field called `stuff` as an object containing six fields:
+
+- `url`
+- `params`
+- `props`
+- `fetch`
+- `session`
+- `stuff`
+
+We will take a look at how `stuff` works here.
+
+In this layout page, we hard-code a parent object having a name and an email properties and attach it to the `stuff`. This `stuff` will be available to any subsequent `load` functions in the descendant layouts and pages.
+
+```jsx file=./src/__layout.svelte highlights=3,7-9
+<script context="module">
+  export const load = () => {
+    const parent = { name: "John", email: "john@example.com" };
+
+    return {
+      props: {},
+      stuff: {
+        parent,
+      },
+    };
+  };
+</script>
+
+<h1>Parent</h1>
+
+<slot />
+```
+
+To be able to access `stuff` in a descendant page, we need to use `load()` and `stuff` to extract the parent object and attach it to `props`. Then we export `parent` as a variable in the second `<script>` tag:
+
+```jsx file=./src/index.svelte highlights=2,6-8,15
+<script context="module">
+  export async function load({ stuff }) {
+    const { parent } = stuff;
+
+    return {
+      props: {
+        parent,
+      },
+    };
+  }
+</script>
+
+<script>
+  import Grandchild from "$lib/Grandchild.svelte";
+  export let parent;
+</script>
+
+<h2>Child</h2>
+
+<pre>{JSON.stringify(parent)}</pre>
+
+<Grandchild />
+```
+
+```jsx file=./src/lib/Grandchild.svelte
+<h3>Grand Child</h3>
+```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
+
+### Using `page` intead of `load()` to access stuff
+
+`stuff` is also available to pages, components using the `page stores`. Here is how you do it.
+Change `index.svelte` while `__layout.svelte`, `Grandchild.svelte` kept same as above:
+
+```jsx file=./src/routes/index.svelte highlights=2,5,10
+<script>
+  import { page } from "$app/stores";
+  import Grandchild from "$lib/Grandchild.svelte";
+
+  export const { parent } = $page.stuff;
+</script>
+
+<h2>Child</h2>
+
+<pre>{JSON.stringify(parent)}</pre>
+
+<Grandchild />
+```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
+
+## 3. Direct Import
+
+What if you want to access `props`, `stuff` in a grandchild component directly? Remember that we can't use `load()` mainly because it is available to be used in `pages` and `layouts` only, not in `components`. Then you can simply use a direct import in a component to access data. That is to import `load` from the layout page and call it as a function in a component.
+
+Now let's go over how we can directly import data from `__layout.svelte` to `Grandchild.svelte` component.
+
+```jsx file=./src/routes/__layout.svelte
+<script context="module">
+  export const parent = { name: "John", email: "john@example.com" };
+
+  export const load = () => {
+    return {
+      props: {
+        foo: "bar",
+      },
+      stuff: {
+        parent,
+      },
+    };
+  };
+</script>
+
+<h1>Parent</h1>
+
+<slot />
+```
+
+In `index.svelte`, we simply use `load()` and `stuff` to access data from the layout page.
+
+```jsx file=./src/routes/index.svelte
+<script context="module">
+  export async function load({ stuff }) {
+    const { parent } = stuff;
+
+    return {
+      props: {
+        parent,
+      },
+    };
+  }
+</script>
+
+<script>
+  import Grandchild from "$lib/Grandchild.svelte";
+  export let parent;
+</script>
+
+<h2>Child</h2>
+
+<pre>{JSON.stringify(parent)}</pre>
+
+<Grandchild />
+
+```
+
+In a grandchild component, instead of using `load` and `stuff` that are not available for components, you can import data and load function from the layout page and call it inside a component.
+
+```jsx file=./src/lib/Grandchild.svelte highlights=3,9-11
+<script>
+  // import parent, load directly from the layout page
+  import { parent, load } from "../routes/__layout.svelte";
+</script>
+
+<h3>Grand Child</h3>
+
+// Use parent and call load() directly to access data
+<pre>parent:{JSON.stringify(parent)}</pre>
+<pre>props:{JSON.stringify(load().props)}</pre>
+<pre>props:{JSON.stringify(load().stuff)}</pre>
+```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
+<GatsbyImage image={getImage(props.embeddedImages[2])} alt='sveltekit' />
