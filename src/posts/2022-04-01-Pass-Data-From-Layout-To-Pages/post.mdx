@@ -9,6 +9,7 @@ tags: ['sveltekit', 'front-end']
 readTime: 10
 embeddedImages:
   - ./images/config_result.png
+  - ./images/final_result.png
 ---
 
 import { Link } from 'gatsby'
@@ -16,7 +17,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-In the previous article, we went over three ways to pass data from a parent page(layout page) to a child page and a grandchild component. The example was quite limited because we hard-coded data in the layout page and then pass that into the child page and the grand child component. More realistic case would be fetching the data from a backend api and pass that into other pages. In a new example in this article, we will fetch data from an endpoint and load it into a layout page so that we can access the same data from any pages that are wrapped around by the layout page.
+In this article, we will create a standalone endpoint in SvelteKit and fetch data from the endpoint and load the fetched data into a layout page so that we can access the same data from any descendant pages that are wrapped around by the layout page.
 
 ## Standalone Endpoints
 
@@ -151,5 +152,9 @@ Now that we have `config` data available through `stuff` in our layout page, we 
   <p>Description: {config.description}</p>
 </main>
 ```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
 
 That's all for this article. Now you can create a simple endpoint and fetch data from it and pass it onto other pages all happenning withing a single SvelteKit web application. If you have any questions, please feel free to leave a commnet below.
