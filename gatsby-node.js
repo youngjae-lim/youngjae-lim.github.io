@@ -60,7 +60,9 @@ async function turnPostsIntoPages({ graphql, actions }) {
   const result = await graphql(`
     query GetAllSlugs {
       allMdx(
-        filter: { frontmatter: { category: { ne: "PROJECT" } } }
+        filter: {
+          frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+        }
         sort: { fields: frontmatter___date, order: ASC }
       ) {
         nodes {
@@ -136,7 +138,11 @@ async function turnCategoriesIntoPages({ graphql, actions }) {
   // 2. Query all distinct category from all posts excluding projects
   const result = await graphql(`
     query GetDistinctCategory {
-      allMdx(filter: { frontmatter: { category: { ne: "PROJECT" } } }) {
+      allMdx(
+        filter: {
+          frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+        }
+      ) {
         group(field: frontmatter___category) {
           fieldValue
           totalCount
@@ -177,7 +183,7 @@ async function turnTagsIntoPages({ graphql, actions }) {
   // 2. Query all distinct tag
   const result = await graphql(`
     query GetDistinctTag {
-      allMdx {
+      allMdx(filter: { frontmatter: { published: { eq: true } } }) {
         group(field: frontmatter___tags) {
           fieldValue
           totalCount

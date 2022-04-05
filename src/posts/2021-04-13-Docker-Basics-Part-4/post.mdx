@@ -1,11 +1,12 @@
 ---
-title: Docker Basics - Part 4, Docker Compose 
+title: Docker Basics - Part 4, Docker Compose
 slug: docker-basics-part4
 image: ./images/main_docker_compose.png
 date: 2021-04-13
 author: youngjae lim
+published: true
 category: Docker
-tags: ["docker", "tool"]
+tags: ['docker', 'tool']
 readTime: 10
 ---
 
@@ -61,7 +62,7 @@ services: # "Services" are in the end the Containers that your app needs
    dockerfile: Dockerfile-web
   volumes:
    - data:/data/db
- ```
+```
 
 You can conveniently edit this file at any time and you just have a short, simple command which
 you can use to bring up your Containers:
@@ -82,13 +83,14 @@ Networks!
 There are two key commands:
 
 - `docker-compose up`: Start all containers / services mentioned in the Docker Compose file
+
   - `-d`: Start in detached mode
   - `--build`: Force Docker Compose to re-evaluate / rebuild all images (otherwise, it only
-does that if an image is missing)
+    does that if an image is missing)
 
 - `docker-compose down`: Stop and remove all containers / services
   - `-v`: Remove all Volumes used for the Containers - otherwise they stay around, even if
-the Containers are removed
+    the Containers are removed
 
 <Link to='/posts' className='btn center-btn'>
   all posts

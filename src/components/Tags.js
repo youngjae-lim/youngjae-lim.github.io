@@ -6,7 +6,10 @@ import styled from 'styled-components'
 const Tags = () => {
   const data = useStaticQuery(graphql`
     {
-      allMdx(sort: { fields: frontmatter___tags, order: ASC }) {
+      allMdx(
+        filter: { frontmatter: { published: { eq: true } } }
+        sort: { fields: frontmatter___tags, order: ASC }
+      ) {
         group(field: frontmatter___tags) {
           fieldValue
           totalCount

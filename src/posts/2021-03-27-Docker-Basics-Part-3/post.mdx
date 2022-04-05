@@ -1,11 +1,12 @@
 ---
-title: Docker Basics - Part 3, Docker Networks 
+title: Docker Basics - Part 3, Docker Networks
 slug: docker-basics-part3
 image: ./images/main_docker_networks.png
 date: 2021-03-27
 author: youngjae lim
+published: true
 category: Docker
-tags: ["docker", "tool"]
+tags: ['docker', 'tool']
 readTime: 10
 ---
 
@@ -18,13 +19,14 @@ import { Link } from 'gatsby'
 In many application, you'll need more than one container - for two main reasons:
 
 1. It's considered a good practice to focus each container on one main task (e.g. run a web
-server, run a database, ...)
+   server, run a database, ...)
 2. It's very hard to configure a Container that does more than one "main thing" (e.g. run a
-web server AND a database)
+   web server AND a database)
 
 Multi-Container apps are quite common, especially if you're working on "real applications".
 
 Often, some of these Containers need to communicate though:
+
 - either with each other
 - or with the host machine
 - or with the world wide web
@@ -79,9 +81,10 @@ fetch('host.docker.internal:3000/demo').then(...)
 `host.docker.internal` is a special address / identifier which is translated to the IP address of
 the machine hosting the Container by Docker.
 
-<blockquote display="info"> 
-Important: "Translated" does not mean that Docker goes ahead and changes the source code. Instead,
-it simply detects the outgoing request and is able to resolve the IP address for that request.
+<blockquote display='info'>
+  Important: "Translated" does not mean that Docker goes ahead and changes the
+  source code. Instead, it simply detects the outgoing request and is able to
+  resolve the IP address for that request.
 </blockquote>
 
 ## Communicating with Other Containers
@@ -116,4 +119,3 @@ fetch('cont1/my-data').then(...)
 <Link to='/posts' className='btn center-btn'>
   all posts
 </Link>
-

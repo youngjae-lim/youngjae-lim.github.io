@@ -1,0 +1,214 @@
+---
+title: How To Deploy Gatsby Website to GitHub Pages Using GitHub Actions
+slug: how-to-deploy-gatsby-to-github-pages
+image: ./images/main_gatsby_githubpages.png
+date: 2022-03-16
+author: youngjae lim
+published: true
+category: Gatsby
+tags: ['gatsby', 'react', 'devops', 'git', 'github', 'ci/cd', 'github actions']
+readTime: 30
+embeddedImages:
+  - ./images/github_dev_branch.png
+  - ./images/github_default_branch.png
+  - ./images/github_gh-pages_branch.png
+  - ./images/github_pages.png
+  - ./images/github_actions.png
+  - ./images/package_json.png
+  - ./images/youngjae-lim.github.io.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+This article will help you to publish your gatsby site to github pages using github actions.
+
+### Gatsby
+
+Gatsby is a react based GraphQL powered static site generator. It simply means it combines the power of react, GraphQL, webpack and other front end tools to offer a great developer experience.
+
+### GitHub Pages
+
+GitHub Pages are public webpages hosted and easily published through GitHub.
+
+### GitHub Actions
+
+GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline. You can create workflows that build and test every pull request to your repository, or deploy merged pull requests to production.
+
+### Objective
+
+Our objective here is to use Github Actions to publish our webiste to Github pages whenever we push our codes to the remote repository or make a pull request to the dev branch.
+
+## Steps
+
+### 1. Create a GitHub Respository
+
+I named my repository `youngjae-lim.github.io`.
+
+### 2. Initialize git in your local Gatsby project directory
+
+```bash
+git init
+```
+
+### 3. Create a branch called `dev` in your local repository and push it to the GitHub remote repository
+
+```bash
+git checkout -b dev
+git status
+git add .
+git commit -m "initial commit to dev branch"
+
+git remote add origin https://github.com/youngjae-lim/youngjae-lim.github.io
+git push origin dev
+```
+
+Now that you pushed the local repository to the remote repository, you should be able to see the same project in your GitHub repository:
+
+{' '}
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[0])}
+  alt='github dev branch'
+/>
+
+{' '}
+
+<blockquote display='warning'>
+  Also make sure that the dev branch is your default branch in settings of your
+  remote repository:
+</blockquote>
+<GatsbyImage
+  image={getImage(props.embeddedImages[1])}
+  alt='github default branch'
+/>
+
+### 4. Create a new orphan repository called `gh-pages` to which we will deploy using Github Actions and push it to the remote repository
+
+In other words, we will work in `dev` branch locally to develop our website and once we push to the remote repository, it will trigger GitHub Actions that build our Gatsby Website and deploy to `gh-pages` branch automatically.
+
+```bash
+git checkout --orphan gh-pages
+git rm -rf .
+git commit --allow-empty "initial commit to gh-pages branch"
+git push origin gh-pages
+```
+
+If you check your remote GitHub repository, you should see an empty repository `gh-pages` created.
+
+### 5. Make your GitHub Pages site is being built from the `gh-pages` branch
+
+{' '}
+
+<blockquote display='warning'>
+  As you see in the image below, the `Source` must be set to the branch
+  gh-pages.
+</blockquote>
+
+{' '}
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[3])}
+  alt='github default branch for github pages'
+/>
+
+### 6. Create a `GitHub Actions`
+
+Create a `./github/workflows` directory right under your local project root and create `deploy.yml` like this:
+
+```yml file=./github/workflows/deploy.yml highlights=32,36
+# This is a basic workflow to help you get started with Actions
+name: CI
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the dev branch
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+          node-version: 16
+      - run: npm ci # Note that this step needs package-lock.json file
+
+      - run: npm run build --if-present
+
+      - run: npm test
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: public # The folder the action should deploy.
+```
+
+Before we push this change to the remote repository, we have to make two simple changes:
+
+1. Modify `package.json`:
+   Change the `exit` code 1 in the default `test` script in `package.json` to 0. So your `package.json` should look like this:
+
+{' '}
+
+<GatsbyImage image={getImage(props.embeddedImages[5])} alt='package.json' />
+
+2. Make sure that `package-lock.json` is not included in your `.gitignore` file: the `npm ci` step in `deploy.yml` workflow needs `package-lock.json` file, so it should be able to be pushed to the remote repository.
+
+Now that we created our deploy GitHub Actions in our local repository, let's push the changes to `dev` branch of the remote GitHub repository. Make sure you are currently working in your local `dev` branch:
+
+```bash
+git checkout dev
+git add .
+git commit -m "create a deploy GitHub Actions"
+git push origin dev
+```
+
+This will automatically trigger our Gatsby build script and publish the website to `gh-pages` branch. You can check the real-time build steps from the `Actions` tab in your remote repository:
+
+{' '}
+
+<GatsbyImage image={getImage(props.embeddedImages[4])} alt='github actions' />
+
+If the workflow ran successfully, then please switch to the `gh-pages` branch to see if all the production contents are published:
+
+{' '}
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[2])}
+  alt='github gh-pages branch'
+/>
+
+### 7. Test out the Github Pages
+
+Open up your favorite web browser and type your github pages web address. The web address should be something like `https://<your_repository_name>.github.io`. Note that it might take a second to load the github pages if you access it for the first time.
+
+{' '}
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[6])}
+  alt='github gh-pages branch'
+/>
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

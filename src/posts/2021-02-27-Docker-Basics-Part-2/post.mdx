@@ -1,11 +1,12 @@
 ---
-title: Docker Basics - Part 2, Data & Volumes 
+title: Docker Basics - Part 2, Data & Volumes
 slug: docker-basics-part2
 image: ./images/main_data_volumes.png
 date: 2021-02-27
 author: youngjae lim
+published: true
 category: Docker
-tags: ["docker", "tool"]
+tags: ['docker', 'tool']
 readTime: 10
 ---
 
@@ -24,11 +25,11 @@ actually changing the image.
 But even with read-write Containers, two big problems occur in many applications using Docker:
 
 1. Data written in a Container doesn't persist: If the Container is stopped and removed, all
-data written in the Container is lost
+   data written in the Container is lost
 
 2. The container Container can't interact with the host filesystem: If you change something
-in your host project folder, those changes are not reflected in the running container. You
-need to rebuild the image (which copies the folders) and start a new container
+   in your host project folder, those changes are not reflected in the running container. You
+   need to rebuild the image (which copies the folders) and start a new container
 
 Problem 1 can be solved with a Docker feature called "Volumes". Problem 2 can be solved by
 using "Bind Mounts".
@@ -41,10 +42,10 @@ files inside of a container.
 There are two types of Volumes:
 
 - Anonymous Volumes: Created via -v /some/path/in/container and removed
-automatically when a container is removed because of --rm added on the docker run
-command
+  automatically when a container is removed because of --rm added on the docker run
+  command
 - Named Volumes: Created via -v some-name:/some/path/in/container and NOT
-removed automatically
+  removed automatically
 
 With Volumes, data can be passed into a container (if the folder on the host machine is not
 empty) and it can be saved when written by a container (changes made by the container are
@@ -94,18 +95,18 @@ production (since you're container should run isolated from it's host machine).
 ### Key Docker Commands
 
 - `docker run -v /path/in/container IMAGE`: Create an Anonymous Volume inside a
-Container
+  Container
 - `docker run -v some-name:/path/in/container IMAGE`: Create a Named Volume (named
-some-name ) inside a Container
+  some-name ) inside a Container
 - `docker run -v /path/on/your/host/machine:path/in/container IMAGE`: Create a Bind
-Mount and connect a local path on your host machine to some path in the Container
+  Mount and connect a local path on your host machine to some path in the Container
 - `docker volume ls`: List all currently active / stored Volumes (by all Containers)
 - `docker volume create VOL_NAME`: Create a new (Named) Volume named VOL_NAME . You
-typically don't need to do that, since Docker creates them automatically for you if they don't
-exist when running a container
+  typically don't need to do that, since Docker creates them automatically for you if they don't
+  exist when running a container
 - `docker volume rm VOL_NAME`: Remove a Volume by it's name (or ID)
 - `docker volume prune`: Remove all unused Volumes (i.e. not connected to a currently
-running or stopped container)
+  running or stopped container)
 
 <Link to='/posts' className='btn center-btn'>
   all posts

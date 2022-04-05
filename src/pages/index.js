@@ -25,7 +25,9 @@ export default IndexPage
 export const query = graphql`
   {
     allMdx(
-      filter: { frontmatter: { category: { ne: "PROJECT" } } }
+      filter: {
+        frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+      }
       limit: 5
       sort: { fields: frontmatter___date, order: DESC }
     ) {

@@ -705,7 +705,7 @@ Single Pages
 
 /* error page */
 .error-page {
-  background: var(--clr-primary-10);
+  background: var(--clr-green-4);
 }
 .error-page span {
   font-size: 10rem;

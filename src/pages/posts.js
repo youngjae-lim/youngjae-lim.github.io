@@ -25,7 +25,9 @@ export default PostsPage
 export const query = graphql`
   {
     allMdx(
-      filter: { frontmatter: { category: { ne: "PROJECT" } } }
+      filter: {
+        frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+      }
       sort: { fields: frontmatter___date, order: DESC }
     ) {
       allPosts: nodes {

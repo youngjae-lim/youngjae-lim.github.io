@@ -9,7 +9,9 @@ const Recent = () => {
   const data = useStaticQuery(graphql`
     query GetFiveLastestPosts {
       allMdx(
-        filter: { frontmatter: { category: { ne: "PROJECT" } } }
+        filter: {
+          frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+        }
         limit: 5
         sort: { fields: frontmatter___date, order: DESC }
       ) {

@@ -5,7 +5,11 @@ import { Link } from 'gatsby'
 const Categories = () => {
   const data = useStaticQuery(graphql`
     {
-      allMdx(filter: { frontmatter: { category: { ne: "PROJECT" } } }) {
+      allMdx(
+        filter: {
+          frontmatter: { category: { ne: "PROJECT" }, published: { eq: true } }
+        }
+      ) {
         group(field: frontmatter___category) {
           fieldValue
           totalCount

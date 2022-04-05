@@ -1,0 +1,22 @@
+---
+title: Cookie Session Authentication
+slug: cookie-session-auth-in-sveltekit
+image: ./images/main_sveltekit_auth.png
+date: 2022-04-04
+author: youngjae lim
+published: false
+category: SvelteKit
+tags: ['sveltekit', 'front-end', 'auth']
+readTime: 10
+embeddedImages:
+  - ./images/main_sveltekit_auth.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+In this article, we will show a usecase of `hooks` in SvelteKit. In a simple app we are buillding, a user will be able to login and we will authenticate the user and set a cookie. Then whenever the user visits a page, we will check if the cookie is in the request to determine whether or not he/she is authorized to visit the page.
+
+## What is Hooks?

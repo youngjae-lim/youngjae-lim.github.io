@@ -24,7 +24,10 @@ export default TagsPage
 
 export const query = graphql`
   {
-    allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+    allMdx(
+      filter: { frontmatter: { published: { eq: true } } }
+      sort: { fields: frontmatter___date, order: DESC }
+    ) {
       allPosts: nodes {
         id
         frontmatter {
