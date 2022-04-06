@@ -12,6 +12,7 @@ embeddedImages:
   - ./images/sveltekit_start.png
   - ./images/sveltekit_getSession.png
   - ./images/sveltekit_custom_headers.png
+  - ./images/sveltekit_session_object.png
 ---
 
 import { Link } from 'gatsby'
@@ -214,4 +215,219 @@ Then we immediately resolve the event to receive a response(line 6). We attach a
 
 The `getSession` function is exactly the same as before. But check your terminal again, you will see that this time the `console.log(event)`(line 12) printed out `locals: { userName: 'Mary Doe' },` in the terminal because the `handle` had intercepted the request and added the `userName`.
 
-### Putting it all together
+### Example: Cookie Session Authentication
+
+Now that we know how getSession, handle work in SvelteKit, we can take a step further to do a cookie session authentication in a simple app. The app itself won't be a complete form, but it would suffice to show how things are put together to make authentication work in SvelteKit.
+
+Let's work on making authentication endpoints first.
+
+#### Install Dependencies
+
+```bash
+npm insall cookie uuid
+```
+
+#### Login Page
+
+Let's get started with creating a new page `login.svelte` in `./src/routes` directory:
+
+```jsx file=./src/routes/login.svelte
+<script>
+  let msg = "";
+
+  const login = async () => {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: "johndoe@example.com",
+        password: "secret",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      msg = data.msg;
+      return;
+    }
+
+    msg = data.msg;
+  };
+</script>
+
+<h1>Login</h1>
+<button on:click={login}>Login</button>
+<p>{msg}</p>
+```
+
+#### Login Endpoint
+
+```jsx file=./src/routes/api/login.js
+import { serialize } from 'cookie'
+import { v4 as uuidv4 } from 'uuid'
+
+export const post = async ({ request }) => {
+  const user = await request.json()
+  console.log(user)
+
+  // In a real life situation, the password must to be hashed/salted and compared to database
+  if (!(user.email === 'johndoe@example.com' && user.password === 'secret')) {
+    return {
+      status: 401,
+      body: {
+        msg: 'Invalid email or password',
+      },
+    }
+  }
+
+  const sessionId = uuidv4()
+  console.log(sessionId)
+
+  const headers = {
+    'Set-Cookie': serialize('session_id', sessionId, {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    }),
+  }
+  console.log(headers)
+
+  return {
+    status: 200,
+    headers,
+    body: {
+      msg: 'Login successful!',
+    },
+  }
+}
+```
+
+Let's break down what this code does:
+
+- The `/api/login.js` endpoint will receive a request from a client and check if a user email and a password are valid.
+  The console-logged `user` is:
+
+  ```
+  { email: 'johndoe@example.com', password: 'secret' }
+  ```
+
+- If not, it sends a status 401 with a message, 'Invalid email or password'.
+- If valid, then it creates a session id with the help of uuid package and
+  The `session_Id` will be something like this:
+
+  ```
+  2414a81b-2308-4f0c-9409-572193a95135
+  ```
+
+- Then it also generates a `Set-Cookie` headers with the session id using `cookie` package.
+  Then `headers` is:
+
+  ```
+  {
+    'Set-Cookie': 'session_id=2414a81b-2308-4f0c-9409-572193a95135; Max-Age=604800; Path=/; HttpOnly; SameSite=Lax'
+  }
+  ```
+
+- Once the header is created, we finally return an object with a status code 200, the headers, and a body message 'Login successfule!'.
+
+#### Hooks: handle, getSession
+
+```jsx file=./src/hooks.js
+import { parse } from 'cookie'
+
+export const handle = async ({ event, resolve }) => {
+  // Print out cookie in the terminal
+  // It will be something like: session_id=49914bf9-64e6-424a-bb2e-df7348882256
+  console.log(event.request.headers.get('cookie'))
+
+  // Parse cookie
+  const cookies = parse(event.request.headers.get('cookie') || '')
+  console.log('cookies: ', cookies)
+
+  // Attach a user object with the cookies to the event.locals
+  event.locals.user = cookies
+
+  // Determine whether or not a user is authenticated by checking out the sesssion_id
+  if (!cookies.session_id) {
+    event.locals.user.authenticated = false
+  } else {
+    event.locals.user.authenticated = true
+  }
+
+  // Resolve the request
+  const response = await resolve(event)
+
+  return response
+}
+
+export const getSession = event => {
+  console.log(event.locals.user)
+  const user = event.locals.user
+
+  if (!user.session_id) {
+    return {}
+  }
+
+  return {
+    user,
+  }
+}
+```
+
+##### handle
+
+Let's break down what this code does:
+
+- `handle` will take an event object as an argument and get a cookie object from `event.request.headers`.
+- Then it parses the cookie using `parse()` from cookie package
+  The parsed cookie will be like this:
+  ```
+  { session_id: '49914bf9-64e6-424a-bb2e-df7348882256' }
+  ```
+- Then we set `event.locals.user` to the parse cookie.
+- If the cookie has a session id, we attche `authenticated` key with a value`true`, otherwise 'false' to the `event.locals.user`.
+- Then we resolve the request and return a response.
+
+##### getSession
+
+Because the `handle` has intercepted the request and already determinied whether or not a user is authenticated, we can set a session object using `getSession` so that it can be available in the client.
+
+- `getSession` takes an event object that has passed through `handle`. When you console log `evnet.locals.user`, you will be able to see:
+  ```
+  {
+    session_id: '49914bf9-64e6-424a-bb2e-df7348882256',
+    authenticated: true
+  }
+  ```
+- If the user does not have a session id, then we return nothiing.
+- Otherwise, we return the user object.
+
+### Main Page
+
+Now let's see how we can get an session object using `load` in our main page.
+
+```jsx file=./src/routes/index.svelte
+<script context="module">
+  export const load = ({ session }) => {
+    return {
+      props: {
+        session,
+      },
+    };
+  };
+</script>
+
+<script>
+  export let session;
+</script>
+
+<h1>Session Object</h1>
+{JSON.stringify(session)}
+```
+
+<GatsbyImage image={getImage(props.embeddedImages[3])} alt='sveltekit' />

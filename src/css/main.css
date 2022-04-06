@@ -264,7 +264,8 @@ tr:last-child > td:last-child {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   color: var(--clr-headings);
   letter-spacing: var(--spacing);
   text-transform: capitalize;
@@ -283,11 +284,16 @@ h2 {
 }
 h3 {
   font-size: var(--fontSize-3);
+  text-transform: none;
 }
 h4 {
   font-size: var(--fontSize-2);
+  text-transform: none;
 }
-
+h5 {
+  font-size: var(--fontSize-1);
+  text-transform: none;
+}
 h2 a {
   font-size: 2rem;
 }
