@@ -7,7 +7,7 @@ const NotFoundPage = () => (
     <section className='error-page'>
       <div className='page-center'>
         <span>404</span>
-        <h3>Sorry, the paage you tried cannot be found</h3>
+        <h3>Sorry, the page you tried cannot be found</h3>
         <Link to='/' className='btn'>
           back home
         </Link>

@@ -4,12 +4,14 @@ slug: cookie-session-auth-in-sveltekit
 image: ./images/main_sveltekit_auth.png
 date: 2022-04-04
 author: youngjae lim
-published: false
+published: true
 category: SvelteKit
 tags: ['sveltekit', 'front-end', 'auth']
 readTime: 10
 embeddedImages:
-  - ./images/main_sveltekit_auth.png
+  - ./images/sveltekit_start.png
+  - ./images/sveltekit_getSession.png
+  - ./images/sveltekit_custom_headers.png
 ---
 
 import { Link } from 'gatsby'
@@ -17,6 +19,199 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-In this article, we will show a usecase of `hooks` in SvelteKit. In a simple app we are buillding, a user will be able to login and we will authenticate the user and set a cookie. Then whenever the user visits a page, we will check if the cookie is in the request to determine whether or not he/she is authorized to visit the page.
+In this article, we will take a look at how hooks, particularly `handle` & `getSession` work in SvelteKit. Then I will show a usecase of `hooks` in a simple app. A user will be able to login and we will authenticate the user and set a cookie. Then whenever the user visits a page, we will check if the cookie is in the request to determine whether or not he/she is authorized to visit the page.
 
 ## What is Hooks?
+
+In programming, a hook is a place and usually an interface provided in packaged code that allows a programmer to insert customized programming. If you are familiar with a middlware in a server-side programming of `node.js` and `express.js`, that is considered as a hook because it does a certain things inside the middleware by accessing to a request object and a response object.
+
+In SvelteKit, there are currently four functions provided as part of hooks at the time of this writing:
+
+- `handle`
+- `handleError`
+- `getSession`
+- `externalFetch`
+
+To be able to do cookie-session authentication, we need only two of them: `handle` & `getSession`.
+
+Let's dive into each of them and check out how they work.
+
+## Getting started
+
+Make a SvelteKit project directory first.
+
+```bash
+npm init svelte@next cookie-session-auth
+cd cookie-session-auth
+vim . # Or code . if you use a VS Code editor
+npm install
+npm run dev
+```
+
+Open up a browser and access `http://locahost:3000`.
+
+<GatsbyImage image={getImage(props.embeddedImages[0])} alt='sveltekit' />
+
+### getSession
+
+In this section, we will take a look at how to create a session data on a server using `getSession` and access it from a client side using two methods.
+
+`getSession()` runs whenever SvelteKit server-renders a page. It takes an `event` objects and returns a `session` object that is available on the client side. Note that the `session` object must be serializable, which means that it must not contain things like functions or classes.
+
+To use `getSession`, we must create a `hooks.js` file in our `./src` directory:
+
+```jsx file=./src/hooks.js
+export const getSession = event => {
+  console.log(event)
+
+  return {
+    user: {
+      id: '1h4jk90ds',
+      name: 'John Doe',
+      role: 'admin',
+    },
+  }
+}
+```
+
+Go back to your terminal and check out the `event` object printed out:
+
+```js file=console.log(event) highlights=3
+{
+  clientAddress: [Getter],
+  locals: {},
+  params: {},
+  platform: undefined,
+  request: Request {
+    size: 0,
+    follow: 20,
+    compress: true,
+    counter: 0,
+    agent: undefined,
+    highWaterMark: 16384,
+    insecureHTTPParser: false,
+    [Symbol(Body internals)]: {
+      body: null,
+      stream: null,
+      boundary: null,
+      disturbed: false,
+      error: null
+    },
+    [Symbol(Request internals)]: {
+      method: 'GET',
+      redirect: 'follow',
+      headers: [Object],
+      parsedURL: [URL],
+      signal: null,
+      referrer: undefined,
+      referrerPolicy: ''
+    }
+  },
+  routeId: '',
+  url: URL {
+    href: 'http://localhost:3000/',
+    origin: 'http://localhost:3000',
+    protocol: 'http:',
+    username: '',
+    password: '',
+    host: 'localhost:3000',
+    hostname: 'localhost',
+    port: '3000',
+    pathname: '/',
+    search: '',
+    searchParams: URLSearchParams {},
+    hash: ''
+  }
+}
+```
+
+As you see, we have lots of information available in the `event` object. Please pay attention to the highlighted line `locals:{},`. We will populate this `locals` object through `handle` function.
+
+Because the `getSession` returns a `session` object to a client, there are two ways to access it in a client side:
+
+#### 1. Using `$app/stores`
+
+```jsx file=./src/routes/index.svelte
+<script>
+  import { session } from "$app/stores";
+</script>
+
+<h1>Session Object</h1>
+{JSON.stringify($session)}
+```
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
+
+#### 2. Using `load` function
+
+You can also use `load` to access the `session` object as well by modifying the `index.svelte`:
+
+```jsx file=./src/routes/index.svelte
+<script context="module">
+  export const load = ({ session }) => {
+    return {
+      props: {
+        session,
+      },
+    };
+  };
+</script>
+
+<script>
+  export let session;
+</script>
+
+<h1>Session Object</h1>
+{JSON.stringify(session)}
+```
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
+
+### handle
+
+`handle()` runs on the server every time SvelteKit receives a request. It receives two objects as the function arguments:
+
+- an `event` object that carries the request and
+- a `resolve` function that invokes SvelteKit's router and generates a response
+
+Through the `handle`, we can modify both the request and a response.
+
+Update the `hooks.js` file in the project root directory with the following changes:
+
+```jsx file=./src/hooks.js add=1-11
+export const handle = async ({ event, resolve }) => {
+  console.log(event)
+
+  event.locals.userName = 'Mary Doe'
+
+  const response = await resolve(event)
+
+  response.headers.set('x-custom-header', 'custom-header')
+
+  return response
+}
+
+export const getSession = event => {
+  console.log(event)
+
+  return {
+    user: {
+      id: '1h4jk90ds',
+      name: 'John Doe',
+      role: 'admin',
+    },
+  }
+}
+```
+
+#### What this code does
+
+We've added another function `handle` that receives `event` and `resolve`. The `console.log(event)`(line 2) will spit out the same object in the terminal as we've seen from `getSession` example with `locals: {},` in it. However, we populate `locals` with `userName: 'Mary Doe'` right before resolving the request in `handle` function so that `getSession` will receive `event` object with the populated `locals` in it.
+
+Then we immediately resolve the event to receive a response(line 6). We attach a custom header to the original response(line 8) that is going to sent to the client. If you open up your browser's developer tool and inspect the repsonse headers after accessing `http://localhost:3000`, there will be `x-custom-header: custom-header`:
+
+<GatsbyImage image={getImage(props.embeddedImages[2])} alt='sveltekit' />
+
+The `getSession` function is exactly the same as before. But check your terminal again, you will see that this time the `console.log(event)`(line 12) printed out `locals: { userName: 'Mary Doe' },` in the terminal because the `handle` had intercepted the request and added the `userName`.
+
+### Putting it all together

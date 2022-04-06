@@ -29,7 +29,9 @@ export default TagTemplate
 
 export const query = graphql`
   query GetPostsByTag($tag: String!) {
-    allMdx(filter: { frontmatter: { tags: { eq: $tag } } }) {
+    allMdx(
+      filter: { frontmatter: { tags: { eq: $tag }, published: { eq: true } } }
+    ) {
       nodes {
         id
         excerpt

@@ -27,7 +27,11 @@ export default CategoryTemplate
 
 export const query = graphql`
   query GetPostsByCategory($category: String!) {
-    allMdx(filter: { frontmatter: { category: { eq: $category } } }) {
+    allMdx(
+      filter: {
+        frontmatter: { category: { eq: $category }, published: { eq: true } }
+      }
+    ) {
       nodes {
         id
         excerpt
