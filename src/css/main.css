@@ -299,6 +299,7 @@ h4 {
 h5 {
   font-size: var(--fontSize-1);
   text-transform: none;
+  margin-top: 0;
 }
 h2 a {
   font-size: 2rem;
