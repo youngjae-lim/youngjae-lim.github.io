@@ -13,6 +13,9 @@ embeddedImages:
   - ./images/sveltekit_getSession.png
   - ./images/sveltekit_custom_headers.png
   - ./images/sveltekit_session_object.png
+  - ./images/sveltekit_login_successful.png
+  - ./images/sveltekit_session_id.png
+  - ./images/sveltekit_project_structure.png
 ---
 
 import { Link } from 'gatsby'
@@ -20,11 +23,11 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-In this article, we will take a look at how hooks, particularly `handle` & `getSession` work in SvelteKit. Then I will show a usecase of `hooks` in a simple app. A user will be able to login and we will authenticate the user and set a cookie. Then whenever the user visits a page, we will check if the cookie is in the request to determine whether or not he/she is authorized to visit the page.
+In this article, we will take a look at how <mark>hooks</mark>, particularly `handle` & `getSession` work in SvelteKit. Then I will show a usecase of `hooks` in a simple app. A user will be able to login and we will authenticate the user and set a cookie. Then whenever the user visits a page, we will check if the cookie is in the request to determine whether or not he/she is authorized to visit the page.
 
 ## What is Hooks?
 
-In programming, a hook is a place and usually an interface provided in packaged code that allows a programmer to insert customized programming. If you are familiar with a middlware in a server-side programming of `node.js` and `express.js`, that is considered as a hook because it does a certain things inside the middleware by accessing to a request object and a response object.
+In programming, a hook is a place and usually an interface provided in packaged code that allows a programmer to insert customized programming. If you are familiar with a middlware in a server-side programming of `node.js` and `express.js`, that is considered as a hook because it does certain things inside the middleware by accessing to a request and a response object.
 
 In SvelteKit, there are currently four functions provided as part of hooks at the time of this writing:
 
@@ -39,7 +42,7 @@ Let's dive into each of them and check out how they work.
 
 ## Getting started
 
-Make a SvelteKit project directory first.
+Create a skeleton Sveltekit project and spin up a dev server.
 
 ```bash
 npm init svelte@next cookie-session-auth
@@ -49,15 +52,18 @@ npm install
 npm run dev
 ```
 
-Open up a browser and access `http://locahost:3000`.
+Open up a browser and access `http://locahost:3000`. You should be able to see a welcome page.
 
 <GatsbyImage image={getImage(props.embeddedImages[0])} alt='sveltekit' />
 
 ### getSession
 
-In this section, we will take a look at how to create a session data on a server using `getSession` and access it from a client side using two methods.
+In this section, we will take a look at how to create a session data on a server using `getSession` and access it from a client side using two methods:
 
-`getSession()` runs whenever SvelteKit server-renders a page. It takes an `event` objects and returns a `session` object that is available on the client side. Note that the `session` object must be serializable, which means that it must not contain things like functions or classes.
+1. [$app/stores](/posts/cookie-session-auth-in-sveltekit#1-using-appstores)
+2. [load](/posts/cookie-session-auth-in-sveltekit#2-using-load-function)
+
+`getSession()` runs whenever SvelteKit server-renders a page. It takes an `event` object and returns a `session` object that is available on the client side. Note that the `session` object must be serializable, which means that it must not contain things like functions or classes.
 
 To use `getSession`, we must create a `hooks.js` file in our `./src` directory:
 
@@ -126,13 +132,25 @@ Go back to your terminal and check out the `event` object printed out:
 }
 ```
 
-As you see, we have lots of information available in the `event` object. Please pay attention to the highlighted line `locals:{},`. We will populate this `locals` object through `handle` function.
+As you see, we have lots of information available in the `event` object. Please pay attention to the highlighted line `locals:{},`. In the [example](/posts/cookie-session-auth-in-sveltekit#example-cookie-session-authentication), we will populate this `locals` object through `handle` function that will run on the server every time it receives a request. What this means is that intead of populating the user data inside `getSession` as we did above, we will intercept the request first and populate the user session data via `locals` object using `handle`.
 
-Because the `getSession` returns a `session` object to a client, there are two ways to access it in a client side:
+Because the `getSession` returns a `session` object to a client, whatever we pass in the `session` object will be accessible through two ways in the client side:
 
 #### 1. Using `$app/stores`
 
-```jsx file=./src/routes/index.svelte
+`$app/stores` is one of built-in modules in SvelteKit. To access the session data we populated on the server, we can import `session` from `$app/stores` on the client. The `session` object has two important characteristics:
+
+1. <mark>Contextual</mark>
+
+- What this means is that it is added to the context of the root component of our app.
+
+2. <mark>Unique</mark>
+
+- It is also unique to each request on the server. What this means that the `session` is not shared between multiple requests handled by the same server simultaneously.
+
+These two properties make the `session` so useful to store user-specific data. To use stores, it is important to note that we must subscribe to it while component is being initialized. Using `$session` would do subscription for us convienently.
+
+```jsx file=./src/routes/index.svelte highlights=2,6
 <script>
   import { session } from "$app/stores";
 </script>
@@ -141,11 +159,13 @@ Because the `getSession` returns a `session` object to a client, there are two w
 {JSON.stringify($session)}
 ```
 
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
+
 <GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
 
 #### 2. Using `load` function
 
-You can also use `load` to access the `session` object as well by modifying the `index.svelte`:
+You can also use `load` to access the `session` object as well by modifying the `index.svelte`. To understand how `load` function works in SvelteKit, you can read [this article](/posts/data-from-endpoint-to-layouts-to-pages-in-sveltekit).
 
 ```jsx file=./src/routes/index.svelte
 <script context="module">
@@ -165,6 +185,8 @@ You can also use `load` to access the `session` object as well by modifying the 
 <h1>Session Object</h1>
 {JSON.stringify(session)}
 ```
+
+Make sure to spin up dev server and access `http://localhost:3000` in a browser:
 
 <GatsbyImage image={getImage(props.embeddedImages[1])} alt='sveltekit' />
 
@@ -217,14 +239,18 @@ The `getSession` function is exactly the same as before. But check your terminal
 
 ### Example: Cookie Session Authentication
 
-Now that we know how getSession, handle work in SvelteKit, we can take a step further to do a cookie session authentication in a simple app. The app itself won't be a complete form, but it would suffice to show how things are put together to make authentication work in SvelteKit.
+Now that we know how `getSession`, `handle` work in SvelteKit, we can take a step further to do a cookie session authentication in a simple app. The app itself won't be a complete form, but it would suffice to show how things are put together to make authentication work in SvelteKit.
 
 Let's work on making authentication endpoints first.
+
+#### App Structure
+
+<GatsbyImage image={getImage(props.embeddedImages[6])} alt='sveltekit' />
 
 #### Install Dependencies
 
 ```bash
-npm insall cookie uuid
+npm install cookie uuid
 ```
 
 #### Login Page
@@ -238,6 +264,7 @@ Let's get started with creating a new page `login.svelte` in `./src/routes` dire
   const login = async () => {
     const res = await fetch("/api/login", {
       method: "POST",
+      // For demonstration purpose, we just hard-coded a user email and password
       body: JSON.stringify({
         email: "johndoe@example.com",
         password: "secret",
@@ -263,7 +290,11 @@ Let's get started with creating a new page `login.svelte` in `./src/routes` dire
 <p>{msg}</p>
 ```
 
+Basically, what this code does is that once a user clicks the login button, it will make a HTTP POST request to the `/api/login` endpoint. Depending on the server response, it will display the corresponding(i.e., login success or fail) message on the login page.
+
 #### Login Endpoint
+
+To handle the HTTP POST request from the login page, we have to create a matching endpoint:
 
 ```jsx file=./src/routes/api/login.js
 import { serialize } from 'cookie'
@@ -309,31 +340,39 @@ export const post = async ({ request }) => {
 
 Let's break down what this code does:
 
-- The `/api/login.js` endpoint will receive a request from a client and check if a user email and a password are valid.
-  The console-logged `user` is:
+- The `/api/login.js` endpoint will receive a HTTP POST request from a client and check if a user email and a password are valid.
+  The console-logged `user` in line 6 is:
 
   ```
   { email: 'johndoe@example.com', password: 'secret' }
   ```
 
-- If not, it sends a status 401 with a message, 'Invalid email or password'.
-- If valid, then it creates a session id with the help of uuid package and
+- If the email or the password are not valid, it returns a `status 401` with a message, `Invalid email or password`.
+- Otherwise, it creates a session id with the help of `uuid` package and
   The `session_Id` will be something like this:
 
   ```
-  2414a81b-2308-4f0c-9409-572193a95135
+  49914bf9-64e6-424a-bb2e-df7348882256
   ```
 
 - Then it also generates a `Set-Cookie` headers with the session id using `cookie` package.
-  Then `headers` is:
+  The `headers` is set like:
 
   ```
   {
-    'Set-Cookie': 'session_id=2414a81b-2308-4f0c-9409-572193a95135; Max-Age=604800; Path=/; HttpOnly; SameSite=Lax'
+    'Set-Cookie': 'session_id=49914bf9-64e6-424a-bb2e-df7348882256; Max-Age=604800; Path=/; HttpOnly; SameSite=Lax'
   }
   ```
 
-- Once the header is created, we finally return an object with a status code 200, the headers, and a body message 'Login successfule!'.
+  | Set-Cookie Attribute | Explanation                                                                                                                                                                 |
+  | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `httpOnly`           | By setting it `true`, this prevents the client javascript from accessing the cookie                                                                                         |
+  | `sameSite`           | This sets the `Same-Site` attribute in the cookie. The cookies are sent when a user is navigating to the origin site only.                                                  |
+  | `maxAge`             | This sets the `Max-Age` attribute in the cookie. It lets the cookie be deleted in the browser when a specified period is over.                                              |
+  | `secure`             | By setting it `true`, the cookie is sent to the server only when a request is made with the `https:` scheme.                                                                |
+  | `path`               | This indicates the path that must exist in the requested URL for the browser to send the `Cookie` header. We set it to `/` so that the cookie will be sent to each request. |
+
+- Once the header is created, we finally return an object with a `status 200`, the headers, and a body message `Login successful!`.
 
 #### Hooks: handle, getSession
 
@@ -379,7 +418,7 @@ export const getSession = event => {
 }
 ```
 
-##### handle
+##### <mark>handle</mark>
 
 Let's break down what this code does:
 
@@ -393,7 +432,7 @@ Let's break down what this code does:
 - If the cookie has a session id, we attche `authenticated` key with a value`true`, otherwise 'false' to the `event.locals.user`.
 - Then we resolve the request and return a response.
 
-##### getSession
+##### <mark>getSession</mark>
 
 Because the `handle` has intercepted the request and already determinied whether or not a user is authenticated, we can set a session object using `getSession` so that it can be available in the client.
 
@@ -407,9 +446,21 @@ Because the `handle` has intercepted the request and already determinied whether
 - If the user does not have a session id, then we return nothiing.
 - Otherwise, we return the user object.
 
+### Back to Login Page
+
+In your browser, please access `http://locahost:3000/login`. Once you click `Login` button in the login page, you will be able to see the `Login successful` message:
+
+<GatsbyImage image={getImage(props.embeddedImages[4])} alt='sveltekit' />
+
+Because the login is successful, the `/api/login` endpoint returns the headers with `Set-Cookie` header as a part of response. When the client receives the status 200, the `session_id` will be available in your local browser. You can confirm this from your chrome developer tool:
+
+<GatsbyImage image={getImage(props.embeddedImages[5])} alt='sveltekit' />
+
+The `session_id` will be effective for 7 days as we've set `maxAge` to 7 days, so every time you send another request to the server, the server will run `hooks.js` and receive a `cookie` headers as part of request and attempt to check if the user is authenticated or not through `handle`.
+
 ### Main Page
 
-Now let's see how we can get an session object using `load` in our main page.
+Since we would like to confirm that the client gets the `session` data, let's use `load` function to access `session` and display it:
 
 ```jsx file=./src/routes/index.svelte
 <script context="module">
@@ -429,5 +480,7 @@ Now let's see how we can get an session object using `load` in our main page.
 <h1>Session Object</h1>
 {JSON.stringify(session)}
 ```
+
+Assuming that you've successfully logged in and hit the main page `http://locahost:3000`, you will be able to see the user's session data displayed like this:
 
 <GatsbyImage image={getImage(props.embeddedImages[3])} alt='sveltekit' />

@@ -197,6 +197,12 @@ a.text-link[href*="//"]:hover
 {
   text-decoration: underline;
 }
+a.internal-link {
+  color: var(--clr-external-link);
+}
+a.internal-link:hover {
+  text-decoration: underline;
+}
 
 /* Table styles  */
 table {

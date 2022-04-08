@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { CgInternal } from 'react-icons/cg'
 
 const ExternalLink = props => {
   if (
@@ -7,14 +8,8 @@ const ExternalLink = props => {
     props.href[0] === '/'
   ) {
     return (
-      <a
-        {...props}
-        href={props.href}
-        style={{
-          color: 'var(--clr-external-link)',
-          textDecoration: 'underline',
-        }}
-      >
+      <a {...props} href={props.href} className='internal-link'>
+        <CgInternal />
         {props.children}
       </a>
     )

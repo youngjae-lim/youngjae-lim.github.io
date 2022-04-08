@@ -94,7 +94,7 @@ Make sure to spin up dev server and access `http://localhost:3000` in a browser:
 
 ## 2. Stuff
 
-In `SvelteKit`, the `load` function receives a field called `stuff` as an object containing six fields:
+In `SvelteKit`, the `load` function receives the following six objects as the function arguments:
 
 - `url`
 - `params`
@@ -103,7 +103,7 @@ In `SvelteKit`, the `load` function receives a field called `stuff` as an object
 - `session`
 - `stuff`
 
-We will take a look at how `stuff` works here.
+We are particularly interested in `stuff`.
 
 In this layout page, we hard-code a parent object having a name and an email properties and attach it to the `stuff`. This `stuff` will be available to any subsequent `load` functions in the descendant layouts and pages.
 
