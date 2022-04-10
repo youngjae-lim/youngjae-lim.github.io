@@ -23,7 +23,7 @@ const Recent = () => {
             date(formatString: "MMMM Do, YYYY")
             image {
               childImageSharp {
-                gatsbyImageData
+                gatsbyImageData(quality: 75)
               }
             }
           }

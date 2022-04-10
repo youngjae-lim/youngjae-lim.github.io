@@ -418,7 +418,7 @@ export const getSession = event => {
 }
 ```
 
-##### <mark>handle</mark>
+##### handle
 
 Let's break down what this code does:
 
@@ -432,7 +432,7 @@ Let's break down what this code does:
 - If the cookie has a session id, we attche `authenticated` key with a value`true`, otherwise 'false' to the `event.locals.user`.
 - Then we resolve the request and return a response.
 
-##### <mark>getSession</mark>
+##### getSession
 
 Because the `handle` has intercepted the request and already determinied whether or not a user is authenticated, we can set a session object using `getSession` so that it can be available in the client.
 

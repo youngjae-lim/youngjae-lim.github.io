@@ -127,6 +127,7 @@ const Wrapper = styled.article`
       grid-template-columns: 30rem 1fr;
       column-gap: 1.5rem;
       .info {
+        margin-top: 0.3rem;
         text-align: left;
       }
       .img {

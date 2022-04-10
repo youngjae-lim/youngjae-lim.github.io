@@ -118,7 +118,7 @@ export const query = graphql`
         }
         embeddedImages {
           childImageSharp {
-            gatsbyImageData
+            gatsbyImageData(quality: 100)
           }
         }
         videoSourceURL
