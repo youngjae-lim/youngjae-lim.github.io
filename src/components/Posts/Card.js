@@ -31,14 +31,21 @@ const Card = ({ frontmatter, excerpt }) => {
 }
 
 const Wrapper = styled.article`
-  /* border: 1px solid white; */
-  margin-bottom: 3rem;
+  background-color: var(--clr-green-4);
+  padding: 0.5rem;
+  border-radius: var(--radius-2);
+  margin-bottom: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  :hover {
+    transform: scale(1.01);
+  }
   .info {
     text-align: center;
   }
   .img {
     margin-bottom: 1rem;
-    border-radius: var(--radius);
+    border-radius: var(--radius-2);
     height: 17rem;
   }
   .category {
