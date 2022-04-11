@@ -155,6 +155,10 @@ ol {
   margin: 0.5rem 1rem 1rem 2rem;
 }
 
+ul li ul {
+  margin-left: 1rem;
+}
+
 .nav-links li,
 .banner-icons li,
 .categories li,
