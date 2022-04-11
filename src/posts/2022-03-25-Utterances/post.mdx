@@ -15,6 +15,7 @@ embeddedImages:
   - ./images/utterance_success.png
   - ./images/github_secret_key_settings.png
   - ./images/comment_capture.png
+  - ./images/utterances_script_tag.png
 ---
 
 import { Link } from 'gatsby'
@@ -24,15 +25,41 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 This article shows you how to add `utterances` light weight comments widget to your Gatsby website. The widget is built on `GitHub` issues.
 
-## Caveats
+## Limitations of Utterances Comments System
 
 - Needs Github authentication by users to make a comment
 - There is no reply functionality
 
-## What you need
+## Initial Setup
 
-1. Public Github Repository
-2. ...
+### Create Public Github Repository
+
+- This repository will be linked to Utterance Github Application that we're going to install below.
+
+### Install [Utterance Github Application](https://github.com/apps/utterances)
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[0])}
+  alt='utterance comment'
+/>
+
+Select the repository that you've created above from the dropdown list:
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[1])}
+  alt='utterance comment'
+/>
+
+## Create Comments Component
+
+[The offical utterances doc](https://utteranc.es/) instructs us to add the following script tag to your blog template.
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[5])}
+  alt='utterance settings'
+/>
+
+Howerver, I use Gatsby framework, so I had to create a React component to configure the settings. Note that the component we crate here is to be imported in our blog post template later.
 
 ```jsx file=./src/components/Comments.js highlights=7,11
 import React, { useEffect } from 'react'
@@ -91,12 +118,13 @@ Then create `.env` file in your project root and add a key and a value pair to i
 GATSBY_COMMENTS_REPO=<github_owner_name>/<github_repository_name_connected_to_utterances>
 ```
 
-With this configuration, now the `Comments` component that we've created above will have access the env variable using `process.env.GATSBY_COMMENTS_REPO` syntax. The Post template that imports the `Comments` component shoudl be able to render the comment without any issues in your local development environment.
+Example
 
-<GatsbyImage
-  image={getImage(props.embeddedImages[4])}
-  alt='utterance comment'
-/>
+```
+GATSBY_COMMENTS_REPO=johndoe/utterances-comments
+```
+
+With this configuration, now the `Comments` component that we've created above will have access the env variable using `process.env.GATSBY_COMMENTS_REPO` syntax.
 
 ### For your production development
 
@@ -173,6 +201,97 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: public # The folder the action should deploy.
 ```
+
+## Import the Comment Component
+
+The last part of making Utterances comment work in each blog post is to import the `Comments.js` component and use it in the blog post template.
+
+The following is the part of codes in `post-template.js` used in this website. To see the entire codes, please refer to [this](https://github.com/youngjae-lim/youngjae-lim.github.io/blob/dev/src/templates/post-template.js).
+
+<blockquote display='info'>
+  post-template.js is a template that is used to create new pages for blog posts
+  programmatically using Gatsby's filesystem route api.
+</blockquote>
+
+```jsx file=./src/templates/post-template.js highlights=4,56
+...
+...
+...
+import Comments from '../components/Comments'
+...
+...
+...
+const PostTemplate = ({ data, pageContext }) => {
+...
+...
+...
+  return (
+    <Layout>
+      <Seo
+        title={title}
+        description={excerpt}
+        image={image?.childImageSharp.resize}
+        pathname={pathName}
+      />
+      <Wrapper toc={isThereTableOfContent}>
+        {/* Table of Contents */}
+        {isThereTableOfContent && (
+          <TableOfContents items={tableOfContents.items} />
+        )}
+        {/* Post Info */}
+        <article className='mdx-page'>
+          <GatsbyImage
+            image={getImage(image)}
+            alt={title}
+            className='main-img'
+          />
+          <div className='post-info'>
+            <h1>{title}</h1>
+            {tags?.length > 0 && <TagsList tags={tags} isPost={true} />}
+            <p>{date}</p>
+            <div className='underline' />
+            <div className='social-buttons-top'>
+              <SocialShareButtons url={url} description={description} />
+            </div>
+          </div>
+          <MDXRenderer
+            embeddedImages={embeddedImages}
+            videoSourceURL={videoSourceURL}
+            videoTitle={videoTitle}
+          >
+            {body}
+          </MDXRenderer>
+          <div className='social-buttons'>
+            <span>If you found this article informative, please share: </span>
+            <SocialShareButtons url={url} description={description} />
+          </div>
+          <PrevAndNext prev={previousPost} next={nextPost} />
+          {relatedPosts?.length > 0 && (
+            <YouMightAlsoLike posts={relatedPosts} tag={tags[0]} />
+          )}
+          <Comments />
+        </article>
+
+        {/* Banner on the right side */}
+        <article>
+          <Banner isPost={true} />
+        </article>
+      </Wrapper>
+    </Layout>
+
+)
+}
+
+export default PostTemplate
+...
+```
+
+The following is the capture of the same utterances comment embedded in this article.
+
+<GatsbyImage
+  image={getImage(props.embeddedImages[4])}
+  alt='utterance comment'
+/>
 
 <Link to='/posts' className='btn center-btn'>
   all posts

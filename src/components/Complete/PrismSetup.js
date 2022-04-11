@@ -90,7 +90,13 @@ const PrismWrapper = props => {
                       : 'transparent',
                   }}
                   className={
-                    adds(i) ? 'added-line' : deletes(i) ? 'deleted-line' : ''
+                    adds(i)
+                      ? 'added-line'
+                      : deletes(i)
+                      ? 'deleted-line'
+                      : highlights(i)
+                      ? 'highlighted-line'
+                      : ''
                   }
                 >
                   <div
@@ -233,6 +239,23 @@ const Pre = styled.pre`
     /* padding-right: 1em; */
     user-select: none;
     opacity: 0.5;
+  }
+  .highlighted-line .line-no {
+    color: yellow;
+    font-weight: bold;
+    border-left: 3px solid yellow;
+  }
+  .added-line .line-no {
+    color: lightgreen;
+    font-weight: bold;
+    font-style: normal;
+    border-left: 3px solid lightgreen;
+  }
+  .deleted-line .line-no {
+    color: red;
+    font-weight: bold;
+    font-style: normal;
+    border-left: 3px solid red;
   }
   .terminal {
     margin-left: 0.4rem;
