@@ -32,7 +32,6 @@ const Card = ({ frontmatter, excerpt }) => {
 
 const Wrapper = styled.article`
   background-color: var(--clr-green-4);
-  padding: 0.5rem;
   border-radius: var(--radius-2);
   margin-bottom: 1rem;
   box-shadow: var(--card-shadow);
@@ -41,12 +40,16 @@ const Wrapper = styled.article`
     transform: scale(1.01);
   }
   .info {
+    padding: 0.5rem;
     text-align: center;
   }
   .img {
     margin-bottom: 1rem;
-    border-radius: var(--radius-2);
-    height: 17rem;
+    border-top-left-radius: var(--radius-2);
+    border-top-right-radius: var(--radius-2);
+    /* height: 17rem; */
+    /* width: 100%; */
+    object-fit: cover;
   }
   .category {
     display: inline-block;
@@ -94,7 +97,7 @@ const Wrapper = styled.article`
     color: var(--clr-link-hover);
   }
   footer {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     padding-top: 1rem;
     border-top: 1px solid var(--clr-grey-9);
     display: flex;
@@ -124,7 +127,8 @@ const Wrapper = styled.article`
   @media (min-width: 992px) {
     & {
       display: grid;
-      grid-template-columns: 30rem 1fr;
+      /* grid-template-columns: 30rem 1fr; */
+      grid-template-columns: 20rem 1fr;
       column-gap: 1.5rem;
       .info {
         margin-top: 0.3rem;
@@ -133,6 +137,10 @@ const Wrapper = styled.article`
       .img {
         height: 100%;
         max-height: 20rem;
+        border-top-left-radius: var(--radius-2);
+        border-bottom-left-radius: var(--radius-2);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
       }
       .underline {
         margin-left: 0;
