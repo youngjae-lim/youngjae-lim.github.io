@@ -10,22 +10,26 @@ const Card = ({ frontmatter, excerpt }) => {
   return (
     <Wrapper>
       <GatsbyImage image={getImage(image)} alt={title} className='img' />
-      <div className='info'>
-        <h3>{title}</h3>
-        <div className='underline' />
-        <p>{excerpt}</p>
-        {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
-        <Link
-          to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
-          className='link'
-        >
-          Continue Reading...
-        </Link>
-        <footer>
-          <span className='date'>📆 &nbsp; {date}</span>
-          <span>{readTime} min</span>
-        </footer>
-      </div>
+      <Link
+        to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
+      >
+        <div className='info'>
+          <h3>{title}</h3>
+          <div className='underline' />
+          {/* <p>{excerpt}</p> */}
+          {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
+          <Link
+            to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
+            className='link'
+          >
+            Continue Reading...
+          </Link>
+          <footer>
+            <span className='date'>📆 &nbsp; {date}</span>
+            <span>{readTime} min</span>
+          </footer>
+        </div>
+      </Link>
     </Wrapper>
   )
 }
@@ -129,7 +133,7 @@ const Wrapper = styled.article`
       display: grid;
       /* grid-template-columns: 30rem 1fr; */
       grid-template-columns: 20rem 1fr;
-      column-gap: 1.5rem;
+      column-gap: 0.5rem;
       .info {
         margin-top: 0.3rem;
         text-align: left;
