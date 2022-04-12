@@ -89,7 +89,7 @@ Variables
   --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.55);
   --navbar-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
   --max-width: 1170px;
-  --fixed-width: 700px;
+  --fixed-width: 750px;
 
   /* codeschool theme colors */
   --clr-codeschool-dark-1: hsl(203, 16%, 20%);
@@ -256,6 +256,12 @@ th:last-child {
 td {
   background-color: var(--clr-green-5);
 }
+/* tr:nth-child(odd) { */
+/*   background-color: var(--clr-green-5); */
+/* } */
+/* tr:nth-child(even) { */
+/*   background-color: var(--clr-green-5); */
+/* } */
 tr:last-child > td:first-child {
   border-bottom-left-radius: var(--radius-2);
 }

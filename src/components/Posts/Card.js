@@ -14,7 +14,7 @@ const Card = ({ frontmatter, excerpt }) => {
         to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
       >
         <div className='info'>
-          <h3>{title}</h3>
+          <h4>{title}</h4>
           <div className='underline' />
           {/* <p>{excerpt}</p> */}
           {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
@@ -48,7 +48,7 @@ const Wrapper = styled.article`
     text-align: center;
   }
   .img {
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
     border-top-left-radius: var(--radius-2);
     border-top-right-radius: var(--radius-2);
     /* height: 17rem; */
@@ -66,7 +66,7 @@ const Wrapper = styled.article`
     letter-spacing: var(--spacing);
     color: black;
   }
-  h3 {
+  h4 {
     font-weight: 700;
     margin-bottom: 1rem;
     text-transform: initial;
@@ -116,16 +116,6 @@ const Wrapper = styled.article`
         color: var(--clr-grey-5);
         margin-right: 0.5rem;
       }
-    }
-  }
-  @media (min-width: 600px) {
-    .img {
-      height: 20rem;
-    }
-  }
-  @media (min-width: 800px) {
-    .img {
-      height: 25rem;
     }
   }
   @media (min-width: 992px) {
