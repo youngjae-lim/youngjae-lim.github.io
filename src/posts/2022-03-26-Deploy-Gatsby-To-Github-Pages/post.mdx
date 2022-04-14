@@ -160,8 +160,6 @@ Before we push this change to the remote repository, we have to make two simple 
 1. Modify `package.json`:
    Change the `exit` code 1 in the default `test` script in `package.json` to 0. So your `package.json` should look like this:
 
-{' '}
-
 <GatsbyImage image={getImage(props.embeddedImages[5])} alt='package.json' />
 
 2. Make sure that `package-lock.json` is not included in your `.gitignore` file: the `npm ci` step in `deploy.yml` workflow needs `package-lock.json` file, so it should be able to be pushed to the remote repository.
@@ -177,13 +175,9 @@ git push origin dev
 
 This will automatically trigger our Gatsby build script and publish the website to `gh-pages` branch. You can check the real-time build steps from the `Actions` tab in your remote repository:
 
-{' '}
-
 <GatsbyImage image={getImage(props.embeddedImages[4])} alt='github actions' />
 
 If the workflow ran successfully, then please switch to the `gh-pages` branch to see if all the production contents are published:
-
-{' '}
 
 <GatsbyImage
   image={getImage(props.embeddedImages[2])}
@@ -193,8 +187,6 @@ If the workflow ran successfully, then please switch to the `gh-pages` branch to
 ### 7. Test out the Github Pages
 
 Open up your favorite web browser and type your github pages web address. The web address should be something like `https://<your_repository_name>.github.io`. Note that it might take a second to load the github pages if you access it for the first time.
-
-{' '}
 
 <GatsbyImage
   image={getImage(props.embeddedImages[6])}

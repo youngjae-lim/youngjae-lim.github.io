@@ -1,0 +1,646 @@
+---
+title: Webpack Essentials, Part 1 - Setting Up Workflow
+slug: webpack-essentials-part-1
+image: ./images/main_webpack.png
+date: 2022-04-11
+author: youngjae lim
+published: true
+category: Webpack
+tags: ['webpack', 'tool', 'bundler', 'css', 'postcss']
+readTime: 10
+embeddedImages:
+  - ./images/my_network.png
+  - ./images/alert_hello_webpack.png
+  - ./images/css_change.png
+  - ./images/postcss_change.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+In this two part series article, I am going to show you how to configure `Webpack` to get started with your next project using `html`, `javascript`, and `css`(more specifically **PostCSS**). The Webpack is our choice for bundling all the necessary resources together in order for our website to work.
+
+Then what is Webpack?
+According to Webpack's official documentation, Webpack is:
+
+> At its core, webpack is a static module <mark>bundler</mark> for modern JavaScript applications. When webpack processes your application, it internally builds a dependency graph from one or more entry points and then combines every module your project needs into one or more bundles, which are static assets to serve your content from.
+
+## What's a bundler?
+
+A bundler is a tool that puts together all your JavaScript code and its dependencies and throws a new JavaScript output file with everything merged, ready for the web, commonly known as the bundle file.
+
+Basically, Webpack bundles:
+
+- Assets:
+  - images(jpg, jpeg, png, svg, etc.)
+  - scripts(javascript)
+  - styles(css)
+
+When we structurize our project directories below, we will follow this concept.
+
+## Getting Started
+
+### Project Setup
+
+Now that we understand what is a bundler and Webpack, we can get started with creating our project directory and initialize it with `npm`:
+
+```bash
+mkdir webpack-starter
+cd webpack-starter
+npm init -y
+vim . # Or code . if you use VS Code Editor
+```
+
+First, let's create `./app` directory in the project root. And within this app folder, let's create something that we would want Webpack to bundle for us.
+
+Inside the app folder, create a `index.html`:
+
+```html file=./app/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack Starter</title>
+  </head>
+  <body>
+    <div>
+      <img src="assets/images/card-1.jpg" width="800" />
+      <h1>Title</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi aut
+        quisquam maiores ratione quidem veritatis sapiente expedita
+        necessitatibus harum accusamus.
+      </p>
+      <h4>Date</h4>
+    </div>
+  </body>
+</html>
+```
+
+Create the follwoing directories inside the app/assets folder:
+
+- `images`: will contain all the image resources(jpg, jpeg, png, svg, etc.)
+- `scripts`: will contain javascript files
+  - `App.js`: javascript file that we would want Webpack to process for us
+- `styles`: will containt css files
+
+You will have a structure like this:
+
+```
+.
+├── app
+│   ├── assets
+│   │   ├── images
+│   │   ├── scripts
+│   │   │   └── App.js
+│   │   └── styles
+│   └── index.html
+└── package.json
+```
+
+We will go over each directory one by one throughout the article.
+
+#### Images
+
+I've saved some default images in the images folder for demonstration purpose. You can download images by visiting [here]().
+
+#### Scripts
+
+```js file=./app/assets/scripts/App.js
+alert('Hello, Webpack!!!')
+```
+
+## Webpack Minimal Configurations
+
+### Webpack and Webpack CLI
+
+Although we created the javascript file App.js in the scripts folder, we haven't told Webpack to look at this file and process/bundle it for us. To do that, we have to install two packages: `webpack` & `webpack-cli`:
+
+Open up your terminal and run the following command:
+
+```bash
+npm install webpack webpack-cli --save-dev
+```
+
+Note that it might take a while to finish the installations.
+
+### Webpack Configuration
+
+The way we tell Webpack to do what we want to do is to configure `webpack.config.js` file.
+
+```js file=./webpack.config.js highlights=2
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+}
+```
+
+Remember that we created `App.js` file? We want to tell Webpack to find/process this file as an `entry` point before it builds out its internal dependency graph.
+
+This is the minimal setup for our demonstration, but we will add more properties later.
+
+### How To Run Webpack
+
+Now that we've configured Webpack, it is time for us to run Webpack to bundle things for us. But how? The answer is we will utilize `scripts` property in `package.json`.
+
+```js file=./package.json add=6
+{
+  "name": "webpack-starter",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
+```
+
+Because we installed Webpack as a dev dependency, not as a global, our terminal can't understand a direct command `webpack`, but by using the `scripts` inside `package.json`, we can run Webpack like this:
+
+```bash
+npm run dev
+```
+
+It is highly likely that you will find one warning message saying `The mode option has not been set...`, but for now we can ignore this.
+As soon as you run the command, you will notice a brand new folder named `dist`, and within that folder there's a new file named `main.js`.
+
+What happened behind the scenes is that the `npm` found the Webpack package inside `node_modules` in our project root and ran it for us. Then Webpack looked at `App.js` file and it processed it and bundled it and created the new `main.js`.
+
+## Webpack Further Customization
+
+### Output & Mode
+
+We can add more properties to the `webpack.config.js` file for further customization.
+
+What I want to customize here is:
+
+- Instead of creating `dist/main.js` as defualt, I would like to change `main.js` to `bundled.js` and then save it to the existing `./app` directory. In other words, I want the bundled javascript file to sit with `index.html` side by side in the `app` folder.
+- By setting `mode` to `development`, I want to resolove the warning message that we've seen earlier.
+
+So jump back into your `webpack.config.js`.
+
+```js file=./webpack.config.js add=1,5-9
+const path = require('path')
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  mode: 'development',
+}
+```
+
+Now, before we test this out again, let's be sure to delete the `dist` folder in the project root. We didn't want the bundled file to be output there any longer.
+
+Let's see what we get now by running `npm run dev` again:
+
+```bash
+npm run dev
+```
+
+Notice that we don't have any warning message any more. Now in our app folder, we have the brand new generated `bundled.js` file sitting by `index.html`.
+
+#### Load `bundled.js` file into `index.html`
+
+We now have `bundled.js` and `index.html` sitting side by side in `./app` directory. However, to take our webpages to the next level by harnessing javascript, we need to load the `bundled.js` into the `index.html`.
+
+To call javascript code from within HTML, you need the `<script>` element.
+
+```html file=./app/index.html add=21
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack Starter</title>
+  </head>
+  <body>
+    <div>
+      <img src="assets/images/card-1.jpg" />
+      <h1>Title</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi aut
+        quisquam maiores ratione quidem veritatis sapiente expedita
+        necessitatibus harum accusamus.
+      </p>
+      <h4>Date</h4>
+    </div>
+
+    <script src="bundled.js"></script>
+  </body>
+</html>
+```
+
+As you see, we've added the line 21 `<script>` tag to load `bundled.js` into the `index.html` file. Let's save the file and open up a file explorer on your OS and drag the `index.html` file into the web browser. If you see a pop-up alert with 'Hello, Webpack!!!', then you successfully loaded the `bundled.js` into the `index.html`.
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='network' />
+
+### Watch mode
+
+Right now, whenever we make changes in our codes, we need to run Webpack again to rebundle. Can we make Webpack rebundle automatically whenver we save changes to our source file? Absolutely yes!!! Again we will add a new property to `webpack.config.js` file.
+
+So jump back into your `webpack.config.js`.
+
+```js file=./webpack.config.js add=10
+const path = require('path')
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  mode: 'development',
+  watch: true,
+}
+```
+
+With this new configuration, please run `npm run dev` again. Since we set the watch option to true(line 10), Webpack will stay running and it will watch and detect any time we save a change to our source file or our entry file so that we don't need to run `npm run dev` manually over and over again.
+
+## Webpack Dev Server
+
+However, we still need to refresh pages in the browser to see the actual changes made, right? Can we make our source files updated in the browser without a full reload? Yes!!! This is where [webpack-dev-server](https://github.com/webpack/webpack-dev-server) comes into play to save our life.
+
+### Install webpack-dev-server
+
+```bash
+npm install webpack-dev-server --save-dev
+```
+
+### Update webpack.config.js
+
+```js file=./webpack.config.js add=9-17 delete=19
+const path = require('path')
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  devServer: {
+    watchFiles: ['./app/**/*.html'],
+    static: {
+      directory: path.join(__dirname, 'app'),
+    },
+    hot: true,
+    port: 3000,
+    host: '0.0.0.0',
+  },
+  mode: 'development',
+  watch: true,
+}
+```
+
+We added `devServer` property that tells Webpack to:
+
+- reload the browser for any changes in `html` files
+- watch `./app` directory for any changes
+- do [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement) when we save changes to the source files
+- listen for requests on a port 3000
+- make the dev server to be accessible externally by other devices such as a tablet, a mobile phone connected to the same Wi-Fi
+
+  - For example, if you use a mac os, you can open up `System Preferences > Network` to find your local ip address:
+
+    <GatsbyImage image={getImage(props.embeddedImages[0])} alt='network' />
+
+    In my case, it is 192.168.0.170. I can access the same website from my mobile phone by typing `192.168.0.170:3000` in my Chrome browser.
+
+Note that we no longer need `watch: true`(line 19) because webpack-dev-server is told to do the same already.
+
+### Update package.json
+
+Next, to be able to run webpack-dev-server, we need to make a slight modification on the scripts in `package.json` file:
+
+```js file=./package.json delete=6 add=7
+{
+  "name": "webpack-starter",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "webpack",
+    "dev": "webpack serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+    "webpack-dev-server": "^4.8.1"
+  }
+}
+```
+
+### Update App.js
+
+Lastly, we need to tell our entry point javascript file to accept updates on the fly:
+
+```js file=./app/assets/scripts/App.js delete=1 add=2-4
+alert('Hello, Webpack!!!')
+if (module.hot) {
+  module.hot.accept()
+}
+```
+
+### Test webpack-dev-server
+
+```bash
+npm run dev
+```
+
+#### 1. Make a change in HTML file
+
+Let's jump into `index.html` and change `Title` to `Title!!!` in `<h1>>` tag.
+
+```html file=./app/index.html delete=12 add=13
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack Starter</title>
+  </head>
+  <body>
+    <div>
+      <img src="assets/images/card-1.jpg" />
+      <h1>Title</h1>
+      <h1>Title!!!</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi aut
+        quisquam maiores ratione quidem veritatis sapiente expedita
+        necessitatibus harum accusamus.
+      </p>
+      <h4>Date</h4>
+    </div>
+
+    <script src="bundled.js"></script>
+  </body>
+</html>
+```
+
+You should be able to see the change immediately if you access localhost:3000.
+
+<blockquote display='info'>
+  Please note that a full page reload will happen when you save any changes to
+  *.html file. This is different from hot module replacement in that the webpage
+  will lose any previous states, if any.
+</blockquote>
+
+#### 2. Make a change in CSS file
+
+By the time we add CSS support to our Webpack configuration, we will be able to see hot module replacement work whenever we save changes to CSS files. Once again, this HMR will differ from a full page reload that forces us to lose any state on our webpage.
+
+<blockquote display='info'>
+  One last thing I want to point out is that webpack-dev-server does not produce
+  a new bundled javascript file to our local hard disk whenever we save changes
+  to files. The dev server truly works with the bundled javascript file residing
+  in memory. So even if we delete the bundled.js file from our directory, the
+  server will still work without any issues. You can confirm this by deleting
+  the bundled.js file manually and accessing localhost:3000/bundled.js in the
+  web browser. You should see the bundled.js file still loaded without any
+  problems because it is pulled from memory.
+</blockquote>
+
+## CSS Workflow With Webpack
+
+Writing CSS is an essential part of the front-end development. There are lots of useful CSS preprocessors such as `Sass`, `Less`, `Stylus`, I will introduce a postprocessor, `PostCSS`. It is very well known that PostCSS can do the similar work as preprocessors, but it is modular and faster. PostCSS is a tool that uses JavaScript-based plugins to automate routine CSS operations. If you heard about `autoprefixer`, that is one of those plugins available in PostCSS ecosystem. PostCSS makes it possible to write CSS in a developer friendly way that can't be understood by a normal web browser, but it parses those codes into regular CSS codes that the browser can understand.
+
+### Add CSS Support To Webpack Configuration
+
+Before we configure PostCSS, let's start small by making a regular CSS work with Webpack.
+
+#### Create a styles.css
+
+```css file=./app/assets/styles/styles.css
+body {
+  color: blue;
+}
+```
+
+#### Import the styles.css in App.js
+
+We will import this `styles.css` in `App.js`. The reason why we import `styles.css` in javascript file instead of injecting it into html using stylesheet is very important for our development workflow and its efficiency. However, we will have used the stylesheet to load CSS later when we actually serve our website to public. We will tackle this in the [Part 2 - CSS Artchitecture]().
+
+```js file=./app/assets/scripts/App.js add=1 delete=7
+import '../styles/styles.css'
+
+if (module.hot) {
+  module.hot.accept()
+}
+
+alert('Hello, Webpack!!!')
+```
+
+We don't need `alert` anymore, so I got rid of it.
+
+#### Install css-loader & style-loader
+
+In order to tell Webpack to make CSS workflow, we need to install two dependencies:
+
+- The `css-loader` interprets `@import` and `url()` like `import/require()` and will resolve them.
+- The `style-loader` injects CSS into the DOM.
+
+```bash
+npm install css-loader style-loader --save-dev
+```
+
+#### Configure webpack.config.js
+
+Now it is time to tell Webpack to use these dependencies to handle CSS.
+
+So jump back into your `webpack.config.js`. To configure CSS workflow, we will use `modules`, `rules` properties:
+
+```js file=./webpack.config.js add=19-32
+const path = require('path')
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  devServer: {
+    watchFiles: ['./app/**/*.html'],
+    static: {
+      directory: path.join(__dirname, 'app'),
+    },
+    hot: true,
+    port: 3000,
+    host: '0.0.0.0',
+  },
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false },
+          },
+        ],
+      },
+    ],
+  },
+}
+```
+
+Basically, what the added codes do is to tell Webpack to test if any file is CSS. If so, use `css-loader`, `style-loader`.
+
+- `css-loader?url=false`
+  By default, the css-loader will attempt to handle any images we reference in our CSS (e.g. background images, etc...). While this is great in certain situations, for our usage in this course we want to disable this and we'll manage our image files manually.
+
+Now let's test if the CSS workflow works:
+
+```bash
+npm run dev
+```
+
+This will generate a new `bundled.js` file with the `styles.css` incoprated. Howerver,
+
+Open up your web browser and access `localhost:3000` again. You should see the text changed to blue immediately with the help of `webpack-dev-server` and hot module replacement we've configured earlier.
+
+<GatsbyImage image={getImage(props.embeddedImages[2])} alt='css' />
+
+### Add PostCSS Support To Webpack Configuration
+
+#### Install postcss-loader and 3 plugins
+
+```bash
+npm install postcss-loader postcss-simple-vars postcss-nested autoprefixer --save-dev
+```
+
+| Dependencies          | Usage                             |
+| --------------------- | --------------------------------- |
+| `postcss-loader`      | loads CSS with PostCSS            |
+| `postcss-simple-vars` | supports for Sass-style variables |
+| `postcss-nested`      | unwraps nested rules              |
+| `autoprefixer`        | adds vendor prefixes              |
+
+#### Configure webpack.config.js
+
+```js file=./webpack.config.js add=3-7,35-38
+const path = require('path')
+
+const postCSSPlugins = [
+  require('postcss-simple-vars'),
+  require('postcss-nested'),
+  require('autoprefixer'),
+]
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  devServer: {
+    watchFiles: ['./app/**/*.html'],
+    static: {
+      directory: path.join(__dirname, 'app'),
+    },
+    hot: true,
+    port: 3000,
+    host: '0.0.0.0',
+  },
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false },
+          },
+          {
+            loader: 'postcss-loader',
+            options: { postcssOptions: { plugins: postCSSPlugins } },
+          },
+        ],
+      },
+    ],
+  },
+}
+```
+
+With this new configuration, let's add some **PostCSS**-specific syntax and try that out:
+
+```css file=./app/assets/styles/styles.css add=5-11
+body {
+  color: blue;
+}
+
+$mainRed: red;
+
+.card {
+  h1 {
+    color: $mainRed;
+  }
+}
+```
+
+Let's target `<div>` element with `.card` selector in `index.html`:
+
+```html file=./app/index.html delete=10 add=11
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack Starter</title>
+  </head>
+  <body>
+    <div>
+    <div class="card">
+      <img src="assets/images/card-1.jpg" width="800" />
+      <h1>Title</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi aut
+        quisquam maiores ratione quidem veritatis sapiente expedita
+        necessitatibus harum accusamus.
+      </p>
+      <h4>Date</h4>
+    </div>
+
+    <script src="bundled.js"></script>
+  </body>
+</html>
+```
+
+Spin up the dev server again and access `localhost:3000`.
+
+```bash
+npm run dev
+```
+
+Jump back on the browser. As we expected, the color on `Title` has been changed into red.
+
+<GatsbyImage image={getImage(props.embeddedImages[3])} alt='css' />
+
+## What's Next
+
+We went through a lot in this Part 1. With all the basic configurations done, we will take another step to talk about CSS architecture with Webpack in the Part 2. I hope you enjoyed reading and please feel free to leave any questions or comments if you have.
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>

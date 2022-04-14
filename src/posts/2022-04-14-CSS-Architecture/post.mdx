@@ -1,0 +1,657 @@
+---
+title: Webpack Essentials, Part 2 - CSS Architecture
+slug: webpack-essentials-part-2
+image: ./images/main_webpack.png
+date: 2022-04-14
+author: youngjae lim
+published: false
+category: Webpack
+tags: ['webpack', 'tool', 'bundler', 'css', 'postcss']
+readTime: 10
+embeddedImages:
+  - ./images/my_network.png
+  - ./images/alert_hello_webpack.png
+  - ./images/css_change.png
+  - ./images/postcss_change.png
+---
+
+import { Link } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
+
+## Overview
+
+## CSS Architecture
+
+- File Architecture
+- Indentify patterns in design
+- Rules to follow for creating class names and writing CSS selectors
+
+### File Architecture
+
+To structurize our css files, we will jump back on our `styles.css` file and delete everything in it and start fresh.
+
+```css file=./app/assets/styles/styles.css
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+```
+
+```bash
+npm run dev
+```
+
+Create `modules` directory inside `./app/assets/styles`.
+
+```css file=./app/assets/styles/modules/_large-hero.css
+.large-hero {
+  position: relative;
+}
+```
+
+Since we modulaized our css file structure, we need to import the css module into the main `styles.css` file:
+
+```css file=./app/assets/styles/styles.css
+@import 'modules/_large-hero';
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+```
+
+Now, it's important to point out that import is a native CSFs feature, but we don't want the Web browser to have to download multiple access files. Instead, we want Web pack and posts access to see this import line and actually replace this line with the contents of this large zero file. And we can very easily set up post to do that.
+
+If you haven't already installed `postcss-import` package, please install it.
+
+```bash
+npm install postcss-import --save-dev
+```
+
+| PostCSS Plugins  | Usage                                                |
+| ---------------- | ---------------------------------------------------- |
+| `postcss-import` | inlines the stylesheets referred to by @import rules |
+| `postcss-mixins` | enables mixins                                       |
+
+To have CSS global variables modularized as well, let's create `base` directory in the styles directory as well:
+
+```css file=./app/assets/styles/base/_global.css
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+```
+
+```css file=./app/assets/styles/styles.css add=1
+@import 'base/_global';
+@import 'modules/_large-hero';
+```
+
+### `normalize.css`
+
+The `normalize.css` is an alternative to css resets. It adjusts the styles of certain elements in order to make all web browsers render things more consistently being normalized.
+
+```bash
+npm install normalize.css
+```
+
+```css file=./app/assets/styles/styles.css add=1
+@import 'normalize.css';
+@import 'base/_global';
+@import 'modules/_large-hero';
+```
+
+```css file=./app/assets/styles/modules/_large-hero.css
+.large-hero {
+  position: relative;
+}
+
+.large-hero__text-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+```
+
+### Identify Patterns In design
+
+### BEM
+
+Popular abstract way of thinking about our interface.
+
+- **Block**
+  - An independent resuable part of our design
+- **Element**
+  - An element belongs to a block.
+  - It cannot be used outside of the block that it belongs to.
+- **Modifier**
+  - A modifier can be used on a block or an element to indicate a change to the default state of an object.
+
+Hello, everyone, welcome to Part two of our two part lesson on how to write super organized success.
+
+In part one, we learned about feio architecture.
+
+And in this lesson, part two, we will learn about identifying patterns in our design.
+
+And we will also learn about a few rules and guidelines that we want to follow when coming up with class
+
+names and writing our CSFs selectors.
+
+Let's cut the intro and get started.
+
+So here we are in part two of the lesson.
+
+And let's pick up right where we left off.
+
+So let's continue working on this large hero section.
+
+Now that we have this text positioned correctly, let's focus on styling the text so that it looks like
+
+this.
+
+So let's begin with this.
+
+Your clarity line in the HTML, we see that that is a heading level, one element.
+
+So if we want to begin styling this element, how would we do that?
+
+We would probably go into our large Xeroxed file and create a new rule.
+
+And what would our selector look like?
+
+We'd probably say go into the large hero div and then target any one element.
+
+So, for example, let's make the text be not bold.
+
+So font weight three hundred.
+
+OK, let's head over to the command line and make sure that our web pack task is running.
+
+So just type NPM run Dev.
+
+And let's go back to the text editor and save this CSC file.
+
+And if we refresh in the browser, watch this text.
+
+It is no longer bould, which means our selector is working.
+
+And let's actually talk about this selector for a moment.
+
+So this is how myself and an entire generation of developers were taught to write success.
+
+However, in recent years there has been a move away from using type and descendant selectors like this.
+
+And instead we've seen a move towards a more systematic way of targeting elements.
+
+One of the most popular systems or methodologies for coming up with selectors is named B.M. And in this
+
+course, we are going to follow a lot of the basic BM principles.
+
+Them is an acronym and I will explain what it stands for in just a second.
+
+But first, I want to point out that in VM we would not write a selector like this.
+
+Instead, the best way of doing it would be to go into the HTML and just give this element a class.
+
+Let's go with large hero, underscore, underscore title and then we would simply target the element
+
+with that class in our next large hero underscore underscore title.
+
+Now, some of you might be squirming in your seats right now because this is going against everything
+
+you were originally taught about writing clean semantic HTML.
+
+I know that's how I felt when I first learned about them.
+
+But the truth is that I think we were misguided in the past about what it means to write semantic HTML.
+
+I will circle back to that topic later on in the lesson.
+
+But first, you're probably wondering what these two underscores mean, and that's a perfect Segway
+
+into what the letters BVM stand for.
+
+So first of all, Bam is an abstract way of thinking about our design or interface.
+
+This philosophy or way of thinking can be broken up into three concepts.
+
+The first is the B in Bam, which stands for Block a Block is an independent, reusable part of our
+
+design.
+
+So for an example, let's look at the design file that the designer sent to us.
+
+This large hero section that we've been working on is a block.
+
+As we scroll down the design, I think the next best example of a block would be in the features section.
+
+We see there are four features here, here, here and here.
+
+So I would say that this is an example of a block.
+
+This block is independent.
+
+It can stand on its own and it can be reused.
+
+If we scroll down a bit further, we see the testimonials area.
+
+There are three testimonials and I would say that this is a testimonial block and this block is reused
+
+an additional two times for the other two testimonials.
+
+So B is for `Block.`
+
+Let's move on to the E in Bam.
+
+It stands for `Element.`
+
+An element belongs to a block.
+
+It is dependent on a block, which means it cannot be used outside of the block that it belongs to.
+
+So, for example, if we scroll back up to the top of our design within this large hero block, this
+
+heading is an element.
+
+This heading is also an element.
+
+These headings use font styles and margins that aren't reused anywhere else in the design.
+
+They.
+
+Are unique to this large hero block, perhaps a clearer example of what an element is would be down
+
+here at the bottom in the testimonials area.
+
+So this image that is cropped in a circle is horizontally centered and vertically violates.
+
+This box is an element that belongs to the testimonial block.
+
+We will never want to use this image outside the context of a testimonial.
+
+So conceptually, we think of this image as an element that belongs to this block.
+
+So E is for element.
+
+Let's move on to the M in Bam, which stands for modifier.
+
+A modifier can be used on a block or an element and we use a modifier to indicate a change to the default
+
+state of an object.
+
+So for example, let's imagine we have a mobile menu on a website and by default the menu is hidden
+
+or closed.
+
+But when a user taps on the menu icon, we want to use JavaScript to add a modifier class to the menu.
+
+Block of Dash Dash is open.
+
+That modifier class will modify the block from being closed or invisible to being open invisible.
+
+When the user taps on the menu icon a second time to hide the menu, we will simply use JavaScript to
+
+remove that modifier class and the menu block will be hidden once again, which is its default state.
+
+Let's look at another example of how we can use modifiers.
+
+So, for example, I'm noticing a button style used throughout our design.
+
+Here is one button, here's another button, and then down in the footer.
+
+Here is another button, so because the button is reused throughout the design, conceptually, let's
+
+consider it a block and let's say that this medium sized blue button in the header is the default state
+
+of the button block.
+
+So this button would simply have a class of button, the button that's down in the footer.
+
+Could use that same class of button, but we would add a modifier class of button, dash, dash, orange
+
+to get it to look this way and this large orange button could also use a class of button.
+
+But we would maybe add two modifiers.
+
+One named Button, Dash, Dash, orange and another named button dash, dash large.
+
+And that is modifiers in a nutshell.
+
+All right.
+
+So now we know what the letters in Bems stand for.
+
+## BEM Overview
+
+Now let's talk about a few of the other key concepts and advantages to using them.
+
+- All of our success selectors should target elements directly with classes instead of relying on generic type selectors to send in selectors and the cascade. This means that we are somewhat eliminating the sea from success.
+
+- Since we are limiting the cascading and trickling down of styles on the page, we are creating a one on one relationship between a block of HTML and its success. We don't need to worry about any parent elements trickling their styles down to our blocks and hurting the predictability of our block styles. This means that our blocks are independent, self-contained and we are free to move them around and reuse them throughout the page.
+
+- Another important concept is that blocks can be nested inside of other blocks.
+
+- The idea is to identify patterns in our design and then create single responsibility blocks that can be used together.
+
+  - What does that phrase single responsibility mean?
+    - Well, if we look at our design file really quickly, if we scroll down. I see two columns here, this text column takes up about two thirds of the width and this image takes up about one third of the width. We scroll down further. I see columns once again in this our features area. This column takes up about half the width and this column takes up about half the width if we scroll down further. Again, I see columns. There are three columns, one for each testimonial. So clearly columns are a pattern that we have identified in the design and there is no reason to code a pattern more than once. So what I would do is create a block that is responsible for creating column layouts. I would use that block here to create three empty columns and then within each column block I would nest a testimonial block. That way, the column block has the single responsibility of creating column layouts and we can reuse that block throughout the page. And the testimonial block has the single responsibility of creating the unique styling for the testimonials.
+
+- It is that Ben makes the relationship between our HTML and our success crystal clear.
+
+Why does that matter?
+
+Well, if you've ever tried to update a website that you haven't touched in a year or if you've ever
+
+inherited a website that someone else originally built, if that website doesn't use some sort of naming
+
+methodology, trying to edit the website's success is like untangling a plate of spaghetti.
+
+You don't have the confidence to actually edit any of the existing success because you don't know where
+
+the styles are being used and what your changes might break.
+
+And if you can't edit the existing success, what you end up doing.
+
+You throw more spaghetti on top of the plate, right?
+
+So you end up creating brand new styles and sloppily throwing them at the very bottom of a huge file.
+
+And that is not organized at all.
+
+It is not maintainable and it is a developer's nightmare.
+
+With B.M., the relationship between HTML and CSR is clear.
+
+So you can come back to a website a year later and confidently edit the existing styles since you know
+
+exactly where and how those rules will affect the page.
+
+All right, so that's enough B.M. theory for now.
+
+Let's get back to actually writing success.
+
+### Concern Over BEM
+
+But really quickly, before we do, I want to address the one big concern that you might have, because
+
+you might be thinking this Bems stuff is all well and good.
+
+But what about the semantics of our HTML is adding all of these extra classes with presentational names
+
+making our HTML less semantic?
+
+That's a fair question.
+
+The answer is <mark>no</mark>.
+
+Now, instead of me arguing and explaining why that's the case, I will just go ahead and quote someone
+
+who is 100 times smarter than I am and a million times more of an authority in the Web development community
+
+than I am.
+
+His name is **Nicholas Gallagher**.
+
+He's the creator of Normalized Access.
+
+He's very well known and super respected in the Web development community.
+
+And he has [an excellent blog post on HTML semantics](https://nicolasgallagher.com/about-html-semantics-front-end-architecture).
+
+And here are a few quotes for you.
+
+Nicholas says that:
+
+- Class names cannot be on semantic.
+- Content layer semantics are already served by each HTML elements.
+- Class names impart little or no useful semantic information to machines or human visitors.
+- The primary purpose of a class name is to be a hook for success, and JavaScript
+- Class names should communicate useful information to developers.
+
+All right, so there you have it.
+
+If adding extra presentational classes doesn't bother Nicholas Gallagher, it definitely shouldn't bother
+
+us.
+
+When you have a free moment, I recommend checking out the full blog post by Nicholas.
+
+It's a great read, but for now, let's get back to actually working on the travel agency website.
+
+So here is what we have so far.
+
+We want this your clarity line to be blue and large to match the design.
+
+So over in our CSC file, within this title rule, let's apply the hexadecimal code for the main blue
+
+color that we will be using throughout the design.
+
+And let's also bump up the font size to four point eight RAM.
+
+If you've never seen REM before, don't worry.
+
+We will cover how REM works in detail shortly.
+
+But for now, let's go ahead and save this and refresh in the browser.
+
+Looks good.
+
+Let's go ahead and begin styling this one trip away heading.
+
+So first let's jump over to our HTML.
+
+Here is that element and let's give it a class so that we can target the Benway.
+
+Let's go with Large Hero.
+
+That's the block that it belongs to.
+
+And this is an element that belongs to the block.
+
+So to indicate that it is an element we say `underscore.`
+
+Underscore.
+
+Or and then the name of the element, let's go with subtitle, and over in our success, we can create
+
+a new rule, large hero, underscore, underscore, subtitle.
+
+We can actually just copy and paste these three declarations and just change the font size to two point
+
+nine.
+
+```css file=./app/assets/styles/modules/_large-hero.css
+/* Block */
+.large-hero {
+  position: relative;
+}
+
+/* Element */
+.large-hero__text-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+/* Element */
+.large-hero__title {
+  font-weight: 300;
+  color: #2f5572;
+  font-size: 4.8rem;
+}
+
+/* Element */
+.large-hero__subtitle {
+  font-weight: 300;
+  color: #2f5572;
+  font-size: 2.9rem;
+}
+```
+
+Let's refactor the css codes to take advantage of BEM and PostCSS nested rules.
+
+```css file=./app/assets/styles/modules/_large-hero.css
+/* Block */
+.large-hero {
+  position: relative;
+
+  /* Element */
+  &__text-content {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Element */
+  &__title {
+    font-weight: 300;
+    color: #2f5572;
+    font-size: 4.8rem;
+  }
+
+  /* Element */
+  &__subtitle {
+    font-weight: 300;
+    color: #2f5572;
+    font-size: 2.9rem;
+  }
+}
+```
+
+As you see, `&` replaced `.large-hero` on the class name of each nested element.
+
+Then go ahead and save that and refresh in the browser.
+
+Looks good.
+
+There might be a bit too much margin or spacing between the two headings.
+
+We can adjust that in just a moment.
+
+But first, before we go any further, I want to show you a neat post postboxes nesting trick.
+
+So normally when we write postboxes or SAS, we like to make use of the nesting feature to conceptually
+
+group code that is related to each other.
+
+So, for example, here is the main rule for the large hero block.
+
+And these three rules are selecting elements that belong to this block.
+
+So conceptually, it would make sense to take one of these, for example, and try to nest it within
+
+this large hero rule.
+
+Now, if I save this and we take a look at the access file that postseasons generates for us, we see
+
+that the nesting feature gets compiled into a descendant selector.
+
+And while this will work in the browser, so if I refresh the positioning stays intact.
+
+Descendant selectors go against the B.M. philosophy.
+
+We want to avoid descendant selectors whenever we can because they often create specificity, because
+
+if we instead select elements with direct class selectors, we can maintain a very flat CSFs architecture
+
+or a flat specificity tree.
+
+We will talk about why that's important later on in the course.
+
+But for now, the question becomes how can we have the best of both worlds?
+
+How can we write nested ceased to help us stay organized conceptually without having WABAC compile things
+
+down to a descendant selecter?
+
+Well, check out this little trick.
+
+So back in our large hero file, within this nested rule, let's change its selector to simply an ampersands.
+
+Go ahead and hit save.
+
+Now, if we check out the success that gets generated for us, we see that the ampersand was replaced
+
+with the root rules selector.
+
+So for example, if we say ampersand Hello World and hit save that gets compiled into the root selector
+
+and then it just adds on whatever we type hello world so we can adapt this behavior to fit the Bam philosophy
+
+perfectly.
+
+So we know that just the ampersand will give us large hero and then we can say underscore, underscore
+
+text content.
+
+Go ahead and hit save.
+
+That will generate the exact BEM class name, so if we refresh in the browser.
+
+Things still look good.
+
+We are following the B.M. philosophy and we now get to use nested success, so we are having our cake
+
+and eating it too.
+
+Let's go ahead and move these other two rules into the main block rule.
+
+So let's copy this.
+
+Pasted into this block rule and replaced large hero.
+
+With an ampersand, let's do the same thing for this subtitle rule pasted in here, remove the large
+
+hero ampersand.
+
+Excellent so we can already see how organized our success is becoming.
+
+Our main success file imports in different single responsibility access files.
+
+And within our CSFs Modules folder, we will have a new file for each block of the design.
+
+So within this module or block file, we have our base block rule and then we can nest all of the beam
+
+elements within that one rule.
+
+And that will bring this lesson to a close.
+
+Now that we speak the same BEM language and are familiar with the basic B.M. syntax rules, we can begin
+
+making a ton of progress.
+
+In our next lesson, we will finish the styling for the large hero block and we will also begin and
+
+complete the styling for the button block.
+
+It's going to be a lot of fun.
+
+There won't be as much theory weighing us down and I will see you in the next lesson.
+
+<Link to='/posts' className='btn center-btn'>
+  all posts
+</Link>
