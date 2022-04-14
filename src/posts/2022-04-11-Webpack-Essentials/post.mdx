@@ -81,7 +81,7 @@ Inside the app folder, create a `index.html`:
 </html>
 ```
 
-Create the follwoing directories inside the app/assets folder:
+Create the follwoing directories inside the `./app/assets` folder:
 
 - `images`: will contain all the image resources(jpg, jpeg, png, svg, etc.)
 - `scripts`: will contain javascript files
@@ -106,7 +106,7 @@ We will go over each directory one by one throughout the article.
 
 #### Images
 
-I've saved some default images in the images folder for demonstration purpose. You can download images by visiting [here]().
+I've saved some default images in the images folder for demonstration purpose. You can download images by visiting [here](https://github.com/youngjae-lim/webpack-starter/tree/main/app/assets/images).
 
 #### Scripts
 
@@ -114,11 +114,15 @@ I've saved some default images in the images folder for demonstration purpose. Y
 alert('Hello, Webpack!!!')
 ```
 
+#### Styles
+
+We are not going to generate anything in the styles directory for now because we will take care of that later when we add [CSS suppoprt to Webpack configuration](/posts/webpack-essentials-part-1#add-css-support-to-webpack-configuration).
+
 ## Webpack Minimal Configurations
 
 ### Webpack and Webpack CLI
 
-Although we created the javascript file App.js in the scripts folder, we haven't told Webpack to look at this file and process/bundle it for us. To do that, we have to install two packages: `webpack` & `webpack-cli`:
+Although we created the javascript file `App.js` in the scripts folder, we haven't told Webpack to look at this file and process/bundle it for us. To do that, we have to install two packages: `webpack` & `webpack-cli`:
 
 Open up your terminal and run the following command:
 
@@ -309,7 +313,7 @@ We added `devServer` property that tells Webpack to:
 
 - reload the browser for any changes in `html` files
 - watch `./app` directory for any changes
-- do [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement) when we save changes to the source files
+- do [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement)(**HMR**) when we save changes to the source files
 - listen for requests on a port 3000
 - make the dev server to be accessible externally by other devices such as a tablet, a mobile phone connected to the same Wi-Fi
 
@@ -323,7 +327,7 @@ Note that we no longer need `watch: true`(line 19) because webpack-dev-server is
 
 ### Update package.json
 
-Next, to be able to run webpack-dev-server, we need to make a slight modification on the scripts in `package.json` file:
+Next, to be able to run `webpack-dev-server`, we need to make a slight modification on the scripts in `package.json` file:
 
 ```js file=./package.json delete=6 add=7
 {
@@ -356,6 +360,8 @@ if (module.hot) {
   module.hot.accept()
 }
 ```
+
+We no longer need `alert` function, so I removed it.
 
 ### Test webpack-dev-server
 
@@ -399,12 +405,12 @@ You should be able to see the change immediately if you access localhost:3000.
 <blockquote display='info'>
   Please note that a full page reload will happen when you save any changes to
   *.html file. This is different from hot module replacement in that the webpage
-  will lose any previous states, if any.
+  will lose any previous states.
 </blockquote>
 
 #### 2. Make a change in CSS file
 
-By the time we add CSS support to our Webpack configuration, we will be able to see hot module replacement work whenever we save changes to CSS files. Once again, this HMR will differ from a full page reload that forces us to lose any state on our webpage.
+By the time we add CSS support to our Webpack configuration, we will be able to see hot module replacement work whenever we save changes to CSS files. Once again, this HMR differs from a full page reload that forces us to lose any state on our webpage.
 
 <blockquote display='info'>
   One last thing I want to point out is that webpack-dev-server does not produce
@@ -435,7 +441,7 @@ body {
 
 #### Import the styles.css in App.js
 
-We will import this `styles.css` in `App.js`. The reason why we import `styles.css` in javascript file instead of injecting it into html using stylesheet is very important for our development workflow and its efficiency. However, we will have used the stylesheet to load CSS later when we actually serve our website to public. We will tackle this in the [Part 2 - CSS Artchitecture]().
+We will import this `styles.css` in `App.js`. The reason why we import `styles.css` in javascript file instead of injecting it into html using stylesheet is very important for our development workflow and its efficiency. However, we will have used the stylesheet to load CSS later when we actually serve our website to public. We will tackle this in the [Part 2 - CSS Artchitecture](/posts/webpack-essentials-part-2).
 
 ```js file=./app/assets/scripts/App.js add=1 delete=7
 import '../styles/styles.css'
@@ -443,11 +449,7 @@ import '../styles/styles.css'
 if (module.hot) {
   module.hot.accept()
 }
-
-alert('Hello, Webpack!!!')
 ```
-
-We don't need `alert` anymore, so I got rid of it.
 
 #### Install css-loader & style-loader
 
@@ -502,10 +504,7 @@ module.exports = {
 }
 ```
 
-Basically, what the added codes do is to tell Webpack to test if any file is CSS. If so, use `css-loader`, `style-loader`.
-
-- `css-loader?url=false`
-  By default, the css-loader will attempt to handle any images we reference in our CSS (e.g. background images, etc...). While this is great in certain situations, for our usage in this course we want to disable this and we'll manage our image files manually.
+Basically, what the added codes do is to tell Webpack to test if any file is CSS. If so, use `css-loader`, `style-loader`. By setting the `url` option to `false`, the css-loader won't attempt to handle any images we reference in our CSS. That is, we'll manage our image files manually.
 
 Now let's test if the CSS workflow works:
 
