@@ -9,10 +9,13 @@ category: Webpack
 tags: ['webpack', 'tool', 'bundler', 'css', 'postcss']
 readTime: 10
 embeddedImages:
-  - ./images/my_network.png
-  - ./images/alert_hello_webpack.png
-  - ./images/css_change.png
-  - ./images/postcss_change.png
+  - ./images/demo_capture.png
+  - ./images/base_directory.png
+  - ./images/card_attiny.png
+  - ./images/card_atmedium.png
+  - ./images/card_atlarge.png
+  - ./images/card_start.png
+  - ./images/modules_directory.png
 ---
 
 import { Link } from 'gatsby'
@@ -20,130 +23,375 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 ## Overview
 
-## CSS Architecture
+In this Part 2 of Webpack Essentials, we will talk about what is the best practice when it comes to writing CSS. We've already configured almost everything we need in Webpack in the Part 1, this article is more about learning how to organize file structure for CSS, identify patterns in desing, and rules to follow for creating CSS class names and selectors, and so on. As a matter of fact, configuring Webpack will be very minimal.
 
-- File Architecture
-- Indentify patterns in design
-- Rules to follow for creating class names and writing CSS selectors
+Here is a capture of our complete demo we're going to create using PostCSS, and BEM philosophy. I highly recommend to read the [Part 1](/posts/webpack-essentials-part-1) to follow along the Part 2.
 
-### File Architecture
+<GatsbyImage image={getImage(props.embeddedImages[0])} alt='demo' />
 
-To structurize our css files, we will jump back on our `styles.css` file and delete everything in it and start fresh.
+### Getting Started
+
+#### Install dependencies
+
+There are a few dependencies that we want to install before we move on:
+
+```bash
+npm install postcss-import postcss-mixins normalize.css --save-dev
+```
+
+| Dependencies     | Usage                                                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| `postcss-import` | inlines the stylesheets referred to by @import rules                                                         |
+| `postcss-mixins` | enables mixins(A mixin lets you make groups of CSS declarations that you want to reuse throughout your site) |
+| `normalize.css`  | adjusts the styles of certain elements to make all web browsers render things more consistently              |
+
+Before we forget, let's jump back on `webpack.config.js` file and add the two installed PostCSS plugins:
+
+```js file=./webpack.config.js add=4-5
+const path = require('path')
+
+const postCSSPlugins = [
+  require('postcss-import'),
+  require('postcss-mixins'),
+  require('postcss-simple-vars'),
+  require('postcss-nested'),
+  require('autoprefixer'),
+]
+
+module.exports = {
+  entry: './app/assets/scripts/App.js',
+  output: {
+    filename: 'bundled.js',
+    path: path.resolve(__dirname, 'app'),
+  },
+  devServer: {
+    watchFiles: ['./app/**/*.html'],
+    static: {
+      directory: path.join(__dirname, 'app'),
+    },
+    hot: true,
+    port: 3000,
+    host: '0.0.0.0',
+  },
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false },
+          },
+          {
+            loader: 'postcss-loader',
+            options: { postcssOptions: { plugins: postCSSPlugins } },
+          },
+        ],
+      },
+    ],
+  },
+}
+```
+
+#### Starting files
+
+Let's start fresh with `index.html` with a new example. You can delete everything in `index.html` and copy and paste the following:
+
+```html file=./app/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Webpack Starter</title>
+  </head>
+  <body>
+    <!-- Page Section - Cards -->
+    <div class="page-section page-section--cards">
+      <!-- Section Title -->
+      <h2 class="section-title">Featured Blogs</h2>
+      <!-- Grid Container -->
+      <div id="blog-section" class="grid-container">
+        <!-- Card 1 -->
+        <a href="#" class="card">
+          <div class="card__media">
+            <img src="assets/images/card-1.jpg" class="card__image" />
+          </div>
+          <div class="card__info">
+            <h3>Lorem ipsum dolor sit, amet consectetur adipisicing.</h3>
+            <span class="card__more">Learn more</span>
+          </div>
+        </a>
+        <!-- Card 2 -->
+        <a href="#" class="card">
+          <div class="card__media">
+            <img src="assets/images/card-2.jpg" class="card__image" />
+          </div>
+          <div class="card__info">
+            <h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia,
+              nisi.
+            </h3>
+            <span class="card__more">Learn more</span>
+          </div>
+        </a>
+        <!-- Card 3 -->
+        <a href="#" class="card">
+          <div class="card__media">
+            <img src="assets/images/card-3.jpg" class="card__image" />
+          </div>
+          <div class="card__info">
+            <h3>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis,
+              unde?
+            </h3>
+            <span class="card__more">Learn more</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <script src="bundled.js"></script>
+  </body>
+</html>
+```
+
+#### Basic CSS File Structure
+
+To structurize our css files, we will jump back on our `styles.css` file and delete everything in it and start fresh. Going forward, the `styles.css` file will have many `@import` statements because we will modularize our CSS codes into separate pieces.
+
+##### styles.css
 
 ```css file=./app/assets/styles/styles.css
+@import 'normalize.css';
+@import 'base/_variables';
+@import 'base/_global';
+@import 'base/_mixins';
+```
+
+##### Base Directory
+
+Let's create `base` directory inside `./app/assets/styles` and then create a `_global.css` & `_variables.css` files inside it. The role of `base` folder is to contain any separate piece of styles that we would like to apply globally or reusable variables that can be used in other parts of partial CSS, and mixins that are groups of CSS declarations that can be reusable throughout our website.
+
+<GatsbyImage image={getImage(props.embeddedImages[1])} alt='demo' />
+
+<blockquote display='info'>
+  The _ (underscore) prefix means a partial for PostCSS. That means the
+  stylesheet is going to be imported (@import) to our styles.css. The advantage
+  on using partials is that you can use many files to organize your code and
+  everything will be compiled on a single file.
+</blockquote>
+
+1. **\_variables.css**
+
+The PostCSS allows us to use `$` syntax to create a reusable variable, so we will have a partial file named `_variables.css` to be imported in the `styles.css`.
+
+```css file=./app/assets/styles/base/_variables.css
+$veryLightGray: #efefef;
+$lightBlue: #4477ff;
+$cardBgWhite: #ffffff;
+```
+
+2. **\_global.css**
+
+Similary, we will have any styles that we want to apply globally in a separte file called `_global.css`.
+
+```css file=./app/assets/styles/base/_global.css
+:root {
+  --duration: 0.2s;
+  --ease-out: cubic-bezier(0.35, 0.01, 0.25, 0.99);
+}
+
 body {
-  font-family: 'Roboto', sans-serif;
-  color: #333;
+  background: $veryLightGray;
+  font-family: 'Poppins', sans-serif;
 }
 
 img {
   max-width: 100%;
   height: auto;
 }
+
+* {
+  box-sizing: border-box;
+}
 ```
 
-```bash
-npm run dev
+3. **\_mixins.css**
+
+Because we installed/configured `postcss-mixins` as one of our dev dependencies, we can use mixins in our CSS. A mixin is a group of CSS declarations that can be resued throughout our stylesheets. It can greatly improve code readability as well. For example, with a regular CSS, we have to write a media query like this:
+
+```css file=./app/assets/styles/base/_mixins.css
+@define-mixin atTiny {
+  @media (min-width: 440px) {
+    @mixin-content;
+  }
+}
+
+@define-mixin atSmall {
+  @media (min-width: 530px) {
+    @mixin-content;
+  }
+}
+
+@define-mixin atMedium {
+  @media (min-width: 800px) {
+    @mixin-content;
+  }
+}
+
+@define-mixin atLarge {
+  @media (min-width: 1010px) {
+    @mixin-content;
+  }
+}
 ```
 
-Create `modules` directory inside `./app/assets/styles`.
+We used to write a media query in a lengthy way:
 
-```css file=./app/assets/styles/modules/_large-hero.css
-.large-hero {
+```css
+@media (min-width: 440px) {
+  text-align: left;
+}
+```
+
+However, with a mixin defined in `_mixins.css`, we can write like this now:
+
+```css
+@mixin atTiny {
+  text-align: left;
+}
+```
+
+##### modules
+
+Create `modules` directory inside `./app/assets/styles`. The `modules` folder will contain many partial stylesheets that consists of our website. For example, since we are planning to make a card as shown in the captured demo, we can create a `_card.css` that consists of styles for the card only. When you want to edit styles for the card in the future, you can simply go to `_card.css` and edit it wihtout touching any other CSS files. This is beauty of modularization.
+
+<GatsbyImage image={getImage(props.embeddedImages[6])} alt='demo' />
+
+```css file=./app/assets/styles/modules/_card.css
+.card {
+  background: $cardBgWhite;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  color: inherit;
   position: relative;
+  text-decoration: none;
+  transition: var(--duration) var(--ease-out);
 }
 ```
 
 Since we modulaized our css file structure, we need to import the css module into the main `styles.css` file:
 
-```css file=./app/assets/styles/styles.css
-@import 'modules/_large-hero';
-
-body {
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-```
-
-Now, it's important to point out that import is a native CSFs feature, but we don't want the Web browser to have to download multiple access files. Instead, we want Web pack and posts access to see this import line and actually replace this line with the contents of this large zero file. And we can very easily set up post to do that.
-
-If you haven't already installed `postcss-import` package, please install it.
-
-```bash
-npm install postcss-import --save-dev
-```
-
-| PostCSS Plugins  | Usage                                                |
-| ---------------- | ---------------------------------------------------- |
-| `postcss-import` | inlines the stylesheets referred to by @import rules |
-| `postcss-mixins` | enables mixins                                       |
-
-To have CSS global variables modularized as well, let's create `base` directory in the styles directory as well:
-
-```css file=./app/assets/styles/base/_global.css
-body {
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-```
-
-```css file=./app/assets/styles/styles.css add=1
-@import 'base/_global';
-@import 'modules/_large-hero';
-```
-
-### `normalize.css`
-
-The `normalize.css` is an alternative to css resets. It adjusts the styles of certain elements in order to make all web browsers render things more consistently being normalized.
-
-```bash
-npm install normalize.css
-```
-
-```css file=./app/assets/styles/styles.css add=1
+```css file=./app/assets/styles/styles.css add=5
 @import 'normalize.css';
+@import 'base/_variables';
+@import 'base/_mixins';
 @import 'base/_global';
-@import 'modules/_large-hero';
+@import 'modules/_card';
 ```
 
-```css file=./app/assets/styles/modules/_large-hero.css
-.large-hero {
-  position: relative;
-}
+Let's set what we've got so far:
 
-.large-hero__text-content {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  width: 100%;
-  text-align: center;
-}
+```bash
+npm run dev
 ```
+
+You should be able to see something like this if everything goes well. I know it is ugly as hell for now. But in the next section, we will identify patterns in design and apply BEM(Block Element Modifier) philosophy to make not only the card design itself, but also overall CSS architecture much better.
+
+<GatsbyImage image={getImage(props.embeddedImages[5])} alt='demo' />
 
 ### Identify Patterns In design
 
-### BEM
+#### BEM
 
 Popular abstract way of thinking about our interface.
 
 - **Block**
   - An independent resuable part of our design
+  - Examples: header, container, menu, checkbox, input
 - **Element**
   - An element belongs to a block.
   - It cannot be used outside of the block that it belongs to.
+  - Examples: menu item, list item, checkbox caption, header title
 - **Modifier**
   - A modifier can be used on a block or an element to indicate a change to the default state of an object.
+  - Examples: disabled, highlighted, checked, fixed, size big, color yellow
+
+```css file=./app/assets/styles/modules/_card.css
+.card {
+  background: $cardBgWhite;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  color: inherit;
+  position: relative;
+  text-decoration: none;
+  transition: var(--duration) var(--ease-out);
+
+  &__info {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+
+    @mixin atTiny {
+      flex-direction: row;
+      text-align: left;
+    }
+
+    @mixin atMedium {
+      height: 60%;
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  &__more {
+    border-bottom: 1px solid $lightBlue;
+    font-size: 13px;
+    padding: 8px 0;
+    white-space: nowrap;
+    margin: 0 10px;
+  }
+
+  &__media {
+    height: 0;
+    padding-top: 56.25%;
+    position: relative;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    transition: var(--duration) var(--ease-out);
+  }
+
+  &:hover {
+    transform: scale(1.01);
+  }
+}
+```
+
+There's a lot to digest here, so let's break down the codes piece by piece based on BEM.
+
+- ## Block
+- ## Element
+- Modifier
 
 Hello, everyone, welcome to Part two of our two part lesson on how to write super organized success.
 
