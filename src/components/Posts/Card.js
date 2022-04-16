@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import TagsList from '../TagsList'
 import styled from 'styled-components'
 
-const Card = ({ frontmatter, excerpt }) => {
+const Card = ({ frontmatter }) => {
   const { title, slug, date, tags, image, readTime, category } = frontmatter
 
   return (
@@ -16,7 +16,6 @@ const Card = ({ frontmatter, excerpt }) => {
         <div className='info'>
           <h4>{title}</h4>
           <div className='underline' />
-          {/* <p>{excerpt}</p> */}
           {tags?.length > 0 && <TagsList tags={tags} isPost={false} />}
           <Link
             to={category === 'PROJECT' ? `/projects/${slug}` : `/posts/${slug}`}
@@ -52,8 +51,10 @@ const Wrapper = styled.article`
     border-top-left-radius: var(--radius-2);
     border-top-right-radius: var(--radius-2);
     /* height: 17rem; */
-    /* width: 100%; */
+    width: 100%;
     object-fit: cover;
+    object-position: center;
+    aspect-ratio: 16 / 9;
   }
   .category {
     display: inline-block;
@@ -122,7 +123,7 @@ const Wrapper = styled.article`
     & {
       display: grid;
       /* grid-template-columns: 30rem 1fr; */
-      grid-template-columns: 20rem 1fr;
+      grid-template-columns: 23rem 1fr;
       column-gap: 0.5rem;
       .info {
         margin-top: 0.3rem;
@@ -130,7 +131,11 @@ const Wrapper = styled.article`
       }
       .img {
         height: 100%;
-        max-height: 20rem;
+        /* width: 100%; */
+        aspect-ratio: 3 / 2;
+        object-fit: cover;
+        /* object-position: center; */
+        /* max-height: 213.33px; */
         border-top-left-radius: var(--radius-2);
         border-bottom-left-radius: var(--radius-2);
         border-top-right-radius: 0;
