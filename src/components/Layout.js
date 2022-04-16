@@ -6,7 +6,7 @@ import ScrollToTop from './ScrollToTop'
 import ReadingBar from '../components/ReadingBar'
 
 const Layout = ({ children }) => {
-  const isPost = children[0].props.pathname !== undefined ? true : false
+  const isPost = children[0]?.props?.pathname !== undefined ? true : false
 
   const [isOpen, setIsOpen] = useState(false)
 
