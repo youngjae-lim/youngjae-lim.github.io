@@ -195,7 +195,7 @@ const Wrapper = styled.section`
       margin: 0 auto;
     }
   }
-  @media (min-width: 1170px) {
+  @media (min-width: 1560px) {
     & {
       display: grid;
       grid-template-columns: ${props =>

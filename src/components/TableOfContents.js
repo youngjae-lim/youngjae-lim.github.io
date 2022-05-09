@@ -114,7 +114,7 @@ const DetailsWrapper = styled.article`
       text-decoration: underline;
     }
   }
-  @media (max-width: 1170px) {
+  @media (max-width: 1560px) {
     display: none;
   }
 `
